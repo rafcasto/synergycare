@@ -138,3 +138,18 @@ def get_valid_roles():
     return success_response({
         'roles': FirebaseService.VALID_ROLES
     }, 'Valid roles retrieved successfully')
+
+@roles_bp.route('/delete-user/<uid>', methods=['DELETE'])
+@require_admin
+def delete_user(uid):
+    """Delete a user (Admin only)."""
+    try:
+        success = FirebaseService.delete_user(uid)
+        
+        if success:
+            return success_response({'uid': uid}, 'User deleted successfully')
+        else:
+            return error_response('Failed to delete user', 500)
+            
+    except Exception as e:
+        return error_response(f'Error deleting user: {str(e)}', 500)

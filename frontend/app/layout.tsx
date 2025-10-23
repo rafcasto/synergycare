@@ -1,4 +1,5 @@
-import type { Metadata } from 'next';
+'use client';
+
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/components/auth/AuthProvider';
@@ -6,27 +7,30 @@ import { RecaptchaProvider } from '@/lib/recaptcha/provider';
 import { Header } from '@/components/layout/Header';
 import { Navigation } from '@/components/layout/Navigation';
 import Script from 'next/script';
+import { usePathname } from 'next/navigation';
 import {GA_TRACKING_ID} from '../lib/utils/analytics'
 const inter = Inter({ subsets: ['latin'] });
-
-export const metadata: Metadata = {
-  title: 'SynergyCare - Healthcare Management System',
-  description: 'Modern healthcare management system with role-based access control',
-};
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+  const isAdminRoute = pathname?.startsWith('/admin');
+
   return (
     <html lang="en">
       <body className={inter.className}>
         <RecaptchaProvider>
           <AuthProvider>
             <div className="min-h-screen bg-gray-50">
-              <Header />
-              <Navigation />
+              {!isAdminRoute && (
+                <>
+                  <Header />
+                  <Navigation />
+                </>
+              )}
               <main>{children}</main>
             </div>
           </AuthProvider>

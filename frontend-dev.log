@@ -8,52 +8,144 @@
    - Environments: .env.local
 
  ✓ Starting...
- ✓ Ready in 1368ms
+ ✓ Ready in 1290ms
  ○ Compiling /admin-setup ...
- ✓ Compiled /admin-setup in 916ms (995 modules)
- GET /admin-setup?token=7059efb9-31d0-48f4-9305-67c57e851ca1 200 in 1266ms
- ✓ Compiled /api/proxy/[...path] in 123ms (1014 modules)
-Error: Route "/api/proxy/[...path]" used `params.path`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
-    at POST (app/api/proxy/[...path]/route.ts:45:24)
-  43 | ) {
-  44 |   try {
-> 45 |     const path = params.path.join('/');
-     |                        ^
-  46 |     const body = await request.json();
-  47 |     
-  48 |     const backendUrl = `${BACKEND_URL}/${path}`;
-Error: Route "/api/proxy/[...path]" used `params.path`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
-    at GET (app/api/proxy/[...path]/route.ts:10:24)
-   8 | ) {
-   9 |   try {
-> 10 |     const path = params.path.join('/');
-     |                        ^
-  11 |     const url = new URL(request.url);
-  12 |     const queryString = url.search;
-  13 |     
- POST /api/proxy/admin-setup/validate-token 200 in 596ms
- GET /api/proxy/admin-setup/status 200 in 599ms
-Error: Route "/api/proxy/[...path]" used `params.path`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
-    at POST (app/api/proxy/[...path]/route.ts:45:24)
-  43 | ) {
-  44 |   try {
-> 45 |     const path = params.path.join('/');
-     |                        ^
-  46 |     const body = await request.json();
-  47 |     
-  48 |     const backendUrl = `${BACKEND_URL}/${path}`;
- POST /api/proxy/admin-setup/register 200 in 64ms
- ✓ Compiled /login in 394ms (1034 modules)
- GET /login?message=Admin+account+created+successfully 200 in 446ms
- ✓ Compiled /dashboard in 440ms (1048 modules)
- GET /dashboard 200 in 498ms
- GET /dashboard 200 in 468ms
- ✓ Compiled /admin in 344ms (1057 modules)
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /admin 200 in 542ms
- GET /dashboard 200 in 21ms
- ✓ Compiled /profile in 397ms (1096 modules)
- GET /profile 200 in 474ms
+ ✓ Compiled /admin-setup in 1321ms (1009 modules)
+ GET /admin-setup?token=5124371e-2343-461d-9923-17688e31904e 200 in 1766ms
+ ✓ Compiled /api/proxy/[...path] in 274ms (1028 modules)
+ GET /admin-setup?token=5124371e-2343-461d-9923-17688e31904e 200 in 89ms
+ GET /api/proxy/admin-setup/status 200 in 635ms
+ POST /api/proxy/admin-setup/validate-token 200 in 636ms
+ POST /api/proxy/admin-setup/register 200 in 23ms
+ ✓ Compiled /login in 434ms (1034 modules)
+ GET /login?message=Admin+account+created+successfully 200 in 486ms
+ ✓ Compiled /dashboard in 243ms (1048 modules)
+ GET /dashboard 200 in 262ms
+ GET /dashboard 200 in 283ms
+ ✓ Compiled /admin in 280ms (1061 modules)
+ GET /admin 200 in 307ms
+ ✓ Compiled in 548ms (1057 modules)
+ GET /admin 200 in 100ms
+ ✓ Compiled in 191ms (1057 modules)
+ GET /admin 200 in 53ms
+ ✓ Compiled in 95ms (406 modules)
+ ✓ Compiled in 108ms (406 modules)
+ GET /admin 200 in 99ms
+ GET /admin 200 in 33ms
+ ✓ Compiled in 94ms (406 modules)
+ GET /admin 200 in 18ms
+ ✓ Compiled in 76ms (406 modules)
+ GET /admin 200 in 9ms
+ ✓ Compiled in 505ms (1057 modules)
+ GET /admin 200 in 49ms
+ GET /admin 200 in 173ms
+ ✓ Compiled in 267ms (1061 modules)
+ GET /admin 200 in 39ms
+ ✓ Compiled /profile in 335ms (1086 modules)
+ GET /profile 200 in 419ms
+ GET /dashboard 200 in 16ms
+ GET /admin 200 in 17ms
+ GET /profile 200 in 12ms
+ GET /dashboard 200 in 13ms
+ GET /admin 200 in 14ms
+ ✓ Compiled in 266ms (1100 modules)
+ GET /admin 200 in 39ms
+ ✓ Compiled in 98ms (426 modules)
+ GET /admin 200 in 57ms
+ ✓ Compiled in 109ms (426 modules)
  GET /admin 200 in 16ms
- GET /dashboard 200 in 19ms
-[?25h
+ ✓ Compiled in 298ms (1100 modules)
+ GET /admin 200 in 28ms
+ GET /admin 200 in 169ms
+ GET /profile 200 in 18ms
+ ✓ Compiled in 200ms (1102 modules)
+ GET /profile 200 in 27ms
+ GET /dashboard 200 in 25ms
+ GET /admin 200 in 17ms
+ ✓ Compiled in 202ms (1102 modules)
+ GET /admin 200 in 37ms
+ ✓ Compiled in 79ms (427 modules)
+ GET /admin 200 in 16ms
+ ✓ Compiled in 78ms (427 modules)
+ GET /admin 200 in 9ms
+ ✓ Compiled in 70ms (427 modules)
+ GET /admin 200 in 15ms
+ ✓ Compiled in 81ms (427 modules)
+ GET /admin 200 in 9ms
+ GET /admin 200 in 159ms
+ GET /profile 200 in 17ms
+ GET /admin 200 in 10ms
+ ✓ Compiled in 823ms (1102 modules)
+ GET /admin 200 in 50ms
+ GET /admin 200 in 177ms
+ ✓ Compiled in 333ms (427 modules)
+ GET /admin 200 in 80ms
+ ✓ Compiled in 98ms (427 modules)
+ GET /admin 200 in 9ms
+ ✓ Compiled in 430ms (1105 modules)
+ GET /admin 200 in 46ms
+ ✓ Compiled in 423ms (1103 modules)
+ GET /admin 200 in 38ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⨯ ReferenceError: AdminOnly is not defined
+    at AdminPage (app/admin/page.tsx:70:5)
+  68 |
+  69 |   return (
+> 70 |     <AdminOnly>
+     |     ^
+  71 |       <div className="min-h-screen bg-gray-50">
+  72 |         {/* Header Section */}
+  73 |         <div className="bg-white shadow-sm border-b border-gray-200"> {
+  digest: '2560582555'
+}
+ GET /admin 500 in 178ms
+ ✓ Compiled in 381ms (1107 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /admin 200 in 142ms
+ ✓ Compiled in 304ms (1107 modules)
+ GET /admin 200 in 24ms
+ ⨯ ./app/layout.tsx
+Error:   [31mx[0m The "use client" directive must be placed before other expressions. Move it to the top of the file to resolve this issue.
+    ,-[[36;1;4m/Users/rafaelcastillo/sc/synergycare/frontend/app/layout.tsx[0m:17:1]
+ [2m14[0m |   description: 'Modern healthcare management system with role-based access control',
+ [2m15[0m | };
+ [2m16[0m | 
+ [2m17[0m | 'use client';
+    : [35;1m^^^^^^^^^^^^^[0m
+ [2m18[0m | 
+ [2m19[0m | import { usePathname } from 'next/navigation';
+    `----
+  [31mx[0m You're importing a component that needs `usePathname`. This React hook only works in a client component. To fix, mark the file (or its parent) with the `"use client"` directive.
+  [31m|[0m
+  [31m|[0m  Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+  [31m|[0m
+
+    ,-[[36;1;4m/Users/rafaelcastillo/sc/synergycare/frontend/app/layout.tsx[0m:19:1]
+ [2m16[0m | 
+ [2m17[0m | 'use client';
+ [2m18[0m | 
+ [2m19[0m | import { usePathname } from 'next/navigation';
+    : [35;1m         ^^^^^^^^^^^[0m
+ [2m20[0m | 
+ [2m21[0m | export default function RootLayout({
+ [2m22[0m |   children,
+    `----
+
+Import trace for requested module:
+./app/layout.tsx
+ ✓ Compiled in 1026ms (1106 modules)
+ GET /admin 200 in 70ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /admin 200 in 164ms
+ GET /profile 200 in 19ms
+ GET /dashboard 200 in 15ms
+ ✓ Compiled in 490ms (1106 modules)
+ GET /admin 200 in 45ms
+   Reload env: .env.local
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ✓ Compiled in 4.9s (1092 modules)
+ GET /admin 200 in 3349ms
+ GET /admin 200 in 22ms
+ ✓ Compiled / in 398ms (1099 modules)
+ GET / 200 in 596ms
+ GET /dashboard 200 in 11ms

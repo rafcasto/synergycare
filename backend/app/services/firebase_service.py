@@ -219,3 +219,15 @@ class FirebaseService:
         except Exception as e:
             logger.error(f"Failed to list users by role: {e}")
             return []
+
+    @staticmethod
+    def delete_user(uid: str) -> bool:
+        """Delete a user."""
+        try:
+            auth.delete_user(uid)
+            logger.info(f"Successfully deleted user {uid}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Failed to delete user: {e}")
+            return False
