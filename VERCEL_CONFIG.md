@@ -25,7 +25,7 @@ BACKEND_URL=https://your-backend-deployment.vercel.app
 NEXT_PUBLIC_RECAPTCHA_SITE_KEY=your_recaptcha_site_key
 RECAPTCHA_SECRET_KEY=your_recaptcha_secret_key
 ```
-
+ 
 ### General Configuration
 ```
 NODE_ENV=production
