@@ -82,7 +82,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     await authService.signIn(email, password);
   };
 
-  const register = async (email: string, password: string, displayName?: string, role?: UserRole, additionalData?: any) => {
+  const register = async (email: string, password: string, displayName?: string, role?: UserRole, additionalData?: Record<string, unknown>) => {
     const userCredential = await authService.register(email, password, displayName);
     
     // If role is provided, complete registration with role and additional data

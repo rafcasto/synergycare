@@ -57,3 +57,6 @@
  GET / 200 in 318ms
  GET /dashboard 200 in 13ms
  ✓ Compiled in 932ms (1136 modules)
+ GET /profile 200 in 150ms
+ ✓ Compiled in 246ms (442 modules)
+ ✓ Compiled in 858ms (1136 modules)
