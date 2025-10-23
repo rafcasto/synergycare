@@ -83,6 +83,11 @@ export function AdminLayout({ children, currentTab = 'dashboard', onTabChange }:
     router.push('/profile');
   };
 
+  const handleBackToDashboard = () => {
+    setIsProfileDropdownOpen(false);
+    router.push('/dashboard');
+  };
+
   const currentTabInfo = navigationTabs.find(tab => tab.id === currentTab);
 
   return (
@@ -200,6 +205,15 @@ export function AdminLayout({ children, currentTab = 'dashboard', onTabChange }:
                   {isProfileDropdownOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50">
                       <div className="py-1">
+                        <button
+                          onClick={handleBackToDashboard}
+                          className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                        >
+                          <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                          </svg>
+                          Back to Dashboard
+                        </button>
                         <button
                           onClick={handleProfileClick}
                           className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"

@@ -28,22 +28,6 @@ export default function DashboardPage() {
 
   const getRoleDashboardContent = () => {
     switch (user?.role) {
-      case 'admin':
-        return (
-          <Card className="p-6">
-            <h2 className="text-xl font-semibold mb-4">Admin Dashboard</h2>
-            <p className="text-gray-600 mb-4">
-              Manage users, roles, and system settings.
-            </p>
-            <Button 
-              onClick={() => window.location.href = '/admin'}
-              className="mr-3"
-            >
-              Go to Admin Panel
-            </Button>
-          </Card>
-        );
-      
       case 'doctor':
         return (
           <Card className="p-6">
