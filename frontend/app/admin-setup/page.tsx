@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -34,7 +34,7 @@ interface AdminSetupStatus {
   message: string;
 }
 
-export default function AdminSetupPage() {
+function AdminSetupContent() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -48,7 +48,6 @@ export default function AdminSetupPage() {
   const {
     register,
     handleSubmit,
-    setValue,
     watch,
     formState: { errors },
   } = useForm<AdminRegistrationFormData>({
@@ -74,8 +73,8 @@ export default function AdminSetupPage() {
             setError('Admin user already exists. Registration is disabled.');
           }
         }
-      } catch (err) {
-        console.error('Failed to check setup status:', err);
+      } catch {
+        console.error('Failed to check setup status');
       }
     };
 
@@ -113,7 +112,7 @@ export default function AdminSetupPage() {
         setTokenValid(false);
         setError(errorData.message || 'Invalid token');
       }
-    } catch (err) {
+    } catch {
       setTokenValid(false);
       setError('Failed to validate token');
     }
@@ -141,7 +140,7 @@ export default function AdminSetupPage() {
         const errorData = await response.json();
         setError(errorData.message || 'Failed to create admin account');
       }
-    } catch (err) {
+    } catch {
       setError('Failed to create admin account. Please try again.');
     } finally {
       setIsLoading(false);
@@ -209,7 +208,7 @@ export default function AdminSetupPage() {
               <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Admin Account Created!</h2>
               <p className="text-gray-600 mb-4">
-                Your admin account has been successfully created. You'll be redirected to the login page shortly.
+                Your admin account has been successfully created. You&apos;ll be redirected to the login page shortly.
               </p>
               <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
                 <Clock className="w-4 h-4" />
@@ -352,5 +351,25 @@ export default function AdminSetupPage() {
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function AdminSetupPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full">
+          <Card className="shadow-lg">
+            <div className="p-6 text-center">
+              <Clock className="w-16 h-16 text-blue-500 mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Loading...</h2>
+              <p className="text-gray-600">Setting up admin registration form</p>
+            </div>
+          </Card>
+        </div>
+      </div>
+    }>
+      <AdminSetupContent />
+    </Suspense>
   );
 }

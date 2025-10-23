@@ -4,14 +4,15 @@ const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:5000';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  { params }: { params: Promise<{ path: string[] }> }
 ) {
   try {
-    const path = params.path.join('/');
+    const { path } = await params;
+    const pathString = path.join('/');
     const url = new URL(request.url);
     const queryString = url.search;
     
-    const backendUrl = `${BACKEND_URL}/${path}${queryString}`;
+    const backendUrl = `${BACKEND_URL}/${pathString}${queryString}`;
     
     const response = await fetch(backendUrl, {
       method: 'GET',
@@ -39,13 +40,14 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  { params }: { params: Promise<{ path: string[] }> }
 ) {
   try {
-    const path = params.path.join('/');
+    const { path } = await params;
+    const pathString = path.join('/');
     const body = await request.json();
     
-    const backendUrl = `${BACKEND_URL}/${path}`;
+    const backendUrl = `${BACKEND_URL}/${pathString}`;
     
     const response = await fetch(backendUrl, {
       method: 'POST',
@@ -74,13 +76,14 @@ export async function POST(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  { params }: { params: Promise<{ path: string[] }> }
 ) {
   try {
-    const path = params.path.join('/');
+    const { path } = await params;
+    const pathString = path.join('/');
     const body = await request.json();
     
-    const backendUrl = `${BACKEND_URL}/${path}`;
+    const backendUrl = `${BACKEND_URL}/${pathString}`;
     
     const response = await fetch(backendUrl, {
       method: 'PUT',
@@ -109,12 +112,13 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  { params }: { params: Promise<{ path: string[] }> }
 ) {
   try {
-    const path = params.path.join('/');
+    const { path } = await params;
+    const pathString = path.join('/');
     
-    const backendUrl = `${BACKEND_URL}/${path}`;
+    const backendUrl = `${BACKEND_URL}/${pathString}`;
     
     const response = await fetch(backendUrl, {
       method: 'DELETE',
