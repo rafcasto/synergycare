@@ -34,7 +34,6 @@ interface DashboardStats {
 }
 
 export default function AdminDashboard() {
-  const [roleStats, setRoleStats] = useState<RoleStats[]>([]);
   const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,8 +48,6 @@ export default function AdminDashboard() {
         const response = await apiClient.get<RoleStats>(`/roles/list/${role}`);
         stats.push(response);
       }
-      
-      setRoleStats(stats);
       
       // Calculate dashboard statistics
       const allUsers = stats.flatMap(stat => stat.users);
