@@ -82,8 +82,38 @@ export function AuthProvider({ children }: AuthProviderProps) {
     await authService.signIn(email, password);
   };
 
-  const register = async (email: string, password: string, displayName?: string) => {
-    await authService.register(email, password, displayName);
+  const register = async (email: string, password: string, displayName?: string, role?: UserRole, additionalData?: any) => {
+    const userCredential = await authService.register(email, password, displayName);
+    
+    // If role is provided, complete registration with role and additional data
+    if (role && userCredential.user) {
+      try {
+        // Get the user's ID token
+        const idToken = await userCredential.user.getIdToken();
+        
+        // Call backend to complete registration with role
+        const response = await fetch('/api/proxy/user/complete-registration', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${idToken}`,
+          },
+          body: JSON.stringify({
+            role,
+            user_data: additionalData || {},
+          }),
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to complete registration');
+        }
+        
+        console.log('Registration completed with role:', role);
+      } catch (error) {
+        console.error('Failed to complete registration with role:', error);
+        // Don't throw here as the user is already created, just log the error
+      }
+    }
   };
 
   const logout = async () => {

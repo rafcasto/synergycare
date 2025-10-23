@@ -19,7 +19,7 @@ export default function HomePage() {
           router.push('/dashboard');
         }
       } else {
-        router.push('/login');
+        router.push('/role-selection');
       }
     }
   }, [user, loading, router]);

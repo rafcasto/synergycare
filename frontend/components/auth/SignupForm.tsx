@@ -170,9 +170,9 @@ export function SignupForm() {
               type="button"
               variant="outline"
               className="w-full"
-              onClick={() => router.push('/login')}
+              onClick={() => router.push('/role-selection')}
             >
-              Sign In
+              Choose Your Role
             </Button>
           </div>
         </div>

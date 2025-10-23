@@ -10,13 +10,13 @@ import { loginSchema, LoginFormData } from '@/lib/utils/validators';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
-import { Shield, ArrowLeft } from 'lucide-react';
+import { Shield, UserCheck, ArrowLeft } from 'lucide-react';
 
 interface AuthError {
   message: string;
 }
 
-export function LoginForm() {
+export function PatientLoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -39,19 +39,17 @@ export function LoginForm() {
       // Execute reCAPTCHA
       let recaptchaToken: string | null = null;
       if (isRecaptchaAvailable) {
-        recaptchaToken = await executeRecaptchaAction('login');
+        recaptchaToken = await executeRecaptchaAction('patient_login');
         if (!recaptchaToken) {
           throw new Error('reCAPTCHA verification failed. Please try again.');
         }
       }
 
-      // Proceed with login - you can send recaptchaToken to your backend for verification
       await login(data.email, data.password);
       
       // Optional: Verify reCAPTCHA token with your backend
       if (recaptchaToken) {
-        console.log('reCAPTCHA token generated for login:', recaptchaToken);
-        // You can send this token to your backend API for verification
+        console.log('reCAPTCHA token generated for patient login:', recaptchaToken);
       }
 
       router.push('/dashboard');
@@ -68,9 +66,14 @@ export function LoginForm() {
       <Card className="shadow-lg">
         <div className="p-6 space-y-6">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900">Sign In</h2>
+            <div className="flex items-center justify-center mb-4">
+              <div className="p-3 bg-green-100 rounded-full">
+                <UserCheck className="w-8 h-8 text-green-600" />
+              </div>
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900">Patient Sign In</h2>
             <p className="mt-2 text-sm text-gray-600">
-              Welcome back to your account
+              Access your health records and appointments
             </p>
           </div>
           
@@ -83,12 +86,12 @@ export function LoginForm() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Email
+                Email Address
               </label>
               <Input
                 id="email"
                 type="email"
-                placeholder="Enter your email"
+                placeholder="patient@email.com"
                 {...register('email')}
                 error={errors.email?.message}
               />
@@ -109,7 +112,7 @@ export function LoginForm() {
 
             <Button
               type="submit"
-              className="w-full"
+              className="w-full bg-green-600 hover:bg-green-700"
               loading={isLoading}
               disabled={isLoading}
             >
@@ -138,15 +141,15 @@ export function LoginForm() {
 
           <div className="text-center space-y-2">
             <p className="text-sm text-gray-600">
-              Don&apos;t have an account?
+              New patient?
             </p>
             <Button
               type="button"
               variant="outline"
-              className="w-full"
-              onClick={() => router.push('/role-selection')}
+              className="w-full border-green-600 text-green-600 hover:bg-green-50"
+              onClick={() => router.push('/patient/register')}
             >
-              Create Account
+              Join as Patient
             </Button>
           </div>
 

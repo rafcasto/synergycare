@@ -9,6 +9,7 @@ export { Alert, AlertTitle, AlertDescription } from './ui/Alert';
 export { AuthProvider, useAuth } from './auth/AuthProvider';
 export { LoginForm } from './auth/LoginForm';
 export { SignupForm } from './auth/SignupForm';
+export { RoleSelectionForm } from './auth/RoleSelectionForm';
 export { ProtectedRoute } from './auth/ProtectedRoute';
 export { 
   RoleGuard, 
