@@ -1,0 +1,59 @@
+
+> frontend@0.1.0 dev
+> next dev -p 3000
+
+   ▲ Next.js 15.3.3
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.236:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1368ms
+ ○ Compiling /admin-setup ...
+ ✓ Compiled /admin-setup in 916ms (995 modules)
+ GET /admin-setup?token=7059efb9-31d0-48f4-9305-67c57e851ca1 200 in 1266ms
+ ✓ Compiled /api/proxy/[...path] in 123ms (1014 modules)
+Error: Route "/api/proxy/[...path]" used `params.path`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at POST (app/api/proxy/[...path]/route.ts:45:24)
+  43 | ) {
+  44 |   try {
+> 45 |     const path = params.path.join('/');
+     |                        ^
+  46 |     const body = await request.json();
+  47 |     
+  48 |     const backendUrl = `${BACKEND_URL}/${path}`;
+Error: Route "/api/proxy/[...path]" used `params.path`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (app/api/proxy/[...path]/route.ts:10:24)
+   8 | ) {
+   9 |   try {
+> 10 |     const path = params.path.join('/');
+     |                        ^
+  11 |     const url = new URL(request.url);
+  12 |     const queryString = url.search;
+  13 |     
+ POST /api/proxy/admin-setup/validate-token 200 in 596ms
+ GET /api/proxy/admin-setup/status 200 in 599ms
+Error: Route "/api/proxy/[...path]" used `params.path`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at POST (app/api/proxy/[...path]/route.ts:45:24)
+  43 | ) {
+  44 |   try {
+> 45 |     const path = params.path.join('/');
+     |                        ^
+  46 |     const body = await request.json();
+  47 |     
+  48 |     const backendUrl = `${BACKEND_URL}/${path}`;
+ POST /api/proxy/admin-setup/register 200 in 64ms
+ ✓ Compiled /login in 394ms (1034 modules)
+ GET /login?message=Admin+account+created+successfully 200 in 446ms
+ ✓ Compiled /dashboard in 440ms (1048 modules)
+ GET /dashboard 200 in 498ms
+ GET /dashboard 200 in 468ms
+ ✓ Compiled /admin in 344ms (1057 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /admin 200 in 542ms
+ GET /dashboard 200 in 21ms
+ ✓ Compiled /profile in 397ms (1096 modules)
+ GET /profile 200 in 474ms
+ GET /admin 200 in 16ms
+ GET /dashboard 200 in 19ms
+[?25h

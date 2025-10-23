@@ -4,13 +4,14 @@ import './globals.css';
 import { AuthProvider } from '@/components/auth/AuthProvider';
 import { RecaptchaProvider } from '@/lib/recaptcha/provider';
 import { Header } from '@/components/layout/Header';
+import { Navigation } from '@/components/layout/Navigation';
 import Script from 'next/script';
 import {GA_TRACKING_ID} from '../lib/utils/analytics'
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Firebase Auth App',
-  description: 'Next.js app with Firebase authentication and reCAPTCHA',
+  title: 'SynergyCare - Healthcare Management System',
+  description: 'Modern healthcare management system with role-based access control',
 };
 
 export default function RootLayout({
@@ -25,6 +26,7 @@ export default function RootLayout({
           <AuthProvider>
             <div className="min-h-screen bg-gray-50">
               <Header />
+              <Navigation />
               <main>{children}</main>
             </div>
           </AuthProvider>

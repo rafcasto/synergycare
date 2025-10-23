@@ -1,0 +1,47 @@
+I1023 22:21:51.225149   71626 load.go:31] Reloading schema and connectors...
+W1023 22:21:51.278968   71626 control.go:68] [/emulator/synergycare 78e6] connector "example" has errors: example/queries.gql:37:43: Field "id_expr" is not defined by type "User_Filter".
+
+sources: example/queries.gql [1661B] 
+I1023 22:21:51.279479   71626 control.go:94] [/emulator/synergycare 78e6] UpdateResources(): done
+Main schema: sources: schema/schema.gql [932B] 
+Connector "example": sources: example/queries.gql [1661B] 
+E1023 22:21:51.283587   71626 load.go:73] Could not load sources: 
+Errors: example/queries.gql:37:43: Field "id_expr" is not defined by type "User_Filter".
+I1023 22:21:51.284348   71626 collector.go:107] schema extensions wrote into "/Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema"
+Generated sources: main/query.gql [7617B] main/mutation.gql [20560B] prelude.gql [73219B] main/implicit.gql [3559B] main/input.gql [60573B] main/relation.gql [30423B] 
+E1023 22:21:51.284519   71626 load.go:42] Errors flushing generated files: schema extensions
+failed to create output directory /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema: mkdir /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect: permission denied
+failed to create directory main: mkdir /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect: permission denied
+failed to write file prelude.gql: open /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema/prelude.gql: no such file or directory
+failed to write file main/implicit.gql: open /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema/main/implicit.gql: no such file or directory
+failed to write file main/input.gql: open /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema/main/input.gql: no such file or directory
+failed to write file main/relation.gql: open /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema/main/relation.gql: no such file or directory
+failed to write file main/query.gql: open /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema/main/query.gql: no such file or directory
+failed to write file main/mutation.gql: open /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema/main/mutation.gql: no such file or directory
+I1023 22:21:51.284572   71626 load.go:74] Finished reloading
+I1023 22:21:51.287324   71626 dev.go:102] Listening on address (HTTP + gRPC): 127.0.0.1:9399
+I1023 22:21:51.288122   71626 dev.go:102] Listening on address (HTTP + gRPC): [::1]:9399
+I1023 22:21:53.725695   71626 migrate.go:24] Running migration SQL:
+Step 1: CREATE EXTENSION IF NOT EXISTS "uuid-ossp"
+Step 2: CREATE TABLE "public"."user" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "address" text NULL, "created_at" timestamptz NOT NULL, "display_name" text NOT NULL, "email" text NOT NULL, "phone_number" text NULL, "photo_url" text NULL, "user_type" text NOT NULL, PRIMARY KEY ("id"))
+Step 3: CREATE TABLE "public"."doctor" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "user_id" uuid NOT NULL, "bio" text NULL, "clinic_address" text NULL, "consultation_fee" double precision NULL, "experience_years" integer NOT NULL, "license_number" text NOT NULL, "specialization" text NOT NULL, PRIMARY KEY ("id"), CONSTRAINT "doctor_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."user" ("id") ON DELETE CASCADE)
+Step 4: CREATE INDEX "doctor_userId_idx" ON "public"."doctor" ("user_id")
+Step 5: CREATE TABLE "public"."patient" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "user_id" uuid NOT NULL, "date_of_birth" date NOT NULL, "gender" text NULL, "medical_history_summary" text NULL, PRIMARY KEY ("id"), CONSTRAINT "patient_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."user" ("id") ON DELETE CASCADE)
+Step 6: CREATE INDEX "patient_userId_idx" ON "public"."patient" ("user_id")
+Step 7: CREATE TABLE "public"."appointment" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "doctor_id" uuid NOT NULL, "patient_id" uuid NOT NULL, "appointment_date_time" timestamptz NOT NULL, "created_at" timestamptz NOT NULL, "duration_minutes" integer NULL, "notes" text NULL, "status" text NOT NULL, PRIMARY KEY ("id"), CONSTRAINT "appointment_doctor_id_fkey" FOREIGN KEY ("doctor_id") REFERENCES "public"."doctor" ("id") ON DELETE CASCADE, CONSTRAINT "appointment_patient_id_fkey" FOREIGN KEY ("patient_id") REFERENCES "public"."patient" ("id") ON DELETE CASCADE)
+Step 8: CREATE INDEX "appointment_doctorId_idx" ON "public"."appointment" ("doctor_id")
+Step 9: CREATE INDEX "appointment_patientId_idx" ON "public"."appointment" ("patient_id")
+Step 10: CREATE TABLE "public"."medical_record" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "associated_appointment_id" uuid NULL, "patient_id" uuid NOT NULL, "description" text NULL, "document_url" text NULL, "record_type" text NOT NULL, "upload_date" timestamptz NOT NULL, PRIMARY KEY ("id"), CONSTRAINT "medical_record_associated_appointment_id_fkey" FOREIGN KEY ("associated_appointment_id") REFERENCES "public"."appointment" ("id") ON DELETE SET NULL, CONSTRAINT "medical_record_patient_id_fkey" FOREIGN KEY ("patient_id") REFERENCES "public"."patient" ("id") ON DELETE CASCADE)
+Step 11: CREATE INDEX "medical_record_associatedAppointmentId_idx" ON "public"."medical_record" ("associated_appointment_id")
+Step 12: CREATE INDEX "medical_record_patientId_idx" ON "public"."medical_record" ("patient_id")
+Step 13: CREATE TABLE "public"."review" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "doctor_id" uuid NOT NULL, "patient_id" uuid NOT NULL, "created_at" timestamptz NOT NULL, "rating" integer NOT NULL, "review_text" text NOT NULL, PRIMARY KEY ("id"), CONSTRAINT "review_doctor_id_fkey" FOREIGN KEY ("doctor_id") REFERENCES "public"."doctor" ("id") ON DELETE CASCADE, CONSTRAINT "review_patient_id_fkey" FOREIGN KEY ("patient_id") REFERENCES "public"."patient" ("id") ON DELETE CASCADE)
+Step 14: CREATE INDEX "review_doctorId_idx" ON "public"."review" ("doctor_id")
+Step 15: CREATE INDEX "review_patientId_idx" ON "public"."review" ("patient_id")
+W1023 22:21:53.791717   71626 control.go:68] [/emulator/synergycare f507] connector "example" has errors: example/queries.gql:37:43: Field "id_expr" is not defined by type "User_Filter".
+
+sources: example/queries.gql [1661B] 
+I1023 22:21:53.791751   71626 control.go:94] [/emulator/synergycare f507] UpdateResources(): done
+Main schema: sources: schema/schema.gql [932B] 
+Connector "example": sources: example/queries.gql [1661B] 
+I1023 22:21:53.791770   71626 service.go:148] [/emulator/synergycare f507] while configuring to server.Settings{ConnectionString:"dbname='fdcdb' host='127.0.0.1' port='5432' sslmode='disable' dbname='fdcdb'", MaxOpenConnection:1, UseDummy:false, EnableGoogleMLIntegration:false, SchemaValidationMode:""}, failed to reload last live sources: 
+Errors: example/queries.gql:37:43: Field "id_expr" is not defined by type "User_Filter".

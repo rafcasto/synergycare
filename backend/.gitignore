@@ -356,3 +356,4 @@ newrelic.ini
 # uploads/
 # custom_config/
 # local_data/
+.vercel

@@ -1,9 +1,12 @@
+export type UserRole = 'admin' | 'patient' | 'doctor';
+
 export interface User {
     uid: string;
     email: string | null;
     displayName: string | null;
     photoURL: string | null;
     emailVerified: boolean;
+    role?: UserRole;
   }
 
   export interface AuthContextType {
@@ -13,4 +16,5 @@ export interface User {
     register: (email: string, password: string, displayName?: string) => Promise<void>;
     logout: () => Promise<void>;
     resetPassword: (email: string) => Promise<void>;
+    refreshUserRole: () => Promise<void>;
   }

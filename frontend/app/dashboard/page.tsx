@@ -26,6 +26,72 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const getRoleDashboardContent = () => {
+    switch (user?.role) {
+      case 'admin':
+        return (
+          <Card className="p-6">
+            <h2 className="text-xl font-semibold mb-4">Admin Dashboard</h2>
+            <p className="text-gray-600 mb-4">
+              Manage users, roles, and system settings.
+            </p>
+            <Button 
+              onClick={() => window.location.href = '/admin'}
+              className="mr-3"
+            >
+              Go to Admin Panel
+            </Button>
+          </Card>
+        );
+      
+      case 'doctor':
+        return (
+          <Card className="p-6">
+            <h2 className="text-xl font-semibold mb-4">Doctor Dashboard</h2>
+            <p className="text-gray-600 mb-4">
+              View appointments, manage patients, and access medical records.
+            </p>
+            <div className="space-x-3">
+              <Button onClick={() => window.location.href = '/appointments'}>
+                View Appointments
+              </Button>
+              <Button variant="outline" onClick={() => window.location.href = '/patients'}>
+                My Patients
+              </Button>
+            </div>
+          </Card>
+        );
+      
+      case 'patient':
+        return (
+          <Card className="p-6">
+            <h2 className="text-xl font-semibold mb-4">Patient Dashboard</h2>
+            <p className="text-gray-600 mb-4">
+              Book appointments, view your medical records, and find doctors.
+            </p>
+            <div className="space-x-3">
+              <Button onClick={() => window.location.href = '/doctors'}>
+                Find Doctors
+              </Button>
+              <Button variant="outline" onClick={() => window.location.href = '/appointments'}>
+                My Appointments
+              </Button>
+            </div>
+          </Card>
+        );
+      
+      default:
+        return (
+          <Card className="p-6">
+            <h2 className="text-xl font-semibold mb-4">Welcome</h2>
+            <p className="text-gray-600">
+              Your role is being set up. Please contact the administrator.
+            </p>
+          </Card>
+        );
+    }
+  };
+
   const fetchDashboardData = async () => {
     setLoading(true);
     setError(null);
@@ -68,9 +134,12 @@ export default function DashboardPage() {
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
           <p className="mt-2 text-gray-600">
-            Welcome to your authenticated dashboard!
+            Welcome to SynergyCare, {user?.displayName || user?.email}!
           </p>
         </div>
+
+        {/* Role-specific content */}
+        {getRoleDashboardContent()}
 
         {/* User Info Card */}
         <Card className="p-6">
@@ -102,6 +171,14 @@ export default function DashboardPage() {
               </label>
               <p className="mt-1 text-sm text-gray-900">
                 {user?.emailVerified ? 'Yes' : 'No'}
+              </p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Role
+              </label>
+              <p className="mt-1 text-sm text-gray-900">
+                {user?.role || 'Not assigned'}
               </p>
             </div>
           </div>

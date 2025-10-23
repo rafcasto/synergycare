@@ -5,6 +5,8 @@ from .services.firebase_service import FirebaseService
 from .routes.health import health_bp
 from .routes.auth import auth_bp
 from .routes.user import user_bp
+from .routes.roles import roles_bp
+from .routes.admin_setup import admin_setup_bp
 from .utils.responses import error_response
 import logging
 import os
@@ -28,6 +30,8 @@ def create_app(config_name=None):
     app.register_blueprint(health_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(user_bp)
+    app.register_blueprint(roles_bp)
+    app.register_blueprint(admin_setup_bp)
     
     # Error handlers
     @app.errorhandler(404)

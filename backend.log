@@ -1,0 +1,14 @@
+Starting Flask app on port 5001 (debug=True)
+ * Serving Flask app 'app'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.1.236:5001
+[33mPress CTRL+C to quit[0m
+127.0.0.1 - - [23/Oct/2025 21:16:05] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [23/Oct/2025 21:16:05] "GET /health HTTP/1.1" 200 -
+Firebase list_users_by_role skipped in development mode for role: admin
+127.0.0.1 - - [23/Oct/2025 21:16:05] "GET /admin-setup/status HTTP/1.1" 200 -
+/opt/homebrew/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/multiprocessing/resource_tracker.py:276: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/mp-ahwwhbqy'}
+  warnings.warn(

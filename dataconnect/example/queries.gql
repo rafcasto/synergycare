@@ -1,0 +1,68 @@
+mutation SeedUsers @transaction @auth(level: NO_ACCESS) {
+  user_insertMany(data: [
+    {
+      id: "550e8400-e29b-41d4-a716-446655440000",
+      displayName: "demouser1",
+      email: "demouser1@example.com",
+      userType: "patient",
+      createdAt: "2024-01-01T00:00:00Z"
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440001",
+      displayName: "demouser2",
+      email: "demouser2@example.com",
+      userType: "doctor",
+      createdAt: "2024-01-01T00:00:00Z"
+    }
+  ])
+  patient_insertMany(data: [
+    {
+      id: "650e8400-e29b-41d4-a716-446655440000",
+      userId: "550e8400-e29b-41d4-a716-446655440000",
+      dateOfBirth: "1990-01-01"
+    }
+  ])
+  doctor_insertMany(data: [
+    {
+      id: "750e8400-e29b-41d4-a716-446655440000",
+      userId: "550e8400-e29b-41d4-a716-446655440001",
+      experienceYears: 5,
+      licenseNumber: "example",
+      specialization: "example"
+    }
+  ])
+}
+
+query GetMyMedicalRecords @auth(level: USER) {
+  medicalRecords(where: {patient: {user: {id_expr: "auth.uid"}}}) {
+    id
+    description
+    uploadDate
+    recordType
+    documentUrl
+  }
+}
+
+mutation CreateReview($doctorId: UUID!, $rating: Int!, $reviewText: String!) @auth(level: USER) {
+  review_insert(data: {
+    doctorId: $doctorId,
+    patientId_expr: "uuidV4()", #  IN_PROD: patientId_expr: "auth.uid"
+    rating: $rating,
+    reviewText: $reviewText,
+    createdAt_expr: "request.time"
+  })
+}
+
+query ListDoctors @auth(level: PUBLIC, insecureReason: "This operation is safe to expose to the public") {
+  doctors {
+    id
+    specialization
+    experienceYears
+    consultationFee
+    bio
+    user {
+      displayName
+      photoUrl
+    }
+  }
+}
