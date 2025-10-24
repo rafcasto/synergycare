@@ -399,6 +399,44 @@ export class FirestoreService {
         stack: error instanceof Error ? error.stack : undefined
       });
       
+      // Enhanced error logging for schedule creation
+      console.error('=== DOCTOR SCHEDULE CREATION ERROR ===');
+      console.error('Function: createDoctorSchedule');
+      console.error('Doctor ID:', scheduleData.doctorId);
+      console.error('Schedule Name:', scheduleData.name);
+      console.error('Timestamp:', new Date().toISOString());
+      
+      if (error instanceof Error) {
+        console.error('Error Details:', {
+          message: error.message,
+          name: error.name,
+          stack: error.stack
+        });
+        
+        const firebaseError = error as Error & { 
+          code?: string; 
+          details?: unknown; 
+        };
+        if (firebaseError.code) {
+          console.error('Firebase Error Code:', firebaseError.code);
+        }
+        if (firebaseError.details) {
+          console.error('Firebase Error Details:', firebaseError.details);
+        }
+        
+        // Check for specific error patterns
+        const lowerMessage = error.message.toLowerCase();
+        if (lowerMessage.includes('index')) {
+          console.error('INDEX ERROR: Missing Firestore composite indexes detected');
+          console.error('Check Firebase Console > Firestore > Indexes for index creation status');
+        }
+        if (lowerMessage.includes('permission')) {
+          console.error('PERMISSION ERROR: Check Firestore security rules for schedules collection');
+        }
+      }
+      
+      console.error('=== END SCHEDULE CREATION ERROR ===');
+      
       if (errorCode === 'permission-denied') {
         throw new Error(`Permission denied: Unable to create schedule. Please check that your account has doctor permissions. Error: ${errorMessage}`);
       }
@@ -534,6 +572,48 @@ export class FirestoreService {
         slotData,
         stack: error instanceof Error ? error.stack : undefined
       });
+      
+      // Enhanced error logging for availability slot creation
+      console.error('=== AVAILABILITY SLOT CREATION ERROR ===');
+      console.error('Function: createAvailabilitySlot');
+      console.error('Doctor ID:', slotData.doctorId);
+      console.error('Date:', slotData.date);
+      console.error('Time Slot:', slotData.startTime, '-', slotData.endTime);
+      console.error('Timestamp:', new Date().toISOString());
+      
+      if (error instanceof Error) {
+        console.error('Error Details:', {
+          message: error.message,
+          name: error.name,
+          stack: error.stack
+        });
+        
+        const firebaseError = error as Error & { 
+          code?: string; 
+          details?: unknown; 
+        };
+        if (firebaseError.code) {
+          console.error('Firebase Error Code:', firebaseError.code);
+        }
+        if (firebaseError.details) {
+          console.error('Firebase Error Details:', firebaseError.details);
+        }
+        
+        // Check for specific error patterns
+        const lowerMessage = error.message.toLowerCase();
+        if (lowerMessage.includes('index')) {
+          console.error('INDEX ERROR: Missing Firestore composite indexes for availability_slots collection');
+          console.error('Indexes needed for queries on: doctorId, date, startTime combinations');
+        }
+        if (lowerMessage.includes('permission')) {
+          console.error('PERMISSION ERROR: Check Firestore security rules for availability_slots collection');
+        }
+        if (lowerMessage.includes('quota') || lowerMessage.includes('limit')) {
+          console.error('QUOTA ERROR: Firestore write limits exceeded');
+        }
+      }
+      
+      console.error('=== END SLOT CREATION ERROR ===');
       
       if (errorCode === 'permission-denied') {
         throw new Error(`Permission denied: Unable to create availability slot. Please check that your account has doctor permissions. Error: ${errorMessage}`);
@@ -783,6 +863,52 @@ export class FirestoreService {
       
     } catch (error) {
       console.error('❌ generateAvailabilitySlots failed:', error);
+      
+      // Enhanced error logging for slot generation
+      console.error('=== AVAILABILITY SLOT GENERATION ERROR ===');
+      console.error('Function: generateAvailabilitySlots');
+      console.error('Doctor ID:', doctorId);
+      console.error('Date Range:', fromDate, 'to', toDate);
+      console.error('Slot Duration:', slotDuration);
+      console.error('Timestamp:', new Date().toISOString());
+      
+      if (error instanceof Error) {
+        console.error('Error Message:', error.message);
+        console.error('Error Stack:', error.stack);
+        
+        // Check for Firebase-specific error properties
+        const firebaseError = error as Error & { 
+          code?: string; 
+          details?: unknown; 
+          serverResponse?: unknown; 
+        };
+        if (firebaseError.code) {
+          console.error('Firebase Error Code:', firebaseError.code);
+        }
+        if (firebaseError.details) {
+          console.error('Firebase Error Details:', firebaseError.details);
+        }
+        if (firebaseError.serverResponse) {
+          console.error('Firebase Server Response:', firebaseError.serverResponse);
+        }
+        
+        // Check for specific error patterns
+        const errorMessage = error.message.toLowerCase();
+        if (errorMessage.includes('index')) {
+          console.error('INDEX ERROR DETECTED: This is likely due to missing Firestore indexes.');
+          console.error('Check the Firebase Console for index creation status.');
+        }
+        if (errorMessage.includes('permission')) {
+          console.error('PERMISSION ERROR DETECTED: Check Firestore security rules.');
+        }
+        if (errorMessage.includes('quota') || errorMessage.includes('limit')) {
+          console.error('QUOTA ERROR DETECTED: Firestore limits may have been exceeded.');
+        }
+      } else {
+        console.error('Non-Error object thrown:', JSON.stringify(error, null, 2));
+      }
+      
+      console.error('=== END SLOT GENERATION ERROR ===');
       throw error;
     }
   }

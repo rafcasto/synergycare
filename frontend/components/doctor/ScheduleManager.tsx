@@ -62,7 +62,27 @@ export default function ScheduleManager() {
 
     } catch (err) {
       console.error('Error loading schedule data:', err);
-      setError('Failed to load schedule data. This might be your first time accessing schedules.');
+      
+      // Enhanced error logging for schedule data loading
+      console.error('=== SCHEDULE DATA LOADING ERROR ===');
+      console.error('User ID:', user?.uid);
+      console.error('Error:', err instanceof Error ? {
+        message: err.message,
+        code: (err as Error & { code?: string }).code,
+        stack: err.stack
+      } : err);
+      console.error('=== END LOADING ERROR ===');
+      
+      const errorMessage = (err as Error).message || String(err);
+      const errorCode = (err as Error & { code?: string }).code;
+      
+      if (errorCode === 'permission-denied') {
+        setError('Permission denied: Unable to load schedule data. Check your user permissions.');
+      } else if (errorMessage.includes('index') || errorMessage.includes('Index')) {
+        setError('Database indexes are building. Schedule data will be available shortly.');
+      } else {
+        setError(`Failed to load schedule data: ${errorMessage}. This might be your first time accessing schedules.`);
+      }
     } finally {
       setLoading(false);
     }
@@ -118,25 +138,84 @@ export default function ScheduleManager() {
     } catch (err) {
       console.error('❌ Error creating default schedule:', err);
       
-      // Log the full error details
+      // Enhanced error logging for production debugging
+      const timestamp = new Date().toISOString();
+      const userId = user?.uid;
+      const userEmail = user?.email;
+      
+      console.error('=== SCHEDULE CREATION ERROR DETAILS ===');
+      console.error('Timestamp:', timestamp);
+      console.error('User ID:', userId);
+      console.error('User Email:', userEmail);
+      console.error('Error Type:', typeof err);
+      console.error('Error Constructor:', err?.constructor?.name);
+      
       if (err instanceof Error) {
-        console.error('Error message:', err.message);
-        console.error('Error stack:', err.stack);
-        if ('code' in err) {
-          console.error('Error code:', (err as Error & { code?: string }).code);
+        console.error('Error Message:', err.message);
+        console.error('Error Stack:', err.stack);
+        
+        // Check for Firebase-specific error properties
+        const firebaseError = err as Error & { 
+          code?: string; 
+          details?: unknown; 
+          customData?: unknown; 
+          serverResponse?: unknown; 
+        };
+        if (firebaseError.code) {
+          console.error('Firebase Error Code:', firebaseError.code);
         }
+        if (firebaseError.details) {
+          console.error('Firebase Error Details:', firebaseError.details);
+        }
+        if (firebaseError.customData) {
+          console.error('Firebase Custom Data:', firebaseError.customData);
+        }
+        if (firebaseError.serverResponse) {
+          console.error('Firebase Server Response:', firebaseError.serverResponse);
+        }
+      } else {
+        console.error('Non-Error object thrown:', JSON.stringify(err, null, 2));
       }
       
+      // Log current environment state
+      console.error('Current URL:', window.location.href);
+      console.error('User Agent:', navigator.userAgent);
+      console.error('Local Storage Keys:', Object.keys(localStorage));
+      
+      // Try to get more Firebase context
+      try {
+        const { getAuth } = await import('firebase/auth');
+        const auth = getAuth();
+        console.error('Current Auth User:', auth.currentUser ? {
+          uid: auth.currentUser.uid,
+          email: auth.currentUser.email,
+          emailVerified: auth.currentUser.emailVerified,
+          customClaims: await auth.currentUser.getIdTokenResult().then(result => result.claims)
+        } : null);
+      } catch (authErr) {
+        console.error('Could not get auth context:', authErr);
+      }
+      
+      console.error('=== END ERROR DETAILS ===');
+      
       // More specific error handling
-      const errorMessage = (err as Error).message;
+      const errorMessage = (err as Error).message || String(err);
       const errorCode = (err as Error & { code?: string }).code;
       
       if (errorCode === 'permission-denied') {
         setError(`Permission denied: ${errorMessage}. Check your user role and Firestore rules.`);
       } else if (errorMessage.includes('index') || errorMessage.includes('Index')) {
         setError('Database indexes are still building - this may take a few moments. Please try again in a minute.');
+      } else if (errorMessage.includes('network') || errorMessage.includes('Network')) {
+        setError(`Network error: ${errorMessage}. Please check your internet connection and try again.`);
+      } else if (errorCode === 'unavailable') {
+        setError(`Service temporarily unavailable: ${errorMessage}. Please try again in a few moments.`);
+      } else if (errorCode === 'deadline-exceeded') {
+        setError(`Request timeout: ${errorMessage}. The operation took too long. Please try again.`);
+      } else if (errorCode === 'resource-exhausted') {
+        setError(`Resource limits exceeded: ${errorMessage}. Please try again later.`);
       } else {
-        setError(`Failed to create default schedule: ${errorMessage}`);
+        setError(`Failed to create default schedule: ${errorMessage} (Code: ${errorCode || 'unknown'})`);
       }
     } finally {
       setLoading(false);
@@ -149,7 +228,26 @@ export default function ScheduleManager() {
       await loadScheduleData();
     } catch (err) {
       console.error('Error updating schedule:', err);
-      setError('Failed to update schedule');
+      
+      // Enhanced error logging for schedule updates
+      console.error('=== SCHEDULE UPDATE ERROR ===');
+      console.error('Schedule ID:', updatedSchedule.id);
+      console.error('User ID:', user?.uid);
+      console.error('Error:', err instanceof Error ? {
+        message: err.message,
+        code: (err as Error & { code?: string }).code,
+        stack: err.stack
+      } : err);
+      console.error('=== END UPDATE ERROR ===');
+      
+      const errorMessage = (err as Error).message || String(err);
+      const errorCode = (err as Error & { code?: string }).code;
+      
+      if (errorCode === 'permission-denied') {
+        setError('Permission denied: Unable to update schedule. Check your user permissions.');
+      } else {
+        setError(`Failed to update schedule: ${errorMessage}`);
+      }
     }
   };
 
@@ -159,7 +257,26 @@ export default function ScheduleManager() {
       await loadScheduleData();
     } catch (err) {
       console.error('Error creating exception:', err);
-      setError('Failed to create schedule exception');
+      
+      // Enhanced error logging for exception creation
+      console.error('=== EXCEPTION CREATION ERROR ===');
+      console.error('Exception data:', exception);
+      console.error('User ID:', user?.uid);
+      console.error('Error:', err instanceof Error ? {
+        message: err.message,
+        code: (err as Error & { code?: string }).code,
+        stack: err.stack
+      } : err);
+      console.error('=== END EXCEPTION ERROR ===');
+      
+      const errorMessage = (err as Error).message || String(err);
+      const errorCode = (err as Error & { code?: string }).code;
+      
+      if (errorCode === 'permission-denied') {
+        setError('Permission denied: Unable to create schedule exception. Check your user permissions.');
+      } else {
+        setError(`Failed to create schedule exception: ${errorMessage}`);
+      }
     }
   };
 
@@ -287,6 +404,64 @@ export default function ScheduleManager() {
             className="flex items-center space-x-2"
           >
             <span>Fix User Role</span>
+          </Button>
+          <Button
+            variant="outline"
+            onClick={async () => {
+              if (!user?.uid) {
+                alert('No user logged in');
+                return;
+              }
+              
+              console.log('=== TESTING INDEX AVAILABILITY ===');
+              console.log('Testing different Firestore queries to identify index issues...');
+              
+              try {
+                // Test basic schedule query
+                console.log('1. Testing basic schedule query...');
+                const schedules = await FirestoreService.getDoctorSchedules(user.uid);
+                console.log('✅ Basic schedule query successful:', schedules.length, 'schedules found');
+                
+                // Test availability slots query
+                console.log('2. Testing availability slots query...');
+                const today = new Date().toISOString().split('T')[0];
+                const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+                const slots = await FirestoreService.getAvailabilitySlots(user.uid, today, tomorrow);
+                console.log('✅ Availability slots query successful:', slots.length, 'slots found');
+                
+                // Test exception query
+                console.log('3. Testing schedule exceptions query...');
+                const exceptions = await FirestoreService.getScheduleExceptions(user.uid);
+                console.log('✅ Schedule exceptions query successful:', exceptions.length, 'exceptions found');
+                
+                alert('All Firestore queries successful! Check console for details.');
+                
+              } catch (error) {
+                console.error('❌ Index test failed:', error);
+                
+                const errorMessage = (error as Error).message || String(error);
+                const errorCode = (error as Error & { code?: string }).code;
+                
+                console.error('Error Analysis:', {
+                  message: errorMessage,
+                  code: errorCode,
+                  isIndexError: errorMessage.includes('index') || errorMessage.includes('Index'),
+                  isPermissionError: errorCode === 'permission-denied',
+                  isNetworkError: errorMessage.includes('network') || errorMessage.includes('Network')
+                });
+                
+                if (errorMessage.includes('index') || errorMessage.includes('Index')) {
+                  alert(`INDEX ERROR CONFIRMED: ${errorMessage}\n\nThis confirms that Firestore indexes are still building. Please wait a few minutes and try again.`);
+                } else {
+                  alert(`Query failed with error: ${errorMessage}\n\nError code: ${errorCode || 'unknown'}\n\nCheck console for full details.`);
+                }
+              }
+              
+              console.log('=== END INDEX TEST ===');
+            }}
+            className="flex items-center space-x-2"
+          >
+            <span>Test Indexes</span>
           </Button>
         </div>
       </div>
