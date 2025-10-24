@@ -653,130 +653,138 @@ export class FirestoreService {
   ): Promise<void> {
     console.log(`🔧 generateAvailabilitySlots called: ${doctorId}, ${fromDate} to ${toDate}`);
     
-    // First, check if slots already exist for this date range and clear them
-    // Use a try-catch to handle potential index errors gracefully
     try {
-      const existingSlots = await this.getAvailabilitySlots(doctorId, fromDate, toDate);
-      if (existingSlots.length > 0) {
-        console.log(`🗑️ Clearing ${existingSlots.length} existing slots`);
-        const deletePromises = existingSlots.map(slot => this.deleteAvailabilitySlot(slot.id));
-        await Promise.all(deletePromises);
-      }
-    } catch (error: unknown) {
-      // If index error occurs during cleanup, log it but continue with generation
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      const isIndexError = errorMessage.includes('index') || errorMessage.includes('Index');
-      if (isIndexError) {
-        console.warn('⚠️ Index error during existing slots cleanup - continuing with generation:', errorMessage);
-      } else {
-        throw error; // Re-throw non-index errors
-      }
-    }
-    
-    // Get doctor's default schedule
-    const defaultSchedule = await this.getDoctorDefaultSchedule(doctorId);
-    if (!defaultSchedule) {
-      throw new Error('No default schedule found for doctor');
-    }
-
-    console.log('📅 Default schedule:', defaultSchedule.weeklySchedule);
-
-    // Get schedule exceptions for the date range
-    const exceptions = await this.getScheduleExceptions(doctorId, fromDate, toDate);
-    const exceptionMap = new Map(exceptions.map(ex => [ex.date, ex]));
-
-    console.log('⚠️ Exceptions found:', exceptions.length);
-
-    // Helper function to generate time slots
-    const generateTimeSlots = (daySchedule: DaySchedule, date: string): AvailabilitySlot[] => {
-      const slots: AvailabilitySlot[] = [];
-      
-      daySchedule.shifts.forEach(shift => {
-        let currentTime = this.timeStringToMinutes(shift.startTime);
-        const endTime = this.timeStringToMinutes(shift.endTime);
-        
-        while (currentTime + slotDuration <= endTime) {
-          // Check if this time conflicts with any breaks
-          const currentTimeStr = this.minutesToTimeString(currentTime);
-          const slotEndTimeStr = this.minutesToTimeString(currentTime + slotDuration);
-          
-          const isInBreak = daySchedule.breaks.some(breakSlot => {
-            const breakStart = this.timeStringToMinutes(breakSlot.startTime);
-            const breakEnd = this.timeStringToMinutes(breakSlot.endTime);
-            return currentTime < breakEnd && (currentTime + slotDuration) > breakStart;
-          });
-          
-          if (!isInBreak) {
-            slots.push({
-              id: '', // Will be set by createAvailabilitySlot
-              doctorId,
-              date,
-              startTime: currentTimeStr,
-              endTime: slotEndTimeStr,
-              duration: slotDuration,
-              isBooked: false,
-              status: 'available',
-              createdAt: Timestamp.now(),
-              updatedAt: Timestamp.now(),
-            });
-          }
-          
-          currentTime += slotDuration;
+      // First, check if slots already exist for this date range and clear them
+      console.log('🔍 Step 1: Checking for existing slots...');
+      try {
+        const existingSlots = await this.getAvailabilitySlots(doctorId, fromDate, toDate);
+        if (existingSlots.length > 0) {
+          console.log(`🗑️ Found ${existingSlots.length} existing slots, clearing them...`);
+          const deletePromises = existingSlots.map(slot => this.deleteAvailabilitySlot(slot.id));
+          await Promise.all(deletePromises);
+          console.log('✅ Existing slots cleared');
+        } else {
+          console.log('✅ No existing slots found');
         }
-      });
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const isIndexError = errorMessage.includes('index') || errorMessage.includes('Index');
+        if (isIndexError) {
+          console.warn('⚠️ Index error during existing slots cleanup - continuing with generation:', errorMessage);
+        } else {
+          console.error('❌ Error during slot cleanup:', errorMessage);
+          throw error;
+        }
+      }
       
-      return slots;
-    };
+      // Get doctor's default schedule
+      console.log('🔍 Step 2: Getting doctor default schedule...');
+      const defaultSchedule = await this.getDoctorDefaultSchedule(doctorId);
+      if (!defaultSchedule) {
+        throw new Error('No default schedule found for doctor');
+      }
+      console.log('✅ Default schedule found:', defaultSchedule.name);
 
-    // Generate slots for each date
-    const startDate = this.parseLocalDate(fromDate);
-    const endDate = this.parseLocalDate(toDate);
-    const promises: Promise<string>[] = [];
-    
-    for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
-      // Use timezone-safe date formatting
-      const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-      const dayOfWeek = this.getDayOfWeek(date);
+      // Get schedule exceptions for the date range
+      console.log('🔍 Step 3: Getting schedule exceptions...');
+      const exceptions = await this.getScheduleExceptions(doctorId, fromDate, toDate);
+      const exceptionMap = new Map(exceptions.map(ex => [ex.date, ex]));
+      console.log(`✅ Found ${exceptions.length} exceptions`);
+
+      // Helper function to generate time slots
+      const generateTimeSlots = (daySchedule: DaySchedule, date: string): AvailabilitySlot[] => {
+        const slots: AvailabilitySlot[] = [];
+        
+        daySchedule.shifts.forEach(shift => {
+          let currentTime = this.timeStringToMinutes(shift.startTime);
+          const endTime = this.timeStringToMinutes(shift.endTime);
+          
+          while (currentTime + slotDuration <= endTime) {
+            const currentTimeStr = this.minutesToTimeString(currentTime);
+            const slotEndTimeStr = this.minutesToTimeString(currentTime + slotDuration);
+            
+            const isInBreak = daySchedule.breaks.some(breakSlot => {
+              const breakStart = this.timeStringToMinutes(breakSlot.startTime);
+              const breakEnd = this.timeStringToMinutes(breakSlot.endTime);
+              return currentTime < breakEnd && (currentTime + slotDuration) > breakStart;
+            });
+            
+            if (!isInBreak) {
+              slots.push({
+                id: '', // Will be set by createAvailabilitySlot
+                doctorId,
+                date,
+                startTime: currentTimeStr,
+                endTime: slotEndTimeStr,
+                duration: slotDuration,
+                isBooked: false,
+                status: 'available',
+                createdAt: Timestamp.now(),
+                updatedAt: Timestamp.now(),
+              });
+            }
+            
+            currentTime += slotDuration;
+          }
+        });
+        
+        return slots;
+      };
+
+      // Generate slots for each date
+      console.log('🔍 Step 4: Generating slots for date range...');
+      const startDate = this.parseLocalDate(fromDate);
+      const endDate = this.parseLocalDate(toDate);
+      const promises: Promise<string>[] = [];
       
-      console.log(`📆 Processing date: ${dateStr} (${dayOfWeek})`);
-      
-      // Check for exceptions
-      const exception = exceptionMap.get(dateStr);
-      let daySchedule: DaySchedule;
-      
-      if (exception) {
-        console.log(`⚠️ Exception found for ${dateStr}:`, exception.type);
-        if (exception.type === 'unavailable' || exception.type === 'holiday') {
-          continue; // Skip this date
-        } else if (exception.type === 'modified_hours' && exception.modifiedSchedule) {
-          daySchedule = exception.modifiedSchedule;
+      for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+        const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        const dayOfWeek = this.getDayOfWeek(date);
+        
+        const exception = exceptionMap.get(dateStr);
+        let daySchedule: DaySchedule;
+        
+        if (exception) {
+          if (exception.type === 'unavailable' || exception.type === 'holiday') {
+            continue; // Skip this date
+          } else if (exception.type === 'modified_hours' && exception.modifiedSchedule) {
+            daySchedule = exception.modifiedSchedule;
+          } else {
+            daySchedule = defaultSchedule.weeklySchedule[dayOfWeek];
+          }
         } else {
           daySchedule = defaultSchedule.weeklySchedule[dayOfWeek];
         }
-      } else {
-        daySchedule = defaultSchedule.weeklySchedule[dayOfWeek];
+        
+        if (daySchedule.isWorking) {
+          const slots = generateTimeSlots(daySchedule, dateStr);
+          console.log(`� Generated ${slots.length} slots for ${dateStr} (${dayOfWeek})`);
+          slots.forEach(slot => {
+            promises.push(this.createAvailabilitySlot(slot));
+          });
+        }
       }
       
-      console.log(`📋 Day schedule for ${dateStr} (${dayOfWeek}):`, {
-        isWorking: daySchedule.isWorking,
-        shifts: daySchedule.shifts,
-        breaks: daySchedule.breaks
-      });
-      
-      if (daySchedule.isWorking) {
-        const slots = generateTimeSlots(daySchedule, dateStr);
-        console.log(`🕐 Generated ${slots.length} slots for ${dateStr}`);
-        slots.forEach(slot => {
-          promises.push(this.createAvailabilitySlot(slot));
-        });
-      } else {
-        console.log(`❌ Not working on ${dateStr} (${dayOfWeek})`);
+      console.log(`💾 Step 5: Creating ${promises.length} total slots in Firestore...`);
+      if (promises.length === 0) {
+        console.warn('⚠️ No slots to create - check your schedule configuration');
+        return;
       }
+      
+      // Create slots in batches to avoid overwhelming Firestore
+      const batchSize = 50;
+      for (let i = 0; i < promises.length; i += batchSize) {
+        const batch = promises.slice(i, i + batchSize);
+        console.log(`💾 Creating batch ${Math.floor(i/batchSize) + 1}/${Math.ceil(promises.length/batchSize)} (${batch.length} slots)...`);
+        await Promise.all(batch);
+      }
+      
+      console.log('✅ Slot generation completed successfully');
+      
+    } catch (error) {
+      console.error('❌ generateAvailabilitySlots failed:', error);
+      throw error;
     }
-    
-    console.log(`💾 Creating ${promises.length} total slots...`);
-    await Promise.all(promises);
-    console.log('✅ Slot generation complete');
   }
 
   // Utility methods for time handling

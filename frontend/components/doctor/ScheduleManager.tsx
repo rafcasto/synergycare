@@ -79,44 +79,64 @@ export default function ScheduleManager() {
 
     try {
       setLoading(true);
-      console.log('Creating default schedule for doctor:', user.uid);
+      console.log('🔧 Starting default schedule creation for doctor:', user.uid);
 
+      // Step 1: Create schedule template
+      console.log('📋 Step 1: Creating schedule template...');
       const defaultScheduleData = ScheduleService.createDefaultScheduleTemplate(user.uid);
-      console.log('Default schedule template:', defaultScheduleData);
+      console.log('✅ Schedule template created:', defaultScheduleData);
       
+      // Step 2: Save to Firestore
+      console.log('💾 Step 2: Saving schedule to Firestore...');
       const scheduleId = await FirestoreService.createDoctorSchedule(defaultScheduleData);
-      console.log('Created schedule with ID:', scheduleId);
+      console.log('✅ Schedule saved with ID:', scheduleId);
       
-      // Reload data
+      // Step 3: Reload schedule data
+      console.log('🔄 Step 3: Reloading schedule data...');
       await loadScheduleData();
+      console.log('✅ Schedule data reloaded');
       
-      // Generate availability slots for the next 30 days
+      // Step 4: Generate availability slots
       const today = new Date();
       const endDate = new Date(today);
       endDate.setDate(today.getDate() + 30);
       
-      console.log('Generating availability slots from', today.toISOString().split('T')[0], 'to', endDate.toISOString().split('T')[0]);
+      const fromDate = today.toISOString().split('T')[0];
+      const toDate = endDate.toISOString().split('T')[0];
+      
+      console.log(`🕐 Step 4: Generating availability slots from ${fromDate} to ${toDate}...`);
       
       await FirestoreService.generateAvailabilitySlots(
         user.uid,
-        today.toISOString().split('T')[0],
-        endDate.toISOString().split('T')[0]
+        fromDate,
+        toDate
       );
 
-      console.log('Default schedule created successfully');
+      console.log('✅ Default schedule creation completed successfully!');
+      setError(null); // Clear any previous errors
 
     } catch (err) {
-      console.error('Error creating default schedule:', err);
+      console.error('❌ Error creating default schedule:', err);
       
-      // Check if it's an index-related error but schedules were still created
+      // Log the full error details
+      if (err instanceof Error) {
+        console.error('Error message:', err.message);
+        console.error('Error stack:', err.stack);
+        if ('code' in err) {
+          console.error('Error code:', (err as any).code);
+        }
+      }
+      
+      // More specific error handling
       const errorMessage = (err as Error).message;
-      const isIndexError = errorMessage.includes('index') || errorMessage.includes('Index');
+      const errorCode = (err as any).code;
       
-      if (isIndexError) {
-        // Give a more user-friendly message for index errors
-        setError('Schedule creation is in progress. Database indexes are still building - this may take a few moments. Please refresh the page in a minute to see your schedule.');
+      if (errorCode === 'permission-denied') {
+        setError(`Permission denied: ${errorMessage}. Check your user role and Firestore rules.`);
+      } else if (errorMessage.includes('index') || errorMessage.includes('Index')) {
+        setError('Database indexes are still building - this may take a few moments. Please try again in a minute.');
       } else {
-        setError('Failed to create default schedule: ' + errorMessage);
+        setError(`Failed to create default schedule: ${errorMessage}`);
       }
     } finally {
       setLoading(false);
