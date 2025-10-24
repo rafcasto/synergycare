@@ -20,42 +20,89 @@ export default function ScheduleManager() {
   const [defaultSchedule, setDefaultSchedule] = useState<DoctorSchedule | null>(null);
   const [exceptions, setExceptions] = useState<ScheduleException[]>([]);
   const [loading, setLoading] = useState(true);
+  const [dataLoading, setDataLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
 
-  const loadScheduleData = useCallback(async () => {
+  // Retry logic for production delays
+  const retryWithDelay = async (fn: () => Promise<unknown>, maxRetries: number = 3, delay: number = 1000): Promise<unknown> => {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        return await fn();
+      } catch (error) {
+        console.log(`Attempt ${attempt}/${maxRetries} failed:`, error);
+        
+        if (attempt === maxRetries) {
+          throw error;
+        }
+        
+        // Exponential backoff with jitter
+        const backoffDelay = delay * Math.pow(2, attempt - 1) + Math.random() * 1000;
+        console.log(`Retrying in ${Math.round(backoffDelay)}ms...`);
+        await new Promise(resolve => setTimeout(resolve, backoffDelay));
+      }
+    }
+  };
+
+  const loadScheduleData = useCallback(async (retryAttempt: number = 0) => {
     if (!user?.uid) return;
 
     try {
-      setLoading(true);
+      setDataLoading(true);
       setError(null);
+      setRetryCount(retryAttempt);
 
-      console.log('Loading schedule data for doctor:', user.uid);
+      console.log(`Loading schedule data for doctor: ${user.uid} (attempt ${retryAttempt + 1})`);
 
-      // Try to load schedules first
-      let schedulesData: DoctorSchedule[] = [];
-      try {
-        schedulesData = await FirestoreService.getDoctorSchedules(user.uid);
-        console.log('Loaded schedules:', schedulesData);
-      } catch (scheduleErr) {
-        console.warn('Error loading schedules (this is normal for new doctors):', scheduleErr);
-        schedulesData = [];
-      }
+      // Load data with retry logic and proper error handling
+      const loadWithRetry = async () => {
+        // Load schedules with retry
+        const schedulesData = await retryWithDelay(async () => {
+          try {
+            const data = await FirestoreService.getDoctorSchedules(user.uid);
+            console.log('Loaded schedules:', data);
+            return data;
+          } catch (err) {
+            console.warn('Error loading schedules:', err);
+            // For permission or index errors, don't retry
+            const errorCode = (err as Error & { code?: string }).code;
+            if (errorCode === 'permission-denied' || 
+                (err as Error).message.includes('index')) {
+              return [];
+            }
+            throw err;
+          }
+        }, 3, 1000);
 
-      // Try to load exceptions
-      let exceptionsData: ScheduleException[] = [];
-      try {
-        exceptionsData = await FirestoreService.getScheduleExceptions(user.uid);
-        console.log('Loaded exceptions:', exceptionsData);
-      } catch (exceptionErr) {
-        console.warn('Error loading exceptions (this is normal for new doctors):', exceptionErr);
-        exceptionsData = [];
-      }
+        // Load exceptions with retry
+        const exceptionsData = await retryWithDelay(async () => {
+          try {
+            const data = await FirestoreService.getScheduleExceptions(user.uid);
+            console.log('Loaded exceptions:', data);
+            return data;
+          } catch (err) {
+            console.warn('Error loading exceptions:', err);
+            // For permission or index errors, don't retry
+            const errorCode = (err as Error & { code?: string }).code;
+            if (errorCode === 'permission-denied' || 
+                (err as Error).message.includes('index')) {
+              return [];
+            }
+            throw err;
+          }
+        }, 3, 1000);
 
-      setSchedules(schedulesData);
-      setExceptions(exceptionsData);
+        return { schedulesData, exceptionsData };
+      };
+
+      const { schedulesData, exceptionsData } = await loadWithRetry();
+
+      // Update state atomically to prevent race conditions
+      setSchedules(schedulesData as DoctorSchedule[]);
+      setExceptions(exceptionsData as ScheduleException[]);
 
       // Find default schedule
-      const defaultSched = schedulesData.find(s => s.isDefault) || null;
+      const defaultSched = (schedulesData as DoctorSchedule[]).find((s: DoctorSchedule) => s.isDefault) || null;
       setDefaultSchedule(defaultSched);
 
       console.log('Schedule data loaded successfully');
@@ -85,8 +132,14 @@ export default function ScheduleManager() {
       }
     } finally {
       setLoading(false);
+      setDataLoading(false);
     }
   }, [user?.uid]);
+
+  // Wrapper for UI event handlers
+  const handleRefresh = async () => {
+    await loadScheduleData(0);
+  };
 
   useEffect(() => {
     if (user?.uid) {
@@ -99,6 +152,7 @@ export default function ScheduleManager() {
 
     try {
       setLoading(true);
+      setError(null);
       console.log('🔧 Starting default schedule creation for doctor:', user.uid);
 
       // Step 1: Create schedule template
@@ -106,17 +160,23 @@ export default function ScheduleManager() {
       const defaultScheduleData = ScheduleService.createDefaultScheduleTemplate(user.uid);
       console.log('✅ Schedule template created:', defaultScheduleData);
       
-      // Step 2: Save to Firestore
+      // Step 2: Save to Firestore with retry logic
       console.log('💾 Step 2: Saving schedule to Firestore...');
-      const scheduleId = await FirestoreService.createDoctorSchedule(defaultScheduleData);
+      const scheduleId = await retryWithDelay(async () => {
+        return await FirestoreService.createDoctorSchedule(defaultScheduleData);
+      }, 3, 2000);
       console.log('✅ Schedule saved with ID:', scheduleId);
       
-      // Step 3: Reload schedule data
-      console.log('🔄 Step 3: Reloading schedule data...');
-      await loadScheduleData();
+      // Step 3: Wait a moment for consistency in production
+      console.log('⏳ Step 3: Waiting for database consistency...');
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Step 4: Reload schedule data with retry
+      console.log('🔄 Step 4: Reloading schedule data...');
+      await loadScheduleData(0);
       console.log('✅ Schedule data reloaded');
       
-      // Step 4: Generate availability slots
+      // Step 5: Generate availability slots with retry
       const today = new Date();
       const endDate = new Date(today);
       endDate.setDate(today.getDate() + 30);
@@ -124,81 +184,26 @@ export default function ScheduleManager() {
       const fromDate = today.toISOString().split('T')[0];
       const toDate = endDate.toISOString().split('T')[0];
       
-      console.log(`🕐 Step 4: Generating availability slots from ${fromDate} to ${toDate}...`);
+      console.log(`🕐 Step 5: Generating availability slots from ${fromDate} to ${toDate}...`);
       
-      await FirestoreService.generateAvailabilitySlots(
-        user.uid,
-        fromDate,
-        toDate
-      );
+      await retryWithDelay(async () => {
+        return await FirestoreService.generateAvailabilitySlots(
+          user.uid,
+          fromDate,
+          toDate
+        );
+      }, 3, 2000);
 
       console.log('✅ Default schedule creation completed successfully!');
       setError(null); // Clear any previous errors
+      
+      // Final data reload to ensure everything is up to date
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      await loadScheduleData(0);
 
     } catch (err) {
       console.error('❌ Error creating default schedule:', err);
       
-      // Enhanced error logging for production debugging
-      const timestamp = new Date().toISOString();
-      const userId = user?.uid;
-      const userEmail = user?.email;
-      
-      console.error('=== SCHEDULE CREATION ERROR DETAILS ===');
-      console.error('Timestamp:', timestamp);
-      console.error('User ID:', userId);
-      console.error('User Email:', userEmail);
-      console.error('Error Type:', typeof err);
-      console.error('Error Constructor:', err?.constructor?.name);
-      
-      if (err instanceof Error) {
-        console.error('Error Message:', err.message);
-        console.error('Error Stack:', err.stack);
-        
-        // Check for Firebase-specific error properties
-        const firebaseError = err as Error & { 
-          code?: string; 
-          details?: unknown; 
-          customData?: unknown; 
-          serverResponse?: unknown; 
-        };
-        if (firebaseError.code) {
-          console.error('Firebase Error Code:', firebaseError.code);
-        }
-        if (firebaseError.details) {
-          console.error('Firebase Error Details:', firebaseError.details);
-        }
-        if (firebaseError.customData) {
-          console.error('Firebase Custom Data:', firebaseError.customData);
-        }
-        if (firebaseError.serverResponse) {
-          console.error('Firebase Server Response:', firebaseError.serverResponse);
-        }
-      } else {
-        console.error('Non-Error object thrown:', JSON.stringify(err, null, 2));
-      }
-      
-      // Log current environment state
-      console.error('Current URL:', window.location.href);
-      console.error('User Agent:', navigator.userAgent);
-      console.error('Local Storage Keys:', Object.keys(localStorage));
-      
-      // Try to get more Firebase context
-      try {
-        const { getAuth } = await import('firebase/auth');
-        const auth = getAuth();
-        console.error('Current Auth User:', auth.currentUser ? {
-          uid: auth.currentUser.uid,
-          email: auth.currentUser.email,
-          emailVerified: auth.currentUser.emailVerified,
-          customClaims: await auth.currentUser.getIdTokenResult().then(result => result.claims)
-        } : null);
-      } catch (authErr) {
-        console.error('Could not get auth context:', authErr);
-      }
-      
-      console.error('=== END ERROR DETAILS ===');
-      
-      // More specific error handling
       const errorMessage = (err as Error).message || String(err);
       const errorCode = (err as Error & { code?: string }).code;
       
@@ -224,21 +229,19 @@ export default function ScheduleManager() {
 
   const handleScheduleUpdate = async (updatedSchedule: DoctorSchedule) => {
     try {
-      await FirestoreService.updateDoctorSchedule(updatedSchedule.id, updatedSchedule);
-      await loadScheduleData();
+      setDataLoading(true);
+      setError(null);
+      
+      await retryWithDelay(async () => {
+        return await FirestoreService.updateDoctorSchedule(updatedSchedule.id, updatedSchedule);
+      }, 3, 1000);
+      
+      // Wait for consistency before reloading
+      await new Promise(resolve => setTimeout(resolve, 500));
+      await loadScheduleData(0);
+      
     } catch (err) {
       console.error('Error updating schedule:', err);
-      
-      // Enhanced error logging for schedule updates
-      console.error('=== SCHEDULE UPDATE ERROR ===');
-      console.error('Schedule ID:', updatedSchedule.id);
-      console.error('User ID:', user?.uid);
-      console.error('Error:', err instanceof Error ? {
-        message: err.message,
-        code: (err as Error & { code?: string }).code,
-        stack: err.stack
-      } : err);
-      console.error('=== END UPDATE ERROR ===');
       
       const errorMessage = (err as Error).message || String(err);
       const errorCode = (err as Error & { code?: string }).code;
@@ -248,26 +251,26 @@ export default function ScheduleManager() {
       } else {
         setError(`Failed to update schedule: ${errorMessage}`);
       }
+    } finally {
+      setDataLoading(false);
     }
   };
 
   const handleExceptionCreate = async (exception: Omit<ScheduleException, 'id' | 'createdAt' | 'updatedAt'>) => {
     try {
-      await FirestoreService.createScheduleException(exception);
-      await loadScheduleData();
+      setDataLoading(true);
+      setError(null);
+      
+      await retryWithDelay(async () => {
+        return await FirestoreService.createScheduleException(exception);
+      }, 3, 1000);
+      
+      // Wait for consistency before reloading
+      await new Promise(resolve => setTimeout(resolve, 500));
+      await loadScheduleData(0);
+      
     } catch (err) {
       console.error('Error creating exception:', err);
-      
-      // Enhanced error logging for exception creation
-      console.error('=== EXCEPTION CREATION ERROR ===');
-      console.error('Exception data:', exception);
-      console.error('User ID:', user?.uid);
-      console.error('Error:', err instanceof Error ? {
-        message: err.message,
-        code: (err as Error & { code?: string }).code,
-        stack: err.stack
-      } : err);
-      console.error('=== END EXCEPTION ERROR ===');
       
       const errorMessage = (err as Error).message || String(err);
       const errorCode = (err as Error & { code?: string }).code;
@@ -277,6 +280,8 @@ export default function ScheduleManager() {
       } else {
         setError(`Failed to create schedule exception: ${errorMessage}`);
       }
+    } finally {
+      setDataLoading(false);
     }
   };
 
@@ -306,6 +311,7 @@ export default function ScheduleManager() {
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         <span className="ml-3 text-gray-600">Loading schedule...</span>
+        {retryCount > 0 && <span className="ml-2 text-xs text-gray-500">(Retry {retryCount + 1})</span>}
       </div>
     );
   }
@@ -315,9 +321,16 @@ export default function ScheduleManager() {
       <Card className="p-6">
         <div className="text-center">
           <div className="text-red-600 mb-4">{error}</div>
+          {retryCount > 0 && (
+            <div className="text-sm text-gray-500 mb-4">
+              Attempted {retryCount + 1} time{retryCount > 0 ? 's' : ''}
+            </div>
+          )}
           <div className="flex justify-center space-x-3">
-            <Button onClick={loadScheduleData}>Try Again</Button>
-            <Button variant="outline" onClick={createDefaultSchedule}>
+            <Button onClick={handleRefresh} disabled={dataLoading}>
+              {dataLoading ? 'Retrying...' : 'Try Again'}
+            </Button>
+            <Button variant="outline" onClick={createDefaultSchedule} disabled={loading}>
               Create Default Schedule
             </Button>
           </div>
@@ -334,137 +347,31 @@ export default function ScheduleManager() {
           <h1 className="text-2xl font-bold text-gray-900">Schedule Management</h1>
           <p className="text-gray-600 mt-1">
             Manage your availability and working hours
+            {dataLoading && <span className="ml-2 text-blue-600 text-sm">• Updating...</span>}
           </p>
         </div>
         <div className="flex space-x-3">
           <Button
             variant="outline"
-            onClick={loadScheduleData}
+            onClick={handleRefresh}
+            disabled={dataLoading}
             className="flex items-center space-x-2"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className={`w-4 h-4 ${dataLoading ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
-            <span>Refresh</span>
-          </Button>
-          <Button
-            variant="outline"
-            onClick={async () => {
-              console.log('Testing Firebase connection...');
-              console.log('Current user:', user);
-              try {
-                const userProfile = await FirestoreService.getUser(user?.uid || '');
-                console.log('User profile from Firestore:', userProfile);
-                alert('Firebase connection working! Check console for details.');
-              } catch (err) {
-                console.error('Firebase connection error:', err);
-                alert('Firebase connection failed: ' + (err as Error).message);
-              }
-            }}
-            className="flex items-center space-x-2"
-          >
-            <span>Test Firebase</span>
-          </Button>
-          <Button
-            variant="outline"
-            onClick={async () => {
-              const { FirebaseDiagnostic } = await import('@/lib/firebase/diagnostic');
-              await FirebaseDiagnostic.checkEnvironment();
-              const results = await FirebaseDiagnostic.runFullDiagnostic();
-              console.log('🔍 Diagnostic Results:', results);
-              
-              if (results.errors.length > 0) {
-                alert(`Issues found:\n${results.errors.join('\n')}\n\nCheck console for details.`);
-              } else {
-                alert('All tests passed! Check console for details.');
-              }
-            }}
-            className="flex items-center space-x-2"
-          >
-            <span>Run Diagnostics</span>
-          </Button>
-          <Button
-            variant="outline"
-            onClick={async () => {
-              if (!user?.uid) {
-                alert('No user logged in');
-                return;
-              }
-              
-              try {
-                const { FirebaseDiagnostic } = await import('@/lib/firebase/diagnostic');
-                const role = await FirebaseDiagnostic.fixUserRole('doctor');
-                alert(`User role set to: ${role}. Now try creating the schedule again.`);
-                await loadScheduleData(); // Refresh the page data
-              } catch (error) {
-                console.error('Failed to fix user role:', error);
-                alert(`Failed to fix user role: ${error}`);
-              }
-            }}
-            className="flex items-center space-x-2"
-          >
-            <span>Fix User Role</span>
-          </Button>
-          <Button
-            variant="outline"
-            onClick={async () => {
-              if (!user?.uid) {
-                alert('No user logged in');
-                return;
-              }
-              
-              console.log('=== TESTING INDEX AVAILABILITY ===');
-              console.log('Testing different Firestore queries to identify index issues...');
-              
-              try {
-                // Test basic schedule query
-                console.log('1. Testing basic schedule query...');
-                const schedules = await FirestoreService.getDoctorSchedules(user.uid);
-                console.log('✅ Basic schedule query successful:', schedules.length, 'schedules found');
-                
-                // Test availability slots query
-                console.log('2. Testing availability slots query...');
-                const today = new Date().toISOString().split('T')[0];
-                const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-                const slots = await FirestoreService.getAvailabilitySlots(user.uid, today, tomorrow);
-                console.log('✅ Availability slots query successful:', slots.length, 'slots found');
-                
-                // Test exception query
-                console.log('3. Testing schedule exceptions query...');
-                const exceptions = await FirestoreService.getScheduleExceptions(user.uid);
-                console.log('✅ Schedule exceptions query successful:', exceptions.length, 'exceptions found');
-                
-                alert('All Firestore queries successful! Check console for details.');
-                
-              } catch (error) {
-                console.error('❌ Index test failed:', error);
-                
-                const errorMessage = (error as Error).message || String(error);
-                const errorCode = (error as Error & { code?: string }).code;
-                
-                console.error('Error Analysis:', {
-                  message: errorMessage,
-                  code: errorCode,
-                  isIndexError: errorMessage.includes('index') || errorMessage.includes('Index'),
-                  isPermissionError: errorCode === 'permission-denied',
-                  isNetworkError: errorMessage.includes('network') || errorMessage.includes('Network')
-                });
-                
-                if (errorMessage.includes('index') || errorMessage.includes('Index')) {
-                  alert(`INDEX ERROR CONFIRMED: ${errorMessage}\n\nThis confirms that Firestore indexes are still building. Please wait a few minutes and try again.`);
-                } else {
-                  alert(`Query failed with error: ${errorMessage}\n\nError code: ${errorCode || 'unknown'}\n\nCheck console for full details.`);
-                }
-              }
-              
-              console.log('=== END INDEX TEST ===');
-            }}
-            className="flex items-center space-x-2"
-          >
-            <span>Test Indexes</span>
+            <span>{dataLoading ? 'Refreshing...' : 'Refresh'}</span>
+            {retryCount > 0 && <span className="text-xs text-gray-500">({retryCount + 1})</span>}
           </Button>
         </div>
       </div>
+
+      {/* Data Loading Progress Bar */}
+      {dataLoading && (
+        <div className="w-full bg-gray-200 rounded-full h-1">
+          <div className="bg-blue-600 h-1 rounded-full animate-pulse" style={{width: '60%'}}></div>
+        </div>
+      )}
 
       {/* Tab Navigation */}
       <Card className="p-1">
@@ -502,8 +409,8 @@ export default function ScheduleManager() {
             <p className="text-gray-600 mb-4">
               You haven&apos;t set up your weekly schedule yet.
             </p>
-            <Button onClick={createDefaultSchedule}>
-              Create Default Schedule
+            <Button onClick={createDefaultSchedule} disabled={loading || dataLoading}>
+              {loading ? 'Creating...' : 'Create Default Schedule'}
             </Button>
           </Card>
         )}
@@ -513,7 +420,7 @@ export default function ScheduleManager() {
             doctorId={user.uid}
             schedules={schedules}
             exceptions={exceptions}
-            onRefresh={loadScheduleData}
+            onRefresh={handleRefresh}
           />
         )}
 
@@ -522,7 +429,7 @@ export default function ScheduleManager() {
             doctorId={user.uid}
             exceptions={exceptions}
             onExceptionCreate={handleExceptionCreate}
-            onRefresh={loadScheduleData}
+            onRefresh={handleRefresh}
           />
         )}
       </div>
