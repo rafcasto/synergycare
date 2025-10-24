@@ -32,6 +32,10 @@ export { DashboardSkeleton } from './admin/DashboardSkeleton';
 // Doctor components
 export { DoctorLayout } from './doctor/DoctorLayout';
 export { default as DoctorDashboard } from './doctor/DoctorDashboard';
+export { default as ScheduleManager } from './doctor/ScheduleManager';
+export { WeeklyScheduleEditor } from './doctor/WeeklyScheduleEditor';
+export { CalendarView } from './doctor/CalendarView';
+export { ExceptionManager } from './doctor/ExceptionManager';
 
 // Patient components
 export { PatientLayout } from './patient/PatientLayout';

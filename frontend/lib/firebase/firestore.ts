@@ -46,6 +46,61 @@ export interface DoctorProfile extends BaseUser {
   };
 }
 
+// New interfaces for schedule management
+export interface DoctorSchedule {
+  id: string;
+  doctorId: string;
+  name: string; // e.g., "Regular Hours", "Weekend Clinic"
+  isDefault: boolean;
+  timezone: string;
+  weeklySchedule: {
+    [key in DayOfWeek]: DaySchedule;
+  };
+  effectiveFrom: Timestamp;
+  effectiveTo?: Timestamp;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+}
+
+export interface DaySchedule {
+  isWorking: boolean;
+  shifts: TimeSlot[];
+  breaks: TimeSlot[];
+}
+
+export interface TimeSlot {
+  startTime: string; // Format: "HH:mm" (24-hour)
+  endTime: string;   // Format: "HH:mm" (24-hour)
+  id?: string;
+}
+
+export interface ScheduleException {
+  id: string;
+  doctorId: string;
+  date: string; // Format: "YYYY-MM-DD"
+  type: 'unavailable' | 'modified_hours' | 'holiday';
+  reason?: string;
+  modifiedSchedule?: DaySchedule; // Only for 'modified_hours' type
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+}
+
+export interface AvailabilitySlot {
+  id: string;
+  doctorId: string;
+  date: string; // Format: "YYYY-MM-DD"
+  startTime: string; // Format: "HH:mm"
+  endTime: string;   // Format: "HH:mm"
+  duration: number; // in minutes
+  isBooked: boolean;
+  appointmentId?: string;
+  status: 'available' | 'booked' | 'blocked';
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+}
+
+export type DayOfWeek = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+
 export interface DoctorPublicProfile {
   uid: string;
   displayName: string;
@@ -85,6 +140,9 @@ const USERS_COLLECTION = 'users';
 const DOCTORS_COLLECTION = 'doctors';
 const PATIENTS_COLLECTION = 'patients';
 const DOCTOR_PUBLIC_COLLECTION = 'doctor_public'; // New: Public doctor directory
+const DOCTOR_SCHEDULES_COLLECTION = 'doctor_schedules';
+const SCHEDULE_EXCEPTIONS_COLLECTION = 'schedule_exceptions';
+const AVAILABILITY_SLOTS_COLLECTION = 'availability_slots';
 
 export class FirestoreService {
   // Generic user operations
@@ -307,5 +365,341 @@ export class FirestoreService {
       deleteDoc(doc(db, USERS_COLLECTION, uid)),
       deleteDoc(doc(db, PATIENTS_COLLECTION, uid))
     ]);
+  }
+
+  // ===============================
+  // SCHEDULE MANAGEMENT METHODS
+  // ===============================
+
+  // Doctor Schedule Operations
+  static async createDoctorSchedule(scheduleData: Omit<DoctorSchedule, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+    const scheduleRef = doc(collection(db, DOCTOR_SCHEDULES_COLLECTION));
+    const scheduleDoc: DoctorSchedule = {
+      ...scheduleData,
+      id: scheduleRef.id,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+    };
+    
+    await setDoc(scheduleRef, scheduleDoc);
+    return scheduleRef.id;
+  }
+
+  static async getDoctorSchedules(doctorId: string): Promise<DoctorSchedule[]> {
+    const q = query(
+      collection(db, DOCTOR_SCHEDULES_COLLECTION),
+      where('doctorId', '==', doctorId),
+      orderBy('effectiveFrom', 'desc')
+    );
+    
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => doc.data() as DoctorSchedule);
+  }
+
+  static async getDoctorDefaultSchedule(doctorId: string): Promise<DoctorSchedule | null> {
+    const q = query(
+      collection(db, DOCTOR_SCHEDULES_COLLECTION),
+      where('doctorId', '==', doctorId),
+      where('isDefault', '==', true),
+      limit(1)
+    );
+    
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.empty ? null : querySnapshot.docs[0].data() as DoctorSchedule;
+  }
+
+  static async updateDoctorSchedule(scheduleId: string, updates: Partial<DoctorSchedule>): Promise<void> {
+    const updateData = {
+      ...updates,
+      updatedAt: Timestamp.now(),
+    };
+    
+    await updateDoc(doc(db, DOCTOR_SCHEDULES_COLLECTION, scheduleId), updateData);
+  }
+
+  static async deleteDoctorSchedule(scheduleId: string): Promise<void> {
+    await deleteDoc(doc(db, DOCTOR_SCHEDULES_COLLECTION, scheduleId));
+  }
+
+  static async setDefaultSchedule(doctorId: string, scheduleId: string): Promise<void> {
+    // First, remove default flag from all doctor's schedules
+    const existingSchedules = await this.getDoctorSchedules(doctorId);
+    const updatePromises = existingSchedules.map(schedule => 
+      this.updateDoctorSchedule(schedule.id, { isDefault: false })
+    );
+    
+    // Then set the new default
+    updatePromises.push(
+      this.updateDoctorSchedule(scheduleId, { isDefault: true })
+    );
+    
+    await Promise.all(updatePromises);
+  }
+
+  // Schedule Exception Operations
+  static async createScheduleException(exceptionData: Omit<ScheduleException, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+    const exceptionRef = doc(collection(db, SCHEDULE_EXCEPTIONS_COLLECTION));
+    
+    // Filter out undefined values to prevent Firestore errors
+    const cleanExceptionData = Object.fromEntries(
+      Object.entries(exceptionData).filter(([, value]) => value !== undefined)
+    );
+    
+    const exceptionDoc: ScheduleException = {
+      ...cleanExceptionData,
+      id: exceptionRef.id,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+    } as ScheduleException;
+    
+    await setDoc(exceptionRef, exceptionDoc);
+    return exceptionRef.id;
+  }
+
+  static async getScheduleExceptions(doctorId: string, fromDate?: string, toDate?: string): Promise<ScheduleException[]> {
+    let q = query(
+      collection(db, SCHEDULE_EXCEPTIONS_COLLECTION),
+      where('doctorId', '==', doctorId)
+    );
+    
+    if (fromDate) {
+      q = query(q, where('date', '>=', fromDate));
+    }
+    
+    if (toDate) {
+      q = query(q, where('date', '<=', toDate));
+    }
+    
+    q = query(q, orderBy('date', 'asc'));
+    
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => doc.data() as ScheduleException);
+  }
+
+  static async updateScheduleException(exceptionId: string, updates: Partial<ScheduleException>): Promise<void> {
+    const updateData = {
+      ...updates,
+      updatedAt: Timestamp.now(),
+    };
+    
+    await updateDoc(doc(db, SCHEDULE_EXCEPTIONS_COLLECTION, exceptionId), updateData);
+  }
+
+  static async deleteScheduleException(exceptionId: string): Promise<void> {
+    await deleteDoc(doc(db, SCHEDULE_EXCEPTIONS_COLLECTION, exceptionId));
+  }
+
+  // Availability Slot Operations
+  static async createAvailabilitySlot(slotData: Omit<AvailabilitySlot, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+    const slotRef = doc(collection(db, AVAILABILITY_SLOTS_COLLECTION));
+    const slotDoc: AvailabilitySlot = {
+      ...slotData,
+      id: slotRef.id,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+    };
+    
+    await setDoc(slotRef, slotDoc);
+    return slotRef.id;
+  }
+
+  static async getAvailabilitySlots(doctorId: string, fromDate: string, toDate: string): Promise<AvailabilitySlot[]> {
+    const q = query(
+      collection(db, AVAILABILITY_SLOTS_COLLECTION),
+      where('doctorId', '==', doctorId),
+      where('date', '>=', fromDate),
+      where('date', '<=', toDate),
+      orderBy('date', 'asc'),
+      orderBy('startTime', 'asc')
+    );
+    
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    } as AvailabilitySlot));
+  }
+
+  static async getAvailabilitySlot(slotId: string): Promise<AvailabilitySlot | null> {
+    const slotDoc = await getDoc(doc(db, AVAILABILITY_SLOTS_COLLECTION, slotId));
+    if (!slotDoc.exists()) {
+      return null;
+    }
+    
+    return {
+      id: slotDoc.id,
+      ...slotDoc.data()
+    } as AvailabilitySlot;
+  }
+
+  static async updateAvailabilitySlot(slotId: string, updates: Partial<AvailabilitySlot>): Promise<void> {
+    const updateData = {
+      ...updates,
+      updatedAt: Timestamp.now(),
+    };
+    
+    await updateDoc(doc(db, AVAILABILITY_SLOTS_COLLECTION, slotId), updateData);
+  }
+
+  static async deleteAvailabilitySlot(slotId: string): Promise<void> {
+    await deleteDoc(doc(db, AVAILABILITY_SLOTS_COLLECTION, slotId));
+  }
+
+  static async getAvailableSlotsForDate(doctorId: string, date: string): Promise<AvailabilitySlot[]> {
+    const q = query(
+      collection(db, AVAILABILITY_SLOTS_COLLECTION),
+      where('doctorId', '==', doctorId),
+      where('date', '==', date),
+      where('status', '==', 'available'),
+      orderBy('startTime', 'asc')
+    );
+    
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => doc.data() as AvailabilitySlot);
+  }
+
+  static async generateAvailabilitySlots(
+    doctorId: string, 
+    fromDate: string, 
+    toDate: string, 
+    slotDuration: number = 30
+  ): Promise<void> {
+    console.log(`🔧 generateAvailabilitySlots called: ${doctorId}, ${fromDate} to ${toDate}`);
+    
+    // First, check if slots already exist for this date range and clear them
+    const existingSlots = await this.getAvailabilitySlots(doctorId, fromDate, toDate);
+    if (existingSlots.length > 0) {
+      console.log(`🗑️ Clearing ${existingSlots.length} existing slots`);
+      const deletePromises = existingSlots.map(slot => this.deleteAvailabilitySlot(slot.id));
+      await Promise.all(deletePromises);
+    }
+    
+    // Get doctor's default schedule
+    const defaultSchedule = await this.getDoctorDefaultSchedule(doctorId);
+    if (!defaultSchedule) {
+      throw new Error('No default schedule found for doctor');
+    }
+
+    console.log('📅 Default schedule:', defaultSchedule.weeklySchedule);
+
+    // Get schedule exceptions for the date range
+    const exceptions = await this.getScheduleExceptions(doctorId, fromDate, toDate);
+    const exceptionMap = new Map(exceptions.map(ex => [ex.date, ex]));
+
+    console.log('⚠️ Exceptions found:', exceptions.length);
+
+    // Helper function to generate time slots
+    const generateTimeSlots = (daySchedule: DaySchedule, date: string): AvailabilitySlot[] => {
+      const slots: AvailabilitySlot[] = [];
+      
+      daySchedule.shifts.forEach(shift => {
+        let currentTime = this.timeStringToMinutes(shift.startTime);
+        const endTime = this.timeStringToMinutes(shift.endTime);
+        
+        while (currentTime + slotDuration <= endTime) {
+          // Check if this time conflicts with any breaks
+          const currentTimeStr = this.minutesToTimeString(currentTime);
+          const slotEndTimeStr = this.minutesToTimeString(currentTime + slotDuration);
+          
+          const isInBreak = daySchedule.breaks.some(breakSlot => {
+            const breakStart = this.timeStringToMinutes(breakSlot.startTime);
+            const breakEnd = this.timeStringToMinutes(breakSlot.endTime);
+            return currentTime < breakEnd && (currentTime + slotDuration) > breakStart;
+          });
+          
+          if (!isInBreak) {
+            slots.push({
+              id: '', // Will be set by createAvailabilitySlot
+              doctorId,
+              date,
+              startTime: currentTimeStr,
+              endTime: slotEndTimeStr,
+              duration: slotDuration,
+              isBooked: false,
+              status: 'available',
+              createdAt: Timestamp.now(),
+              updatedAt: Timestamp.now(),
+            });
+          }
+          
+          currentTime += slotDuration;
+        }
+      });
+      
+      return slots;
+    };
+
+    // Generate slots for each date
+    const startDate = this.parseLocalDate(fromDate);
+    const endDate = this.parseLocalDate(toDate);
+    const promises: Promise<string>[] = [];
+    
+    for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+      // Use timezone-safe date formatting
+      const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+      const dayOfWeek = this.getDayOfWeek(date);
+      
+      console.log(`📆 Processing date: ${dateStr} (${dayOfWeek})`);
+      
+      // Check for exceptions
+      const exception = exceptionMap.get(dateStr);
+      let daySchedule: DaySchedule;
+      
+      if (exception) {
+        console.log(`⚠️ Exception found for ${dateStr}:`, exception.type);
+        if (exception.type === 'unavailable' || exception.type === 'holiday') {
+          continue; // Skip this date
+        } else if (exception.type === 'modified_hours' && exception.modifiedSchedule) {
+          daySchedule = exception.modifiedSchedule;
+        } else {
+          daySchedule = defaultSchedule.weeklySchedule[dayOfWeek];
+        }
+      } else {
+        daySchedule = defaultSchedule.weeklySchedule[dayOfWeek];
+      }
+      
+      console.log(`📋 Day schedule for ${dateStr} (${dayOfWeek}):`, {
+        isWorking: daySchedule.isWorking,
+        shifts: daySchedule.shifts,
+        breaks: daySchedule.breaks
+      });
+      
+      if (daySchedule.isWorking) {
+        const slots = generateTimeSlots(daySchedule, dateStr);
+        console.log(`🕐 Generated ${slots.length} slots for ${dateStr}`);
+        slots.forEach(slot => {
+          promises.push(this.createAvailabilitySlot(slot));
+        });
+      } else {
+        console.log(`❌ Not working on ${dateStr} (${dayOfWeek})`);
+      }
+    }
+    
+    console.log(`💾 Creating ${promises.length} total slots...`);
+    await Promise.all(promises);
+    console.log('✅ Slot generation complete');
+  }
+
+  // Utility methods for time handling
+  private static timeStringToMinutes(timeStr: string): number {
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    return hours * 60 + minutes;
+  }
+
+  private static minutesToTimeString(minutes: number): string {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+  }
+
+  private static getDayOfWeek(date: Date): DayOfWeek {
+    const days: DayOfWeek[] = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    return days[date.getDay()];
+  }
+
+  // Timezone-safe date parsing for YYYY-MM-DD strings
+  private static parseLocalDate(dateString: string): Date {
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day); // month is 0-indexed
   }
 }
