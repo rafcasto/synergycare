@@ -1,18 +1,18 @@
-I1024 20:27:57.174777   51706 load.go:31] Reloading schema and connectors...
-W1024 20:27:57.230715   51706 control.go:68] [/emulator/synergycare 7df5] connector "example" has errors: example/queries.gql:37:43: Field "id_expr" is not defined by type "User_Filter".
+I1024 23:34:18.642100   36107 load.go:31] Reloading schema and connectors...
+W1024 23:34:18.697629   36107 control.go:68] [/emulator/synergycare 58b4] connector "example" has errors: example/queries.gql:37:43: Field "id_expr" is not defined by type "User_Filter".
 
 sources: example/queries.gql [1661B] 
-I1024 20:27:57.231217   51706 control.go:94] [/emulator/synergycare 7df5] UpdateResources(): done
+I1024 23:34:18.698149   36107 control.go:94] [/emulator/synergycare 58b4] UpdateResources(): done
 Main schema: sources: schema/schema.gql [932B] 
 Connector "example": sources: example/queries.gql [1661B] 
-E1024 20:27:57.233420   51706 load.go:73] Could not load sources: 
+E1024 23:34:18.700128   36107 load.go:73] Could not load sources: 
 Errors: example/queries.gql:37:43: Field "id_expr" is not defined by type "User_Filter".
-I1024 20:27:57.235023   51706 collector.go:107] schema extensions wrote into "/Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema"
-Generated sources: prelude.gql [73219B] main/input.gql [60573B] main/relation.gql [30423B] main/query.gql [7617B] main/mutation.gql [20560B] main/implicit.gql [3559B] 
-I1024 20:27:57.235558   51706 load.go:74] Finished reloading
-I1024 20:27:57.238305   51706 dev.go:102] Listening on address (HTTP + gRPC): 127.0.0.1:9399
-I1024 20:27:57.239066   51706 dev.go:102] Listening on address (HTTP + gRPC): [::1]:9399
-I1024 20:27:59.688157   51706 migrate.go:24] Running migration SQL:
+I1024 23:34:18.701954   36107 collector.go:107] schema extensions wrote into "/Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema"
+Generated sources: prelude.gql [73219B] main/implicit.gql [3559B] main/input.gql [60573B] main/relation.gql [30423B] main/query.gql [7617B] main/mutation.gql [20560B] 
+I1024 23:34:18.702071   36107 load.go:74] Finished reloading
+I1024 23:34:18.704562   36107 dev.go:102] Listening on address (HTTP + gRPC): 127.0.0.1:9399
+I1024 23:34:18.705302   36107 dev.go:102] Listening on address (HTTP + gRPC): [::1]:9399
+I1024 23:34:21.114851   36107 migrate.go:24] Running migration SQL:
 Step 1: CREATE EXTENSION IF NOT EXISTS "uuid-ossp"
 Step 2: CREATE TABLE "public"."user" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "address" text NULL, "created_at" timestamptz NOT NULL, "display_name" text NOT NULL, "email" text NOT NULL, "phone_number" text NULL, "photo_url" text NULL, "user_type" text NOT NULL, PRIMARY KEY ("id"))
 Step 3: CREATE TABLE "public"."doctor" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "user_id" uuid NOT NULL, "bio" text NULL, "clinic_address" text NULL, "consultation_fee" double precision NULL, "experience_years" integer NOT NULL, "license_number" text NOT NULL, "specialization" text NOT NULL, PRIMARY KEY ("id"), CONSTRAINT "doctor_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."user" ("id") ON DELETE CASCADE)
@@ -28,11 +28,11 @@ Step 12: CREATE INDEX "medical_record_patientId_idx" ON "public"."medical_record
 Step 13: CREATE TABLE "public"."review" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "doctor_id" uuid NOT NULL, "patient_id" uuid NOT NULL, "created_at" timestamptz NOT NULL, "rating" integer NOT NULL, "review_text" text NOT NULL, PRIMARY KEY ("id"), CONSTRAINT "review_doctor_id_fkey" FOREIGN KEY ("doctor_id") REFERENCES "public"."doctor" ("id") ON DELETE CASCADE, CONSTRAINT "review_patient_id_fkey" FOREIGN KEY ("patient_id") REFERENCES "public"."patient" ("id") ON DELETE CASCADE)
 Step 14: CREATE INDEX "review_doctorId_idx" ON "public"."review" ("doctor_id")
 Step 15: CREATE INDEX "review_patientId_idx" ON "public"."review" ("patient_id")
-W1024 20:27:59.752829   51706 control.go:68] [/emulator/synergycare c29e] connector "example" has errors: example/queries.gql:37:43: Field "id_expr" is not defined by type "User_Filter".
+W1024 23:34:21.178989   36107 control.go:68] [/emulator/synergycare 37d3] connector "example" has errors: example/queries.gql:37:43: Field "id_expr" is not defined by type "User_Filter".
 
 sources: example/queries.gql [1661B] 
-I1024 20:27:59.752862   51706 control.go:94] [/emulator/synergycare c29e] UpdateResources(): done
+I1024 23:34:21.179021   36107 control.go:94] [/emulator/synergycare 37d3] UpdateResources(): done
 Main schema: sources: schema/schema.gql [932B] 
 Connector "example": sources: example/queries.gql [1661B] 
-I1024 20:27:59.752883   51706 service.go:148] [/emulator/synergycare c29e] while configuring to server.Settings{ConnectionString:"dbname='fdcdb' host='127.0.0.1' port='5432' sslmode='disable' dbname='fdcdb'", MaxOpenConnection:1, UseDummy:false, EnableGoogleMLIntegration:false, SchemaValidationMode:""}, failed to reload last live sources: 
+I1024 23:34:21.179040   36107 service.go:148] [/emulator/synergycare 37d3] while configuring to server.Settings{ConnectionString:"dbname='fdcdb' host='127.0.0.1' port='5432' sslmode='disable' dbname='fdcdb'", MaxOpenConnection:1, UseDummy:false, EnableGoogleMLIntegration:false, SchemaValidationMode:""}, failed to reload last live sources: 
 Errors: example/queries.gql:37:43: Field "id_expr" is not defined by type "User_Filter".

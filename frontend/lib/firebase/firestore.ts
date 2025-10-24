@@ -678,10 +678,20 @@ export class FirestoreService {
       );
       
       const querySnapshot = await getDocs(q);
-      return querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      } as AvailabilitySlot));
+      return querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        
+        // Ensure status field exists with fallback
+        if (!data.status) {
+          console.warn(`Availability slot ${doc.id} missing status field, using fallback`);
+          data.status = data.isBooked ? 'booked' : 'available';
+        }
+        
+        return {
+          id: doc.id,
+          ...data
+        } as AvailabilitySlot;
+      });
     });
   }
 
@@ -708,6 +718,17 @@ export class FirestoreService {
 
   static async deleteAvailabilitySlot(slotId: string): Promise<void> {
     await deleteDoc(doc(db, AVAILABILITY_SLOTS_COLLECTION, slotId));
+  }
+
+  static async getAllAvailabilitySlots(): Promise<AvailabilitySlot[]> {
+    return this.retryQuery(async () => {
+      const q = query(collection(db, AVAILABILITY_SLOTS_COLLECTION));
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      } as AvailabilitySlot));
+    });
   }
 
   static async getAvailableSlotsForDate(doctorId: string, date: string): Promise<AvailabilitySlot[]> {

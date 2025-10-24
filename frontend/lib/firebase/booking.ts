@@ -91,8 +91,11 @@ export class BookingService {
         searchToDate
       );
 
-      // Filter to only available slots
-      return allSlots.filter(slot => slot.status === 'available');
+      // Filter to only available slots, handling undefined status
+      return allSlots.filter(slot => {
+        const status = slot.status || (slot.isBooked ? 'booked' : 'available');
+        return status === 'available';
+      });
     } catch (error) {
       console.error('Error getting available slots:', error);
       throw error;
@@ -112,7 +115,8 @@ export class BookingService {
     try {
       // First, verify the slot is still available
       const slot = await FirestoreService.getAvailabilitySlot(slotId);
-      if (!slot || slot.status !== 'available') {
+      const slotStatus = slot?.status || (slot?.isBooked ? 'booked' : 'available');
+      if (!slot || slotStatus !== 'available') {
         throw new Error('Appointment slot is no longer available');
       }
 
@@ -126,10 +130,11 @@ export class BookingService {
         endTime: slot.endTime,
         duration: slot.duration,
         status: 'scheduled',
-        notes: appointmentDetails.notes,
         appointmentType: appointmentDetails.appointmentType || 'consultation',
         createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now()
+        updatedAt: Timestamp.now(),
+        // Include notes if provided and not empty
+        ...(appointmentDetails.notes !== undefined && appointmentDetails.notes !== '' ? { notes: appointmentDetails.notes } : {})
       };
 
       const appointmentRef = await addDoc(
@@ -304,7 +309,8 @@ export class BookingService {
 
       // Verify new slot is available
       const newSlot = await FirestoreService.getAvailabilitySlot(newSlotId);
-      if (!newSlot || newSlot.status !== 'available') {
+      const newSlotStatus = newSlot?.status || (newSlot?.isBooked ? 'booked' : 'available');
+      if (!newSlot || newSlotStatus !== 'available') {
         throw new Error('New appointment slot is not available');
       }
 

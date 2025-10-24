@@ -133,8 +133,9 @@ export class ScheduleService {
     return slots.some(slot => {
       const slotStart = this.timeStringToMinutes(slot.startTime);
       const slotEnd = this.timeStringToMinutes(slot.endTime);
+      const slotStatus = slot.status || (slot.isBooked ? 'booked' : 'available');
       
-      return slot.status === 'available' && 
+      return slotStatus === 'available' && 
              requestedStart >= slotStart && 
              requestedEnd <= slotEnd;
     });
@@ -151,7 +152,8 @@ export class ScheduleService {
     const groupedSlots: { [date: string]: AvailabilitySlot[] } = {};
     
     slots.forEach(slot => {
-      if (slot.status === 'available') {
+      const slotStatus = slot.status || (slot.isBooked ? 'booked' : 'available');
+      if (slotStatus === 'available') {
         if (!groupedSlots[slot.date]) {
           groupedSlots[slot.date] = [];
         }
@@ -177,9 +179,10 @@ export class ScheduleService {
     const slotsToBlock = slots.filter(slot => {
       const slotStart = this.timeStringToMinutes(slot.startTime);
       const slotEnd = this.timeStringToMinutes(slot.endTime);
+      const slotStatus = slot.status || (slot.isBooked ? 'booked' : 'available');
       
       // Check if slot overlaps with block period
-      return slotStart < blockEnd && slotEnd > blockStart && slot.status === 'available';
+      return slotStart < blockEnd && slotEnd > blockStart && slotStatus === 'available';
     });
     
     const updatePromises = slotsToBlock.map(slot =>
@@ -204,8 +207,9 @@ export class ScheduleService {
     const slotsToUnblock = slots.filter(slot => {
       const slotStart = this.timeStringToMinutes(slot.startTime);
       const slotEnd = this.timeStringToMinutes(slot.endTime);
+      const slotStatus = slot.status || (slot.isBooked ? 'booked' : 'available');
       
-      return slotStart < unblockEnd && slotEnd > unblockStart && slot.status === 'blocked';
+      return slotStart < unblockEnd && slotEnd > unblockStart && slotStatus === 'blocked';
     });
     
     const updatePromises = slotsToUnblock.map(slot =>

@@ -105,8 +105,15 @@ export function CalendarView({ doctorId, schedules, exceptions, onRefresh }: Cal
         }
 
         // Count available and booked slots
-        const availableCount = daySlots.filter(slot => slot.status === 'available').length;
-        const bookedCount = daySlots.filter(slot => slot.status === 'booked').length;
+        // Handle cases where status might be undefined by providing fallbacks
+        const availableCount = daySlots.filter(slot => {
+          const status = slot.status || (slot.isBooked ? 'booked' : 'available');
+          return status === 'available';
+        }).length;
+        const bookedCount = daySlots.filter(slot => {
+          const status = slot.status || (slot.isBooked ? 'booked' : 'available');
+          return status === 'booked';
+        }).length;
 
         days.push({
           date: dateStr,
@@ -400,38 +407,43 @@ export function CalendarView({ doctorId, schedules, exceptions, onRefresh }: Cal
           
           {availabilitySlots.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {availabilitySlots.map(slot => (
-                <div
-                  key={slot.id}
-                  className={`p-3 rounded-lg border ${
-                    slot.status === 'available' 
-                      ? 'border-green-200 bg-green-50' 
-                      : slot.status === 'booked'
-                      ? 'border-yellow-200 bg-yellow-50'
-                      : 'border-red-200 bg-red-50'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium">
-                        {ScheduleService.formatTime(slot.startTime)} - {ScheduleService.formatTime(slot.endTime)}
+              {availabilitySlots.map(slot => {
+                // Handle undefined status by providing fallback
+                const slotStatus = slot.status || (slot.isBooked ? 'booked' : 'available');
+                
+                return (
+                  <div
+                    key={slot.id}
+                    className={`p-3 rounded-lg border ${
+                      slotStatus === 'available' 
+                        ? 'border-green-200 bg-green-50' 
+                        : slotStatus === 'booked'
+                        ? 'border-yellow-200 bg-yellow-50'
+                        : 'border-red-200 bg-red-50'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-medium">
+                          {ScheduleService.formatTime(slot.startTime)} - {ScheduleService.formatTime(slot.endTime)}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          {slot.duration} minutes
+                        </div>
                       </div>
-                      <div className="text-sm text-gray-600">
-                        {slot.duration} minutes
+                      <div className={`px-2 py-1 rounded text-xs font-medium ${
+                        slotStatus === 'available' 
+                          ? 'bg-green-100 text-green-800' 
+                          : slotStatus === 'booked'
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : 'bg-red-100 text-red-800'
+                      }`}>
+                        {slotStatus}
                       </div>
-                    </div>
-                    <div className={`px-2 py-1 rounded text-xs font-medium ${
-                      slot.status === 'available' 
-                        ? 'bg-green-100 text-green-800' 
-                        : slot.status === 'booked'
-                        ? 'bg-yellow-100 text-yellow-800'
-                        : 'bg-red-100 text-red-800'
-                    }`}>
-                      {slot.status}
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <div className="text-center py-8 text-gray-500">

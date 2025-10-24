@@ -40,3 +40,9 @@ export { ExceptionManager } from './doctor/ExceptionManager';
 // Patient components
 export { PatientLayout } from './patient/PatientLayout';
 export { default as PatientDashboard } from './patient/PatientDashboard';
+export { default as AppointmentBooking } from './patient/AppointmentBooking';
+export { default as DoctorSearch } from './patient/DoctorSearch';
+export { default as DoctorProfile } from './patient/DoctorProfile';
+export { default as BookingForm } from './patient/BookingForm';
+export { default as BookingConfirmation } from './patient/BookingConfirmation';
+export { default as PatientAppointments } from './patient/PatientAppointments';

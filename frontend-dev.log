@@ -1,0 +1,114 @@
+
+> frontend@0.1.0 dev
+> next dev -p 3000
+
+   ▲ Next.js 15.3.3
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.236:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1315ms
+ ○ Compiling /debug ...
+ ✓ Compiled /debug in 1645ms (945 modules)
+ GET /debug 200 in 2270ms
+ ✓ Compiled in 319ms (354 modules)
+ ✓ Compiled /favicon.ico in 229ms (607 modules)
+ GET /favicon.ico 200 in 296ms
+ ○ Compiling / ...
+ ✓ Compiled / in 723ms (970 modules)
+ GET / 200 in 931ms
+ GET /debug 200 in 24ms
+ ○ Compiling /doctor-portal ...
+ ✓ Compiled /doctor-portal in 1260ms (1075 modules)
+ GET /doctor-portal 200 in 1500ms
+ ✓ Compiled /login in 263ms (1127 modules)
+ GET /login 200 in 326ms
+ ✓ Compiled /role-selection in 416ms (1203 modules)
+ GET /role-selection 200 in 572ms
+ ✓ Compiled /doctor/login in 387ms (1213 modules)
+ GET /doctor/login 200 in 429ms
+ ✓ Compiled /doctor/register in 329ms (1205 modules)
+ GET /doctor/register 200 in 404ms
+ GET /doctor-portal 200 in 35ms
+ ✓ Compiled /api/proxy/[...path] in 489ms (1219 modules)
+ POST /api/proxy/user/complete-registration 200 in 932ms
+ GET /doctor-portal 200 in 33ms
+ GET /login 200 in 27ms
+ GET /login 200 in 15ms
+ GET /doctor-portal 200 in 17ms
+ ✓ Compiled / in 232ms (745 modules)
+ GET / 200 in 492ms
+ GET /doctor-portal 200 in 16ms
+ GET /login 200 in 23ms
+ GET /login 200 in 10ms
+ GET /role-selection 200 in 31ms
+ GET / 200 in 30ms
+ GET /role-selection 200 in 8ms
+ ○ Compiling /patient/register ...
+ ✓ Compiled /patient/register in 874ms (1210 modules)
+ GET /patient/register 200 in 935ms
+ ○ Compiling /api/proxy/[...path] ...
+ ✓ Compiled /api/proxy/[...path] in 2.2s (1233 modules)
+ POST /api/proxy/user/complete-registration 200 in 2328ms
+ GET /patient-portal 200 in 2390ms
+ GET /patient-portal 200 in 13ms
+ ✓ Compiled in 920ms (1186 modules)
+ GET /patient-portal 200 in 94ms
+ GET /login 200 in 25ms
+ ✓ Compiled in 453ms (1186 modules)
+ GET /patient-portal 200 in 47ms
+ GET /login 200 in 21ms
+ GET /login 200 in 19ms
+ GET /login 200 in 12ms
+ ✓ Compiled / in 452ms (716 modules)
+ GET / 200 in 693ms
+ ✓ Compiled /role-selection in 156ms (753 modules)
+ GET /role-selection 200 in 215ms
+ ✓ Compiled /doctor/login in 311ms (753 modules)
+ GET /doctor/login 200 in 342ms
+ GET /doctor-portal 200 in 21ms
+ ✓ Compiled in 742ms (1216 modules)
+ GET /login 200 in 24ms
+ ✓ Compiled in 496ms (1216 modules)
+ ⨯ Error: Cannot find module './447.js'
+Require stack:
+- /Users/rafaelcastillo/sc/synergycare/frontend/.next/server/webpack-runtime.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/.next/server/app/(auth)/login/page.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/server/require.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/server/load-components.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/build/utils.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/build/swc/options.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/build/swc/index.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/server/config.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/server/next.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/server/lib/start-server.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:198:28)
+    at <unknown> (.next/server/webpack-runtime.js:111:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:162:22)
+    at <unknown> (.next/server/app/(auth)/login/page.js:1:12394)
+    at Object.<anonymous> (.next/server/app/(auth)/login/page.js:1:12450) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/login'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 634ms (1536 modules)
+ GET /login 500 in 1031ms
+ GET /login 200 in 46ms
+ GET /login 200 in 7ms
+ GET /login 200 in 181ms
+ ✓ Compiled /_not-found in 414ms (1540 modules)
+ GET /_next/static/css/app/layout.css?v=1761303142020 404 in 596ms
+ GET /_next/static/chunks/main-app.js?v=1761303142020 404 in 553ms
+ GET /_next/static/chunks/app/(auth)/layout.js 404 in 611ms
+ GET /_next/static/chunks/app/(auth)/login/page.js 404 in 609ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 619ms
+ ✓ Compiled in 150ms (725 modules)
+ ✓ Compiled in 104ms (725 modules)
+ ✓ Compiled in 113ms (721 modules)
+ ✓ Compiled in 97ms (721 modules)

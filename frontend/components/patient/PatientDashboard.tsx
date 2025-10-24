@@ -43,7 +43,12 @@ interface TrendData {
   color: string;
 }
 
-export default function PatientDashboard() {
+interface PatientDashboardProps {
+  onBookNewAppointment?: () => void;
+  onFindDoctor?: () => void;
+}
+
+export default function PatientDashboard({ onBookNewAppointment, onFindDoctor }: PatientDashboardProps) {
   const { user } = useAuth();
   const [dashboardStats, setDashboardStats] = useState<PatientDashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -376,7 +381,10 @@ export default function PatientDashboard() {
         <Card className="p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-6">Quick Actions</h3>
           <div className="space-y-4">
-            <button className="w-full text-left px-4 py-3 bg-green-50 hover:bg-green-100 rounded-lg transition-colors group">
+            <button 
+              className="w-full text-left px-4 py-3 bg-green-50 hover:bg-green-100 rounded-lg transition-colors group"
+              onClick={onBookNewAppointment}
+            >
               <div className="flex items-center space-x-3">
                 <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -385,7 +393,10 @@ export default function PatientDashboard() {
               </div>
             </button>
             
-            <button className="w-full text-left px-4 py-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors group">
+            <button 
+              className="w-full text-left px-4 py-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors group"
+              onClick={onFindDoctor || onBookNewAppointment}
+            >
               <div className="flex items-center space-x-3">
                 <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
