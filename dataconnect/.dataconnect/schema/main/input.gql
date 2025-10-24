@@ -1,0 +1,2030 @@
+"""
+✨ `Appointment_KeyOutput` returns the primary key fields of table type `Appointment`.
+
+It has the same format as `Appointment_Key`, but is only used as mutation return value.
+"""
+scalar Appointment_KeyOutput
+"""
+✨ `Doctor_KeyOutput` returns the primary key fields of table type `Doctor`.
+
+It has the same format as `Doctor_Key`, but is only used as mutation return value.
+"""
+scalar Doctor_KeyOutput
+"""
+✨ `MedicalRecord_KeyOutput` returns the primary key fields of table type `MedicalRecord`.
+
+It has the same format as `MedicalRecord_Key`, but is only used as mutation return value.
+"""
+scalar MedicalRecord_KeyOutput
+"""
+✨ `Patient_KeyOutput` returns the primary key fields of table type `Patient`.
+
+It has the same format as `Patient_Key`, but is only used as mutation return value.
+"""
+scalar Patient_KeyOutput
+"""
+✨ `Review_KeyOutput` returns the primary key fields of table type `Review`.
+
+It has the same format as `Review_Key`, but is only used as mutation return value.
+"""
+scalar Review_KeyOutput
+"""
+✨ `User_KeyOutput` returns the primary key fields of table type `User`.
+
+It has the same format as `User_Key`, but is only used as mutation return value.
+"""
+scalar User_KeyOutput
+"""
+✨ Generated data input type for table 'Appointment'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Appointment_Data {
+  """
+  ✨ Generated from Field `Appointment`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Appointment`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Appointment`.`doctorId` of type `UUID!`
+  """
+  doctorId: UUID
+  """
+  ✨ `_expr` server value variant of `doctorId` (✨ Generated from Field `Appointment`.`doctorId` of type `UUID!`)
+  """
+  doctorId_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Appointment`.`patientId` of type `UUID!`
+  """
+  patientId: UUID
+  """
+  ✨ `_expr` server value variant of `patientId` (✨ Generated from Field `Appointment`.`patientId` of type `UUID!`)
+  """
+  patientId_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Appointment`.`doctor` of type `Doctor!`
+  """
+  doctor: Doctor_Key
+  """
+  ✨ Generated from Field `Appointment`.`patient` of type `Patient!`
+  """
+  patient: Patient_Key
+  """
+  ✨ Generated from Field `Appointment`.`appointmentDateTime` of type `Timestamp!`
+  """
+  appointmentDateTime: Timestamp
+  """
+  ✨ `_expr` server value variant of `appointmentDateTime` (✨ Generated from Field `Appointment`.`appointmentDateTime` of type `Timestamp!`)
+  """
+  appointmentDateTime_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `appointmentDateTime` (✨ Generated from Field `Appointment`.`appointmentDateTime` of type `Timestamp!`)
+  """
+  appointmentDateTime_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `appointmentDateTime` (✨ Generated from Field `Appointment`.`appointmentDateTime` of type `Timestamp!`)
+  """
+  appointmentDateTime_update: [Timestamp_Update!]
+  """
+  ✨ Generated from Field `Appointment`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `Appointment`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `Appointment`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `Appointment`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!]
+  """
+  ✨ Generated from Field `Appointment`.`durationMinutes` of type `Int`
+  """
+  durationMinutes: Int
+  """
+  ✨ `_expr` server value variant of `durationMinutes` (✨ Generated from Field `Appointment`.`durationMinutes` of type `Int`)
+  """
+  durationMinutes_expr: Int_Expr
+  """
+  ✨ `_update` server value variant of `durationMinutes` (✨ Generated from Field `Appointment`.`durationMinutes` of type `Int`)
+  """
+  durationMinutes_update: [Int_Update!]
+  """
+  ✨ Generated from Field `Appointment`.`notes` of type `String`
+  """
+  notes: String
+  """
+  ✨ `_expr` server value variant of `notes` (✨ Generated from Field `Appointment`.`notes` of type `String`)
+  """
+  notes_expr: String_Expr
+  """
+  ✨ Generated from Field `Appointment`.`status` of type `String!`
+  """
+  status: String
+  """
+  ✨ `_expr` server value variant of `status` (✨ Generated from Field `Appointment`.`status` of type `String!`)
+  """
+  status_expr: String_Expr
+}
+"""
+✨ Generated filter input type for table 'Appointment'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Appointment_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Appointment_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Appointment_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Appointment_Filter!]
+  """
+  ✨ Generated from Field `Appointment`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Appointment`.`doctorId` of type `UUID!`
+  """
+  doctorId: UUID_Filter
+  """
+  ✨ Generated from Field `Appointment`.`patientId` of type `UUID!`
+  """
+  patientId: UUID_Filter
+  """
+  ✨ Generated from Field `Appointment`.`doctor` of type `Doctor!`
+  """
+  doctor: Doctor_Filter
+  """
+  ✨ Generated from Field `Appointment`.`patient` of type `Patient!`
+  """
+  patient: Patient_Filter
+  """
+  ✨ Generated from Field `Appointment`.`appointmentDateTime` of type `Timestamp!`
+  """
+  appointmentDateTime: Timestamp_Filter
+  """
+  ✨ Generated from Field `Appointment`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `Appointment`.`durationMinutes` of type `Int`
+  """
+  durationMinutes: Int_Filter
+  """
+  ✨ Generated from Field `Appointment`.`notes` of type `String`
+  """
+  notes: String_Filter
+  """
+  ✨ Generated from Field `Appointment`.`status` of type `String!`
+  """
+  status: String_Filter
+  """
+  ✨ Generated from Field `Appointment`.`medicalRecords_on_associatedAppointment` of type `[MedicalRecord!]!`
+  """
+  medicalRecords_on_associatedAppointment: MedicalRecord_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'Appointment'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Appointment_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Appointment_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Appointment_Filter
+}
+"""
+✨ Generated having input type for table 'Appointment'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Appointment_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Appointment_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Appointment_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Appointment_Having!]
+  """
+  ✨ Generated from Field `Appointment`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Appointment`.`appointmentDateTime_count` of type `Int!`
+  """
+  appointmentDateTime_count: Int_Filter
+  """
+  ✨ Generated from Field `Appointment`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `Appointment`.`doctorId_count` of type `Int!`
+  """
+  doctorId_count: Int_Filter
+  """
+  ✨ Generated from Field `Appointment`.`durationMinutes_count` of type `Int!`
+  """
+  durationMinutes_count: Int_Filter
+  """
+  ✨ Generated from Field `Appointment`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Appointment`.`notes_count` of type `Int!`
+  """
+  notes_count: Int_Filter
+  """
+  ✨ Generated from Field `Appointment`.`patientId_count` of type `Int!`
+  """
+  patientId_count: Int_Filter
+  """
+  ✨ Generated from Field `Appointment`.`status_count` of type `Int!`
+  """
+  status_count: Int_Filter
+  """
+  ✨ Generated from Field `Appointment`.`durationMinutes_sum` of type `Int`
+  """
+  durationMinutes_sum: Int_Filter
+  """
+  ✨ Generated from Field `Appointment`.`durationMinutes_avg` of type `Float`
+  """
+  durationMinutes_avg: Float_Filter
+  """
+  ✨ Generated from Field `Appointment`.`appointmentDateTime_min` of type `Timestamp`
+  """
+  appointmentDateTime_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Appointment`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Appointment`.`durationMinutes_min` of type `Int`
+  """
+  durationMinutes_min: Int_Filter
+  """
+  ✨ Generated from Field `Appointment`.`appointmentDateTime_max` of type `Timestamp`
+  """
+  appointmentDateTime_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `Appointment`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `Appointment`.`durationMinutes_max` of type `Int`
+  """
+  durationMinutes_max: Int_Filter
+}
+"""
+✨ Generated key input type for table 'Appointment'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Appointment_Key {
+  """
+  ✨ Generated from Field `Appointment`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Appointment`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+}
+"""
+✨ Generated list filter input type for table 'Appointment'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Appointment_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Appointment_Filter
+}
+"""
+✨ Generated order input type for table 'Appointment'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Appointment_Order {
+  """
+  ✨ Generated from Field `Appointment`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`doctorId` of type `UUID!`
+  """
+  doctorId: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`patientId` of type `UUID!`
+  """
+  patientId: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`doctor` of type `Doctor!`
+  """
+  doctor: Doctor_Order
+  """
+  ✨ Generated from Field `Appointment`.`patient` of type `Patient!`
+  """
+  patient: Patient_Order
+  """
+  ✨ Generated from Field `Appointment`.`appointmentDateTime` of type `Timestamp!`
+  """
+  appointmentDateTime: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`durationMinutes` of type `Int`
+  """
+  durationMinutes: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`notes` of type `String`
+  """
+  notes: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`status` of type `String!`
+  """
+  status: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`appointmentDateTime_count` of type `Int!`
+  """
+  appointmentDateTime_count: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`doctorId_count` of type `Int!`
+  """
+  doctorId_count: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`durationMinutes_count` of type `Int!`
+  """
+  durationMinutes_count: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`notes_count` of type `Int!`
+  """
+  notes_count: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`patientId_count` of type `Int!`
+  """
+  patientId_count: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`status_count` of type `Int!`
+  """
+  status_count: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`durationMinutes_sum` of type `Int`
+  """
+  durationMinutes_sum: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`durationMinutes_avg` of type `Float`
+  """
+  durationMinutes_avg: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`appointmentDateTime_min` of type `Timestamp`
+  """
+  appointmentDateTime_min: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`durationMinutes_min` of type `Int`
+  """
+  durationMinutes_min: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`appointmentDateTime_max` of type `Timestamp`
+  """
+  appointmentDateTime_max: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: OrderDirection
+  """
+  ✨ Generated from Field `Appointment`.`durationMinutes_max` of type `Int`
+  """
+  durationMinutes_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Doctor'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Doctor_Data {
+  """
+  ✨ Generated from Field `Doctor`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Doctor`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Doctor`.`userId` of type `UUID!`
+  """
+  userId: UUID
+  """
+  ✨ `_expr` server value variant of `userId` (✨ Generated from Field `Doctor`.`userId` of type `UUID!`)
+  """
+  userId_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Doctor`.`user` of type `User!`
+  """
+  user: User_Key
+  """
+  ✨ Generated from Field `Doctor`.`bio` of type `String`
+  """
+  bio: String
+  """
+  ✨ `_expr` server value variant of `bio` (✨ Generated from Field `Doctor`.`bio` of type `String`)
+  """
+  bio_expr: String_Expr
+  """
+  ✨ Generated from Field `Doctor`.`clinicAddress` of type `String`
+  """
+  clinicAddress: String
+  """
+  ✨ `_expr` server value variant of `clinicAddress` (✨ Generated from Field `Doctor`.`clinicAddress` of type `String`)
+  """
+  clinicAddress_expr: String_Expr
+  """
+  ✨ Generated from Field `Doctor`.`consultationFee` of type `Float`
+  """
+  consultationFee: Float
+  """
+  ✨ `_expr` server value variant of `consultationFee` (✨ Generated from Field `Doctor`.`consultationFee` of type `Float`)
+  """
+  consultationFee_expr: Float_Expr
+  """
+  ✨ `_update` server value variant of `consultationFee` (✨ Generated from Field `Doctor`.`consultationFee` of type `Float`)
+  """
+  consultationFee_update: [Float_Update!]
+  """
+  ✨ Generated from Field `Doctor`.`experienceYears` of type `Int!`
+  """
+  experienceYears: Int
+  """
+  ✨ `_expr` server value variant of `experienceYears` (✨ Generated from Field `Doctor`.`experienceYears` of type `Int!`)
+  """
+  experienceYears_expr: Int_Expr
+  """
+  ✨ `_update` server value variant of `experienceYears` (✨ Generated from Field `Doctor`.`experienceYears` of type `Int!`)
+  """
+  experienceYears_update: [Int_Update!]
+  """
+  ✨ Generated from Field `Doctor`.`licenseNumber` of type `String!`
+  """
+  licenseNumber: String
+  """
+  ✨ `_expr` server value variant of `licenseNumber` (✨ Generated from Field `Doctor`.`licenseNumber` of type `String!`)
+  """
+  licenseNumber_expr: String_Expr
+  """
+  ✨ Generated from Field `Doctor`.`specialization` of type `String!`
+  """
+  specialization: String
+  """
+  ✨ `_expr` server value variant of `specialization` (✨ Generated from Field `Doctor`.`specialization` of type `String!`)
+  """
+  specialization_expr: String_Expr
+}
+"""
+✨ Generated filter input type for table 'Doctor'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Doctor_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Doctor_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Doctor_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Doctor_Filter!]
+  """
+  ✨ Generated from Field `Doctor`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Doctor`.`userId` of type `UUID!`
+  """
+  userId: UUID_Filter
+  """
+  ✨ Generated from Field `Doctor`.`user` of type `User!`
+  """
+  user: User_Filter
+  """
+  ✨ Generated from Field `Doctor`.`bio` of type `String`
+  """
+  bio: String_Filter
+  """
+  ✨ Generated from Field `Doctor`.`clinicAddress` of type `String`
+  """
+  clinicAddress: String_Filter
+  """
+  ✨ Generated from Field `Doctor`.`consultationFee` of type `Float`
+  """
+  consultationFee: Float_Filter
+  """
+  ✨ Generated from Field `Doctor`.`experienceYears` of type `Int!`
+  """
+  experienceYears: Int_Filter
+  """
+  ✨ Generated from Field `Doctor`.`licenseNumber` of type `String!`
+  """
+  licenseNumber: String_Filter
+  """
+  ✨ Generated from Field `Doctor`.`specialization` of type `String!`
+  """
+  specialization: String_Filter
+  """
+  ✨ Generated from Field `Doctor`.`appointments_on_doctor` of type `[Appointment!]!`
+  """
+  appointments_on_doctor: Appointment_ListFilter
+  """
+  ✨ Generated from Field `Doctor`.`reviews_on_doctor` of type `[Review!]!`
+  """
+  reviews_on_doctor: Review_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'Doctor'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Doctor_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Doctor_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Doctor_Filter
+}
+"""
+✨ Generated having input type for table 'Doctor'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Doctor_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Doctor_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Doctor_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Doctor_Having!]
+  """
+  ✨ Generated from Field `Doctor`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Doctor`.`bio_count` of type `Int!`
+  """
+  bio_count: Int_Filter
+  """
+  ✨ Generated from Field `Doctor`.`clinicAddress_count` of type `Int!`
+  """
+  clinicAddress_count: Int_Filter
+  """
+  ✨ Generated from Field `Doctor`.`consultationFee_count` of type `Int!`
+  """
+  consultationFee_count: Int_Filter
+  """
+  ✨ Generated from Field `Doctor`.`experienceYears_count` of type `Int!`
+  """
+  experienceYears_count: Int_Filter
+  """
+  ✨ Generated from Field `Doctor`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Doctor`.`licenseNumber_count` of type `Int!`
+  """
+  licenseNumber_count: Int_Filter
+  """
+  ✨ Generated from Field `Doctor`.`specialization_count` of type `Int!`
+  """
+  specialization_count: Int_Filter
+  """
+  ✨ Generated from Field `Doctor`.`userId_count` of type `Int!`
+  """
+  userId_count: Int_Filter
+  """
+  ✨ Generated from Field `Doctor`.`consultationFee_sum` of type `Float`
+  """
+  consultationFee_sum: Float_Filter
+  """
+  ✨ Generated from Field `Doctor`.`experienceYears_sum` of type `Int`
+  """
+  experienceYears_sum: Int_Filter
+  """
+  ✨ Generated from Field `Doctor`.`consultationFee_avg` of type `Float`
+  """
+  consultationFee_avg: Float_Filter
+  """
+  ✨ Generated from Field `Doctor`.`experienceYears_avg` of type `Float`
+  """
+  experienceYears_avg: Float_Filter
+  """
+  ✨ Generated from Field `Doctor`.`consultationFee_min` of type `Float`
+  """
+  consultationFee_min: Float_Filter
+  """
+  ✨ Generated from Field `Doctor`.`experienceYears_min` of type `Int`
+  """
+  experienceYears_min: Int_Filter
+  """
+  ✨ Generated from Field `Doctor`.`consultationFee_max` of type `Float`
+  """
+  consultationFee_max: Float_Filter
+  """
+  ✨ Generated from Field `Doctor`.`experienceYears_max` of type `Int`
+  """
+  experienceYears_max: Int_Filter
+}
+"""
+✨ Generated key input type for table 'Doctor'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Doctor_Key {
+  """
+  ✨ Generated from Field `Doctor`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Doctor`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+}
+"""
+✨ Generated list filter input type for table 'Doctor'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Doctor_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Doctor_Filter
+}
+"""
+✨ Generated order input type for table 'Doctor'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Doctor_Order {
+  """
+  ✨ Generated from Field `Doctor`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`userId` of type `UUID!`
+  """
+  userId: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`user` of type `User!`
+  """
+  user: User_Order
+  """
+  ✨ Generated from Field `Doctor`.`bio` of type `String`
+  """
+  bio: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`clinicAddress` of type `String`
+  """
+  clinicAddress: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`consultationFee` of type `Float`
+  """
+  consultationFee: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`experienceYears` of type `Int!`
+  """
+  experienceYears: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`licenseNumber` of type `String!`
+  """
+  licenseNumber: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`specialization` of type `String!`
+  """
+  specialization: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`bio_count` of type `Int!`
+  """
+  bio_count: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`clinicAddress_count` of type `Int!`
+  """
+  clinicAddress_count: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`consultationFee_count` of type `Int!`
+  """
+  consultationFee_count: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`experienceYears_count` of type `Int!`
+  """
+  experienceYears_count: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`licenseNumber_count` of type `Int!`
+  """
+  licenseNumber_count: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`specialization_count` of type `Int!`
+  """
+  specialization_count: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`userId_count` of type `Int!`
+  """
+  userId_count: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`consultationFee_sum` of type `Float`
+  """
+  consultationFee_sum: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`experienceYears_sum` of type `Int`
+  """
+  experienceYears_sum: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`consultationFee_avg` of type `Float`
+  """
+  consultationFee_avg: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`experienceYears_avg` of type `Float`
+  """
+  experienceYears_avg: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`consultationFee_min` of type `Float`
+  """
+  consultationFee_min: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`experienceYears_min` of type `Int`
+  """
+  experienceYears_min: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`consultationFee_max` of type `Float`
+  """
+  consultationFee_max: OrderDirection
+  """
+  ✨ Generated from Field `Doctor`.`experienceYears_max` of type `Int`
+  """
+  experienceYears_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'MedicalRecord'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input MedicalRecord_Data {
+  """
+  ✨ Generated from Field `MedicalRecord`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `MedicalRecord`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+  """
+  ✨ Generated from Field `MedicalRecord`.`associatedAppointmentId` of type `UUID`
+  """
+  associatedAppointmentId: UUID
+  """
+  ✨ `_expr` server value variant of `associatedAppointmentId` (✨ Generated from Field `MedicalRecord`.`associatedAppointmentId` of type `UUID`)
+  """
+  associatedAppointmentId_expr: UUID_Expr
+  """
+  ✨ Generated from Field `MedicalRecord`.`patientId` of type `UUID!`
+  """
+  patientId: UUID
+  """
+  ✨ `_expr` server value variant of `patientId` (✨ Generated from Field `MedicalRecord`.`patientId` of type `UUID!`)
+  """
+  patientId_expr: UUID_Expr
+  """
+  ✨ Generated from Field `MedicalRecord`.`associatedAppointment` of type `Appointment`
+  """
+  associatedAppointment: Appointment_Key
+  """
+  ✨ Generated from Field `MedicalRecord`.`patient` of type `Patient!`
+  """
+  patient: Patient_Key
+  """
+  ✨ Generated from Field `MedicalRecord`.`description` of type `String`
+  """
+  description: String
+  """
+  ✨ `_expr` server value variant of `description` (✨ Generated from Field `MedicalRecord`.`description` of type `String`)
+  """
+  description_expr: String_Expr
+  """
+  ✨ Generated from Field `MedicalRecord`.`documentUrl` of type `String`
+  """
+  documentUrl: String
+  """
+  ✨ `_expr` server value variant of `documentUrl` (✨ Generated from Field `MedicalRecord`.`documentUrl` of type `String`)
+  """
+  documentUrl_expr: String_Expr
+  """
+  ✨ Generated from Field `MedicalRecord`.`recordType` of type `String!`
+  """
+  recordType: String
+  """
+  ✨ `_expr` server value variant of `recordType` (✨ Generated from Field `MedicalRecord`.`recordType` of type `String!`)
+  """
+  recordType_expr: String_Expr
+  """
+  ✨ Generated from Field `MedicalRecord`.`uploadDate` of type `Timestamp!`
+  """
+  uploadDate: Timestamp
+  """
+  ✨ `_expr` server value variant of `uploadDate` (✨ Generated from Field `MedicalRecord`.`uploadDate` of type `Timestamp!`)
+  """
+  uploadDate_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `uploadDate` (✨ Generated from Field `MedicalRecord`.`uploadDate` of type `Timestamp!`)
+  """
+  uploadDate_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `uploadDate` (✨ Generated from Field `MedicalRecord`.`uploadDate` of type `Timestamp!`)
+  """
+  uploadDate_update: [Timestamp_Update!]
+}
+"""
+✨ Generated filter input type for table 'MedicalRecord'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input MedicalRecord_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [MedicalRecord_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: MedicalRecord_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [MedicalRecord_Filter!]
+  """
+  ✨ Generated from Field `MedicalRecord`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `MedicalRecord`.`associatedAppointmentId` of type `UUID`
+  """
+  associatedAppointmentId: UUID_Filter
+  """
+  ✨ Generated from Field `MedicalRecord`.`patientId` of type `UUID!`
+  """
+  patientId: UUID_Filter
+  """
+  ✨ Generated from Field `MedicalRecord`.`associatedAppointment` of type `Appointment`
+  """
+  associatedAppointment: Appointment_Filter
+  """
+  ✨ Generated from Field `MedicalRecord`.`patient` of type `Patient!`
+  """
+  patient: Patient_Filter
+  """
+  ✨ Generated from Field `MedicalRecord`.`description` of type `String`
+  """
+  description: String_Filter
+  """
+  ✨ Generated from Field `MedicalRecord`.`documentUrl` of type `String`
+  """
+  documentUrl: String_Filter
+  """
+  ✨ Generated from Field `MedicalRecord`.`recordType` of type `String!`
+  """
+  recordType: String_Filter
+  """
+  ✨ Generated from Field `MedicalRecord`.`uploadDate` of type `Timestamp!`
+  """
+  uploadDate: Timestamp_Filter
+}
+"""
+✨ Generated first-row input type for table 'MedicalRecord'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input MedicalRecord_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [MedicalRecord_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: MedicalRecord_Filter
+}
+"""
+✨ Generated having input type for table 'MedicalRecord'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input MedicalRecord_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [MedicalRecord_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: MedicalRecord_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [MedicalRecord_Having!]
+  """
+  ✨ Generated from Field `MedicalRecord`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `MedicalRecord`.`associatedAppointmentId_count` of type `Int!`
+  """
+  associatedAppointmentId_count: Int_Filter
+  """
+  ✨ Generated from Field `MedicalRecord`.`description_count` of type `Int!`
+  """
+  description_count: Int_Filter
+  """
+  ✨ Generated from Field `MedicalRecord`.`documentUrl_count` of type `Int!`
+  """
+  documentUrl_count: Int_Filter
+  """
+  ✨ Generated from Field `MedicalRecord`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `MedicalRecord`.`patientId_count` of type `Int!`
+  """
+  patientId_count: Int_Filter
+  """
+  ✨ Generated from Field `MedicalRecord`.`recordType_count` of type `Int!`
+  """
+  recordType_count: Int_Filter
+  """
+  ✨ Generated from Field `MedicalRecord`.`uploadDate_count` of type `Int!`
+  """
+  uploadDate_count: Int_Filter
+  """
+  ✨ Generated from Field `MedicalRecord`.`uploadDate_min` of type `Timestamp`
+  """
+  uploadDate_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `MedicalRecord`.`uploadDate_max` of type `Timestamp`
+  """
+  uploadDate_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'MedicalRecord'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input MedicalRecord_Key {
+  """
+  ✨ Generated from Field `MedicalRecord`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `MedicalRecord`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+}
+"""
+✨ Generated list filter input type for table 'MedicalRecord'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input MedicalRecord_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: MedicalRecord_Filter
+}
+"""
+✨ Generated order input type for table 'MedicalRecord'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input MedicalRecord_Order {
+  """
+  ✨ Generated from Field `MedicalRecord`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `MedicalRecord`.`associatedAppointmentId` of type `UUID`
+  """
+  associatedAppointmentId: OrderDirection
+  """
+  ✨ Generated from Field `MedicalRecord`.`patientId` of type `UUID!`
+  """
+  patientId: OrderDirection
+  """
+  ✨ Generated from Field `MedicalRecord`.`associatedAppointment` of type `Appointment`
+  """
+  associatedAppointment: Appointment_Order
+  """
+  ✨ Generated from Field `MedicalRecord`.`patient` of type `Patient!`
+  """
+  patient: Patient_Order
+  """
+  ✨ Generated from Field `MedicalRecord`.`description` of type `String`
+  """
+  description: OrderDirection
+  """
+  ✨ Generated from Field `MedicalRecord`.`documentUrl` of type `String`
+  """
+  documentUrl: OrderDirection
+  """
+  ✨ Generated from Field `MedicalRecord`.`recordType` of type `String!`
+  """
+  recordType: OrderDirection
+  """
+  ✨ Generated from Field `MedicalRecord`.`uploadDate` of type `Timestamp!`
+  """
+  uploadDate: OrderDirection
+  """
+  ✨ Generated from Field `MedicalRecord`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `MedicalRecord`.`associatedAppointmentId_count` of type `Int!`
+  """
+  associatedAppointmentId_count: OrderDirection
+  """
+  ✨ Generated from Field `MedicalRecord`.`description_count` of type `Int!`
+  """
+  description_count: OrderDirection
+  """
+  ✨ Generated from Field `MedicalRecord`.`documentUrl_count` of type `Int!`
+  """
+  documentUrl_count: OrderDirection
+  """
+  ✨ Generated from Field `MedicalRecord`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `MedicalRecord`.`patientId_count` of type `Int!`
+  """
+  patientId_count: OrderDirection
+  """
+  ✨ Generated from Field `MedicalRecord`.`recordType_count` of type `Int!`
+  """
+  recordType_count: OrderDirection
+  """
+  ✨ Generated from Field `MedicalRecord`.`uploadDate_count` of type `Int!`
+  """
+  uploadDate_count: OrderDirection
+  """
+  ✨ Generated from Field `MedicalRecord`.`uploadDate_min` of type `Timestamp`
+  """
+  uploadDate_min: OrderDirection
+  """
+  ✨ Generated from Field `MedicalRecord`.`uploadDate_max` of type `Timestamp`
+  """
+  uploadDate_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Patient'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Patient_Data {
+  """
+  ✨ Generated from Field `Patient`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Patient`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Patient`.`userId` of type `UUID!`
+  """
+  userId: UUID
+  """
+  ✨ `_expr` server value variant of `userId` (✨ Generated from Field `Patient`.`userId` of type `UUID!`)
+  """
+  userId_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Patient`.`user` of type `User!`
+  """
+  user: User_Key
+  """
+  ✨ Generated from Field `Patient`.`dateOfBirth` of type `Date!`
+  """
+  dateOfBirth: Date
+  """
+  ✨ `_date` server value variant of `dateOfBirth` (✨ Generated from Field `Patient`.`dateOfBirth` of type `Date!`)
+  """
+  dateOfBirth_date: Date_Relative
+  """
+  ✨ `_expr` server value variant of `dateOfBirth` (✨ Generated from Field `Patient`.`dateOfBirth` of type `Date!`)
+  """
+  dateOfBirth_expr: Date_Expr
+  """
+  ✨ `_update` server value variant of `dateOfBirth` (✨ Generated from Field `Patient`.`dateOfBirth` of type `Date!`)
+  """
+  dateOfBirth_update: [Date_Update!]
+  """
+  ✨ Generated from Field `Patient`.`gender` of type `String`
+  """
+  gender: String
+  """
+  ✨ `_expr` server value variant of `gender` (✨ Generated from Field `Patient`.`gender` of type `String`)
+  """
+  gender_expr: String_Expr
+  """
+  ✨ Generated from Field `Patient`.`medicalHistorySummary` of type `String`
+  """
+  medicalHistorySummary: String
+  """
+  ✨ `_expr` server value variant of `medicalHistorySummary` (✨ Generated from Field `Patient`.`medicalHistorySummary` of type `String`)
+  """
+  medicalHistorySummary_expr: String_Expr
+}
+"""
+✨ Generated filter input type for table 'Patient'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Patient_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Patient_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Patient_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Patient_Filter!]
+  """
+  ✨ Generated from Field `Patient`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Patient`.`userId` of type `UUID!`
+  """
+  userId: UUID_Filter
+  """
+  ✨ Generated from Field `Patient`.`user` of type `User!`
+  """
+  user: User_Filter
+  """
+  ✨ Generated from Field `Patient`.`dateOfBirth` of type `Date!`
+  """
+  dateOfBirth: Date_Filter
+  """
+  ✨ Generated from Field `Patient`.`gender` of type `String`
+  """
+  gender: String_Filter
+  """
+  ✨ Generated from Field `Patient`.`medicalHistorySummary` of type `String`
+  """
+  medicalHistorySummary: String_Filter
+  """
+  ✨ Generated from Field `Patient`.`appointments_on_patient` of type `[Appointment!]!`
+  """
+  appointments_on_patient: Appointment_ListFilter
+  """
+  ✨ Generated from Field `Patient`.`medicalRecords_on_patient` of type `[MedicalRecord!]!`
+  """
+  medicalRecords_on_patient: MedicalRecord_ListFilter
+  """
+  ✨ Generated from Field `Patient`.`reviews_on_patient` of type `[Review!]!`
+  """
+  reviews_on_patient: Review_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'Patient'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Patient_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Patient_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Patient_Filter
+}
+"""
+✨ Generated having input type for table 'Patient'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Patient_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Patient_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Patient_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Patient_Having!]
+  """
+  ✨ Generated from Field `Patient`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Patient`.`dateOfBirth_count` of type `Int!`
+  """
+  dateOfBirth_count: Int_Filter
+  """
+  ✨ Generated from Field `Patient`.`gender_count` of type `Int!`
+  """
+  gender_count: Int_Filter
+  """
+  ✨ Generated from Field `Patient`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Patient`.`medicalHistorySummary_count` of type `Int!`
+  """
+  medicalHistorySummary_count: Int_Filter
+  """
+  ✨ Generated from Field `Patient`.`userId_count` of type `Int!`
+  """
+  userId_count: Int_Filter
+  """
+  ✨ Generated from Field `Patient`.`dateOfBirth_min` of type `Date`
+  """
+  dateOfBirth_min: Date_Filter
+  """
+  ✨ Generated from Field `Patient`.`dateOfBirth_max` of type `Date`
+  """
+  dateOfBirth_max: Date_Filter
+}
+"""
+✨ Generated key input type for table 'Patient'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Patient_Key {
+  """
+  ✨ Generated from Field `Patient`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Patient`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+}
+"""
+✨ Generated list filter input type for table 'Patient'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Patient_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Patient_Filter
+}
+"""
+✨ Generated order input type for table 'Patient'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Patient_Order {
+  """
+  ✨ Generated from Field `Patient`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Patient`.`userId` of type `UUID!`
+  """
+  userId: OrderDirection
+  """
+  ✨ Generated from Field `Patient`.`user` of type `User!`
+  """
+  user: User_Order
+  """
+  ✨ Generated from Field `Patient`.`dateOfBirth` of type `Date!`
+  """
+  dateOfBirth: OrderDirection
+  """
+  ✨ Generated from Field `Patient`.`gender` of type `String`
+  """
+  gender: OrderDirection
+  """
+  ✨ Generated from Field `Patient`.`medicalHistorySummary` of type `String`
+  """
+  medicalHistorySummary: OrderDirection
+  """
+  ✨ Generated from Field `Patient`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Patient`.`dateOfBirth_count` of type `Int!`
+  """
+  dateOfBirth_count: OrderDirection
+  """
+  ✨ Generated from Field `Patient`.`gender_count` of type `Int!`
+  """
+  gender_count: OrderDirection
+  """
+  ✨ Generated from Field `Patient`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Patient`.`medicalHistorySummary_count` of type `Int!`
+  """
+  medicalHistorySummary_count: OrderDirection
+  """
+  ✨ Generated from Field `Patient`.`userId_count` of type `Int!`
+  """
+  userId_count: OrderDirection
+  """
+  ✨ Generated from Field `Patient`.`dateOfBirth_min` of type `Date`
+  """
+  dateOfBirth_min: OrderDirection
+  """
+  ✨ Generated from Field `Patient`.`dateOfBirth_max` of type `Date`
+  """
+  dateOfBirth_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Review'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Review_Data {
+  """
+  ✨ Generated from Field `Review`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Review`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Review`.`doctorId` of type `UUID!`
+  """
+  doctorId: UUID
+  """
+  ✨ `_expr` server value variant of `doctorId` (✨ Generated from Field `Review`.`doctorId` of type `UUID!`)
+  """
+  doctorId_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Review`.`patientId` of type `UUID!`
+  """
+  patientId: UUID
+  """
+  ✨ `_expr` server value variant of `patientId` (✨ Generated from Field `Review`.`patientId` of type `UUID!`)
+  """
+  patientId_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Review`.`doctor` of type `Doctor!`
+  """
+  doctor: Doctor_Key
+  """
+  ✨ Generated from Field `Review`.`patient` of type `Patient!`
+  """
+  patient: Patient_Key
+  """
+  ✨ Generated from Field `Review`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `Review`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `Review`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `Review`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!]
+  """
+  ✨ Generated from Field `Review`.`rating` of type `Int!`
+  """
+  rating: Int
+  """
+  ✨ `_expr` server value variant of `rating` (✨ Generated from Field `Review`.`rating` of type `Int!`)
+  """
+  rating_expr: Int_Expr
+  """
+  ✨ `_update` server value variant of `rating` (✨ Generated from Field `Review`.`rating` of type `Int!`)
+  """
+  rating_update: [Int_Update!]
+  """
+  ✨ Generated from Field `Review`.`reviewText` of type `String!`
+  """
+  reviewText: String
+  """
+  ✨ `_expr` server value variant of `reviewText` (✨ Generated from Field `Review`.`reviewText` of type `String!`)
+  """
+  reviewText_expr: String_Expr
+}
+"""
+✨ Generated filter input type for table 'Review'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Review_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Review_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Review_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Review_Filter!]
+  """
+  ✨ Generated from Field `Review`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Review`.`doctorId` of type `UUID!`
+  """
+  doctorId: UUID_Filter
+  """
+  ✨ Generated from Field `Review`.`patientId` of type `UUID!`
+  """
+  patientId: UUID_Filter
+  """
+  ✨ Generated from Field `Review`.`doctor` of type `Doctor!`
+  """
+  doctor: Doctor_Filter
+  """
+  ✨ Generated from Field `Review`.`patient` of type `Patient!`
+  """
+  patient: Patient_Filter
+  """
+  ✨ Generated from Field `Review`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `Review`.`rating` of type `Int!`
+  """
+  rating: Int_Filter
+  """
+  ✨ Generated from Field `Review`.`reviewText` of type `String!`
+  """
+  reviewText: String_Filter
+}
+"""
+✨ Generated first-row input type for table 'Review'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Review_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Review_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Review_Filter
+}
+"""
+✨ Generated having input type for table 'Review'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Review_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Review_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Review_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Review_Having!]
+  """
+  ✨ Generated from Field `Review`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Review`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `Review`.`doctorId_count` of type `Int!`
+  """
+  doctorId_count: Int_Filter
+  """
+  ✨ Generated from Field `Review`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Review`.`patientId_count` of type `Int!`
+  """
+  patientId_count: Int_Filter
+  """
+  ✨ Generated from Field `Review`.`rating_count` of type `Int!`
+  """
+  rating_count: Int_Filter
+  """
+  ✨ Generated from Field `Review`.`reviewText_count` of type `Int!`
+  """
+  reviewText_count: Int_Filter
+  """
+  ✨ Generated from Field `Review`.`rating_sum` of type `Int`
+  """
+  rating_sum: Int_Filter
+  """
+  ✨ Generated from Field `Review`.`rating_avg` of type `Float`
+  """
+  rating_avg: Float_Filter
+  """
+  ✨ Generated from Field `Review`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Review`.`rating_min` of type `Int`
+  """
+  rating_min: Int_Filter
+  """
+  ✨ Generated from Field `Review`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `Review`.`rating_max` of type `Int`
+  """
+  rating_max: Int_Filter
+}
+"""
+✨ Generated key input type for table 'Review'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Review_Key {
+  """
+  ✨ Generated from Field `Review`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Review`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+}
+"""
+✨ Generated list filter input type for table 'Review'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Review_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Review_Filter
+}
+"""
+✨ Generated order input type for table 'Review'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Review_Order {
+  """
+  ✨ Generated from Field `Review`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`doctorId` of type `UUID!`
+  """
+  doctorId: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`patientId` of type `UUID!`
+  """
+  patientId: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`doctor` of type `Doctor!`
+  """
+  doctor: Doctor_Order
+  """
+  ✨ Generated from Field `Review`.`patient` of type `Patient!`
+  """
+  patient: Patient_Order
+  """
+  ✨ Generated from Field `Review`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`rating` of type `Int!`
+  """
+  rating: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`reviewText` of type `String!`
+  """
+  reviewText: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`doctorId_count` of type `Int!`
+  """
+  doctorId_count: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`patientId_count` of type `Int!`
+  """
+  patientId_count: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`rating_count` of type `Int!`
+  """
+  rating_count: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`reviewText_count` of type `Int!`
+  """
+  reviewText_count: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`rating_sum` of type `Int`
+  """
+  rating_sum: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`rating_avg` of type `Float`
+  """
+  rating_avg: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`rating_min` of type `Int`
+  """
+  rating_min: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: OrderDirection
+  """
+  ✨ Generated from Field `Review`.`rating_max` of type `Int`
+  """
+  rating_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'User'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input User_Data {
+  """
+  ✨ Generated from Field `User`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `User`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+  """
+  ✨ Generated from Field `User`.`address` of type `String`
+  """
+  address: String
+  """
+  ✨ `_expr` server value variant of `address` (✨ Generated from Field `User`.`address` of type `String`)
+  """
+  address_expr: String_Expr
+  """
+  ✨ Generated from Field `User`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `User`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `User`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `User`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!]
+  """
+  ✨ Generated from Field `User`.`displayName` of type `String!`
+  """
+  displayName: String
+  """
+  ✨ `_expr` server value variant of `displayName` (✨ Generated from Field `User`.`displayName` of type `String!`)
+  """
+  displayName_expr: String_Expr
+  """
+  ✨ Generated from Field `User`.`email` of type `String!`
+  """
+  email: String
+  """
+  ✨ `_expr` server value variant of `email` (✨ Generated from Field `User`.`email` of type `String!`)
+  """
+  email_expr: String_Expr
+  """
+  ✨ Generated from Field `User`.`phoneNumber` of type `String`
+  """
+  phoneNumber: String
+  """
+  ✨ `_expr` server value variant of `phoneNumber` (✨ Generated from Field `User`.`phoneNumber` of type `String`)
+  """
+  phoneNumber_expr: String_Expr
+  """
+  ✨ Generated from Field `User`.`photoUrl` of type `String`
+  """
+  photoUrl: String
+  """
+  ✨ `_expr` server value variant of `photoUrl` (✨ Generated from Field `User`.`photoUrl` of type `String`)
+  """
+  photoUrl_expr: String_Expr
+  """
+  ✨ Generated from Field `User`.`userType` of type `String!`
+  """
+  userType: String
+  """
+  ✨ `_expr` server value variant of `userType` (✨ Generated from Field `User`.`userType` of type `String!`)
+  """
+  userType_expr: String_Expr
+}
+"""
+✨ Generated filter input type for table 'User'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input User_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [User_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: User_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [User_Filter!]
+  """
+  ✨ Generated from Field `User`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `User`.`address` of type `String`
+  """
+  address: String_Filter
+  """
+  ✨ Generated from Field `User`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `User`.`displayName` of type `String!`
+  """
+  displayName: String_Filter
+  """
+  ✨ Generated from Field `User`.`email` of type `String!`
+  """
+  email: String_Filter
+  """
+  ✨ Generated from Field `User`.`phoneNumber` of type `String`
+  """
+  phoneNumber: String_Filter
+  """
+  ✨ Generated from Field `User`.`photoUrl` of type `String`
+  """
+  photoUrl: String_Filter
+  """
+  ✨ Generated from Field `User`.`userType` of type `String!`
+  """
+  userType: String_Filter
+  """
+  ✨ Generated from Field `User`.`doctors_on_user` of type `[Doctor!]!`
+  """
+  doctors_on_user: Doctor_ListFilter
+  """
+  ✨ Generated from Field `User`.`patients_on_user` of type `[Patient!]!`
+  """
+  patients_on_user: Patient_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'User'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input User_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [User_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: User_Filter
+}
+"""
+✨ Generated having input type for table 'User'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input User_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [User_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: User_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [User_Having!]
+  """
+  ✨ Generated from Field `User`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`address_count` of type `Int!`
+  """
+  address_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`displayName_count` of type `Int!`
+  """
+  displayName_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`email_count` of type `Int!`
+  """
+  email_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`phoneNumber_count` of type `Int!`
+  """
+  phoneNumber_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`photoUrl_count` of type `Int!`
+  """
+  photoUrl_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`userType_count` of type `Int!`
+  """
+  userType_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `User`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'User'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input User_Key {
+  """
+  ✨ Generated from Field `User`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `User`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+}
+"""
+✨ Generated list filter input type for table 'User'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input User_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: User_Filter
+}
+"""
+✨ Generated order input type for table 'User'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input User_Order {
+  """
+  ✨ Generated from Field `User`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `User`.`address` of type `String`
+  """
+  address: OrderDirection
+  """
+  ✨ Generated from Field `User`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `User`.`displayName` of type `String!`
+  """
+  displayName: OrderDirection
+  """
+  ✨ Generated from Field `User`.`email` of type `String!`
+  """
+  email: OrderDirection
+  """
+  ✨ Generated from Field `User`.`phoneNumber` of type `String`
+  """
+  phoneNumber: OrderDirection
+  """
+  ✨ Generated from Field `User`.`photoUrl` of type `String`
+  """
+  photoUrl: OrderDirection
+  """
+  ✨ Generated from Field `User`.`userType` of type `String!`
+  """
+  userType: OrderDirection
+  """
+  ✨ Generated from Field `User`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`address_count` of type `Int!`
+  """
+  address_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`displayName_count` of type `Int!`
+  """
+  displayName_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`email_count` of type `Int!`
+  """
+  email_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`phoneNumber_count` of type `Int!`
+  """
+  phoneNumber_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`photoUrl_count` of type `Int!`
+  """
+  photoUrl_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`userType_count` of type `Int!`
+  """
+  userType_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: OrderDirection
+  """
+  ✨ Generated from Field `User`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: OrderDirection
+}
