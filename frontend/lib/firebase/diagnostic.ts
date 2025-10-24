@@ -1,5 +1,5 @@
 import { auth, db } from './config';
-import { doc, getDoc, collection, addDoc, deleteDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, addDoc, deleteDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 export class FirebaseDiagnostic {
   static async runFullDiagnostic() {
@@ -32,8 +32,13 @@ export class FirebaseDiagnostic {
           const userData = userDoc.data();
           results.userRole = userData.role || null;
           console.log('✅ User Doc: Exists with role:', userData.role);
+          
+          // If no role, this might be the issue
+          if (!userData.role) {
+            results.errors.push('User document exists but has no role assigned');
+          }
         } else {
-          results.errors.push('User document does not exist');
+          results.errors.push('User document does not exist - this is likely the main issue');
           console.log('❌ User Doc: Does not exist');
         }
       } catch (error) {
@@ -118,6 +123,51 @@ export class FirebaseDiagnostic {
     }
 
     return results;
+  }
+
+  static async fixUserRole(forceRole?: 'doctor' | 'patient' | 'admin') {
+    const user = auth.currentUser;
+    if (!user) {
+      throw new Error('No authenticated user');
+    }
+
+    try {
+      const userDocRef = doc(db, 'users', user.uid);
+      const userDoc = await getDoc(userDocRef);
+      
+      if (!userDoc.exists()) {
+        // Create user document if it doesn't exist
+        const userData = {
+          uid: user.uid,
+          email: user.email || '',
+          displayName: user.displayName || user.email?.split('@')[0] || 'User',
+          role: forceRole || 'doctor', // Default to doctor for testing
+          createdAt: new Date(),
+          updatedAt: new Date()
+        };
+        
+        await setDoc(userDocRef, userData);
+        console.log('✅ Created user document with role:', userData.role);
+        return userData.role;
+      } else {
+        // Update existing document with role
+        const currentData = userDoc.data();
+        if (!currentData.role || forceRole) {
+          await updateDoc(userDocRef, {
+            role: forceRole || 'doctor',
+            updatedAt: new Date()
+          });
+          console.log('✅ Updated user role to:', forceRole || 'doctor');
+          return forceRole || 'doctor';
+        } else {
+          console.log('✅ User already has role:', currentData.role);
+          return currentData.role;
+        }
+      }
+    } catch (error) {
+      console.error('❌ Failed to fix user role:', error);
+      throw error;
+    }
   }
 
   static async checkEnvironment() {

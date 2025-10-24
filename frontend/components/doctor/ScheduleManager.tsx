@@ -246,6 +246,28 @@ export default function ScheduleManager() {
           >
             <span>Run Diagnostics</span>
           </Button>
+          <Button
+            variant="outline"
+            onClick={async () => {
+              if (!user?.uid) {
+                alert('No user logged in');
+                return;
+              }
+              
+              try {
+                const { FirebaseDiagnostic } = await import('@/lib/firebase/diagnostic');
+                const role = await FirebaseDiagnostic.fixUserRole('doctor');
+                alert(`User role set to: ${role}. Now try creating the schedule again.`);
+                await loadScheduleData(); // Refresh the page data
+              } catch (error) {
+                console.error('Failed to fix user role:', error);
+                alert(`Failed to fix user role: ${error}`);
+              }
+            }}
+            className="flex items-center space-x-2"
+          >
+            <span>Fix User Role</span>
+          </Button>
         </div>
       </div>
 
