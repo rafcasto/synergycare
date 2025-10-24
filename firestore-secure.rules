@@ -125,6 +125,39 @@ service cloud.firestore {
       allow write: if isOwner(doctorId) || hasRole('admin');
     }
     
+    // Doctor schedule collection rules
+    match /doctor_schedules/{scheduleId} {
+      // Only the doctor themselves or admins can access their schedules
+      allow read, write: if isOwner(resource.data.doctorId) || hasRole('admin');
+      
+      // Allow creating new schedules
+      allow create: if hasRole('doctor') && isOwner(request.resource.data.doctorId) || hasRole('admin');
+    }
+    
+    // Schedule exceptions collection rules
+    match /schedule_exceptions/{exceptionId} {
+      // Only the doctor themselves or admins can access their exceptions
+      allow read, write: if isOwner(resource.data.doctorId) || hasRole('admin');
+      
+      // Allow creating new exceptions
+      allow create: if hasRole('doctor') && isOwner(request.resource.data.doctorId) || hasRole('admin');
+    }
+    
+    // Availability slots collection rules
+    match /availability_slots/{slotId} {
+      // Doctors can manage their own slots, patients can read available slots for booking
+      allow read: if isAuthenticated() && 
+                     (isOwner(resource.data.doctorId) || 
+                      hasRole('admin') ||
+                      (hasRole('patient') && resource.data.status == 'available'));
+      
+      // Only doctors can write their own slots
+      allow write: if hasRole('doctor') && isOwner(resource.data.doctorId) || hasRole('admin');
+      
+      // Allow creating new slots
+      allow create: if hasRole('doctor') && isOwner(request.resource.data.doctorId) || hasRole('admin');
+    }
+    
     // Admin-only collections
     match /admin/{document} {
       allow read, write: if hasRole('admin');

@@ -107,7 +107,17 @@ export default function ScheduleManager() {
 
     } catch (err) {
       console.error('Error creating default schedule:', err);
-      setError('Failed to create default schedule: ' + (err as Error).message);
+      
+      // Check if it's an index-related error but schedules were still created
+      const errorMessage = (err as Error).message;
+      const isIndexError = errorMessage.includes('index') || errorMessage.includes('Index');
+      
+      if (isIndexError) {
+        // Give a more user-friendly message for index errors
+        setError('Schedule creation is in progress. Database indexes are still building - this may take a few moments. Please refresh the page in a minute to see your schedule.');
+      } else {
+        setError('Failed to create default schedule: ' + errorMessage);
+      }
     } finally {
       setLoading(false);
     }

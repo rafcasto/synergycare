@@ -503,21 +503,52 @@ export class FirestoreService {
     return slotRef.id;
   }
 
+  // Helper function to retry queries that might fail due to index building
+  private static async retryQuery<T>(
+    queryFn: () => Promise<T>,
+    maxRetries: number = 3,
+    delayMs: number = 1000
+  ): Promise<T> {
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+      try {
+        return await queryFn();
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const errorCode = (error as { code?: string }).code;
+        
+        const isIndexError = errorMessage.includes('index') || 
+                            errorMessage.includes('Index') ||
+                            errorCode === 'failed-precondition';
+        
+        if (isIndexError && attempt < maxRetries - 1) {
+          console.log(`🔄 Index error detected, retrying in ${delayMs}ms (attempt ${attempt + 1}/${maxRetries})`);
+          await new Promise(resolve => setTimeout(resolve, delayMs));
+          delayMs *= 2; // Exponential backoff
+          continue;
+        }
+        throw error;
+      }
+    }
+    throw new Error('Max retries exceeded');
+  }
+
   static async getAvailabilitySlots(doctorId: string, fromDate: string, toDate: string): Promise<AvailabilitySlot[]> {
-    const q = query(
-      collection(db, AVAILABILITY_SLOTS_COLLECTION),
-      where('doctorId', '==', doctorId),
-      where('date', '>=', fromDate),
-      where('date', '<=', toDate),
-      orderBy('date', 'asc'),
-      orderBy('startTime', 'asc')
-    );
-    
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    } as AvailabilitySlot));
+    return this.retryQuery(async () => {
+      const q = query(
+        collection(db, AVAILABILITY_SLOTS_COLLECTION),
+        where('doctorId', '==', doctorId),
+        where('date', '>=', fromDate),
+        where('date', '<=', toDate),
+        orderBy('date', 'asc'),
+        orderBy('startTime', 'asc')
+      );
+      
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      } as AvailabilitySlot));
+    });
   }
 
   static async getAvailabilitySlot(slotId: string): Promise<AvailabilitySlot | null> {
@@ -546,16 +577,18 @@ export class FirestoreService {
   }
 
   static async getAvailableSlotsForDate(doctorId: string, date: string): Promise<AvailabilitySlot[]> {
-    const q = query(
-      collection(db, AVAILABILITY_SLOTS_COLLECTION),
-      where('doctorId', '==', doctorId),
-      where('date', '==', date),
-      where('status', '==', 'available'),
-      orderBy('startTime', 'asc')
-    );
-    
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => doc.data() as AvailabilitySlot);
+    return this.retryQuery(async () => {
+      const q = query(
+        collection(db, AVAILABILITY_SLOTS_COLLECTION),
+        where('doctorId', '==', doctorId),
+        where('date', '==', date),
+        where('status', '==', 'available'),
+        orderBy('startTime', 'asc')
+      );
+      
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs.map(doc => doc.data() as AvailabilitySlot);
+    });
   }
 
   static async generateAvailabilitySlots(
@@ -567,11 +600,23 @@ export class FirestoreService {
     console.log(`🔧 generateAvailabilitySlots called: ${doctorId}, ${fromDate} to ${toDate}`);
     
     // First, check if slots already exist for this date range and clear them
-    const existingSlots = await this.getAvailabilitySlots(doctorId, fromDate, toDate);
-    if (existingSlots.length > 0) {
-      console.log(`🗑️ Clearing ${existingSlots.length} existing slots`);
-      const deletePromises = existingSlots.map(slot => this.deleteAvailabilitySlot(slot.id));
-      await Promise.all(deletePromises);
+    // Use a try-catch to handle potential index errors gracefully
+    try {
+      const existingSlots = await this.getAvailabilitySlots(doctorId, fromDate, toDate);
+      if (existingSlots.length > 0) {
+        console.log(`🗑️ Clearing ${existingSlots.length} existing slots`);
+        const deletePromises = existingSlots.map(slot => this.deleteAvailabilitySlot(slot.id));
+        await Promise.all(deletePromises);
+      }
+    } catch (error: unknown) {
+      // If index error occurs during cleanup, log it but continue with generation
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      const isIndexError = errorMessage.includes('index') || errorMessage.includes('Index');
+      if (isIndexError) {
+        console.warn('⚠️ Index error during existing slots cleanup - continuing with generation:', errorMessage);
+      } else {
+        throw error; // Re-throw non-index errors
+      }
     }
     
     // Get doctor's default schedule

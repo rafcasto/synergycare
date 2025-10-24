@@ -112,6 +112,48 @@ service cloud.firestore {
       allow read, write: if hasRole('admin');
     }
     
+    // Doctor schedule collection rules
+    match /doctor_schedules/{scheduleId} {
+      // Only the doctor themselves or admins can access their schedules
+      allow read, write: if isOwner(resource.data.doctorId) || hasRole('admin');
+      
+      // Allow creating new schedules
+      allow create: if hasRole('doctor') && isOwner(request.resource.data.doctorId) || hasRole('admin');
+    }
+    
+    // Schedule exceptions collection rules
+    match /schedule_exceptions/{exceptionId} {
+      // Only the doctor themselves or admins can access their exceptions
+      allow read, write: if isOwner(resource.data.doctorId) || hasRole('admin');
+      
+      // Allow creating new exceptions
+      allow create: if hasRole('doctor') && isOwner(request.resource.data.doctorId) || hasRole('admin');
+    }
+    
+    // Availability slots collection rules
+    match /availability_slots/{slotId} {
+      // Doctors can manage their own slots, patients can read available slots for booking
+      allow read: if isAuthenticated() && 
+                     (isOwner(resource.data.doctorId) || 
+                      hasRole('admin') ||
+                      (hasRole('patient') && resource.data.status == 'available'));
+      
+      // Doctors can fully manage their own slots
+      allow write: if hasRole('doctor') && isOwner(resource.data.doctorId) || hasRole('admin');
+      
+      // Patients can book available slots (change status to 'booked' only)
+      allow update: if hasRole('patient') && 
+                       resource.data.status == 'available' &&
+                       request.resource.data.status == 'booked' &&
+                       request.resource.data.doctorId == resource.data.doctorId &&
+                       request.resource.data.date == resource.data.date &&
+                       request.resource.data.startTime == resource.data.startTime &&
+                       request.resource.data.endTime == resource.data.endTime;
+      
+      // Allow creating new slots
+      allow create: if hasRole('doctor') && isOwner(request.resource.data.doctorId) || hasRole('admin');
+    }
+    
     // Audit logs (read-only for admin)
     match /audit_logs/{logId} {
       allow read: if hasRole('admin');
