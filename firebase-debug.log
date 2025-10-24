@@ -1,0 +1,476 @@
+[debug] [2025-10-24T04:23:17.257Z] ----------------------------------------------------------------------
+[debug] [2025-10-24T04:23:17.263Z] Command:       /usr/local/bin/node /usr/local/bin/firebase emulators:start
+[debug] [2025-10-24T04:23:17.263Z] CLI Version:   14.20.0
+[debug] [2025-10-24T04:23:17.263Z] Platform:      darwin
+[debug] [2025-10-24T04:23:17.263Z] Node Version:  v20.11.1
+[debug] [2025-10-24T04:23:17.263Z] Time:          Fri Oct 24 2025 17:23:17 GMT+1300 (New Zealand Daylight Time)
+[debug] [2025-10-24T04:23:17.263Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-10-24T04:23:17.392Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-10-24T04:23:17.392Z] > authorizing via signed-in user (rafcasto@gmail.com)
+[debug] [2025-10-24T04:23:17.497Z] openjdk version "21.0.1" 2023-10-17
+
+[debug] [2025-10-24T04:23:17.497Z] OpenJDK Runtime Environment (build 21.0.1+12-29)
+OpenJDK 64-Bit Server VM (build 21.0.1+12-29, mixed mode, sharing)
+
+[debug] [2025-10-24T04:23:17.503Z] Parsed Java major version: 21
+[info] i  emulators: Starting emulators: auth, functions, firestore, dataconnect, extensions {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, functions, firestore, dataconnect, extensions"}}
+[debug] [2025-10-24T04:23:17.505Z] Checked if tokens are valid: false, expires at: 1761268146927
+[debug] [2025-10-24T04:23:17.505Z] Checked if tokens are valid: false, expires at: 1761268146927
+[debug] [2025-10-24T04:23:17.505Z] > refreshing access token with scopes: []
+[debug] [2025-10-24T04:23:17.506Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-24T04:23:17.506Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-24T04:23:17.821Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-10-24T04:23:17.821Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-24T04:23:17.836Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/patients-synergycare [none]
+[debug] [2025-10-24T04:23:18.280Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/patients-synergycare 200
+[debug] [2025-10-24T04:23:18.281Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/patients-synergycare {"projectNumber":"20154223049","projectId":"patients-synergycare","lifecycleState":"ACTIVE","name":"patients-synergycare","labels":{"firebase":"enabled","firebase-core":"disabled"},"createTime":"2025-10-20T08:08:17.575718Z"}
+[debug] [2025-10-24T04:23:18.803Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-10-24T04:23:18.803Z] [auth] Authentication Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-10-24T04:23:18.803Z] [firestore] Firestore Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-10-24T04:23:18.803Z] [firestore.websocket] websocket server for firestore only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-10-24T04:23:18.803Z] [dataconnect.postgres] postgres server for dataconnect only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-10-24T04:23:18.803Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4001},{"address":"::1","family":"IPv6","port":4001}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8081}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"dataconnect":[{"address":"127.0.0.1","family":"IPv4","port":9399},{"address":"::1","family":"IPv6","port":9399}],"dataconnect.postgres":[{"address":"127.0.0.1","family":"IPv4","port":5432}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2025-10-24T04:23:18.807Z] Emulator locator file path: /var/folders/w5/5x5t0k191xb4201hbm7n5nw80000gn/T/hub-patients-synergycare.json
+[debug] [2025-10-24T04:23:18.807Z] [hub] writing locator at /var/folders/w5/5x5t0k191xb4201hbm7n5nw80000gn/T/hub-patients-synergycare.json
+[debug] [2025-10-24T04:23:18.809Z] [Extensions] Started Extensions emulator, this is a noop.
+[debug] [2025-10-24T04:23:19.002Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-10-24T04:23:19.002Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-10-24T04:23:19.002Z] [tasks] Cloud Tasks Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-10-24T04:23:19.002Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4001},{"address":"::1","family":"IPv6","port":4001}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8081}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"dataconnect":[{"address":"127.0.0.1","family":"IPv4","port":9399},{"address":"::1","family":"IPv6","port":9399}],"dataconnect.postgres":[{"address":"127.0.0.1","family":"IPv4","port":5432}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5002}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9299}],"tasks":[{"address":"127.0.0.1","family":"IPv4","port":9499}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] ⚠  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: apphosting, database, hosting, pubsub, storage {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: apphosting, database, hosting, pubsub, storage"}}
+[debug] [2025-10-24T04:23:19.008Z] defaultcredentials: writing to file /Users/rafaelcastillo/.config/firebase/rafcasto_gmail_com_application_default_credentials.json
+[debug] [2025-10-24T04:23:19.008Z] Setting GAC to /Users/rafaelcastillo/.config/firebase/rafcasto_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to /Users/rafaelcastillo/.config/firebase/rafcasto_gmail_com_application_default_credentials.json"}}
+[debug] [2025-10-24T04:23:19.009Z] Checked if tokens are valid: true, expires at: 1761283396821
+[debug] [2025-10-24T04:23:19.009Z] Checked if tokens are valid: true, expires at: 1761283396821
+[debug] [2025-10-24T04:23:19.009Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/patients-synergycare/adminSdkConfig [none]
+[debug] [2025-10-24T04:23:19.586Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/patients-synergycare/adminSdkConfig 200
+[debug] [2025-10-24T04:23:19.586Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/patients-synergycare/adminSdkConfig {"projectId":"patients-synergycare","storageBucket":"patients-synergycare.firebasestorage.app"}
+[debug] [2025-10-24T04:23:19.601Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2025-10-24T04:23:19.601Z] Ignoring unsupported arg: single_project_mode_error {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: single_project_mode_error"}}
+[debug] [2025-10-24T04:23:19.601Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","/Users/rafaelcastillo/.cache/firebase/emulators/cloud-firestore-emulator-v1.19.8.jar","--host","127.0.0.1","--port",8081,"--websocket_port",9150,"--project_id","patients-synergycare","--rules","/Users/rafaelcastillo/sc/synergycare/firestore.rules","--single_project_mode",true,"--functions_emulator","127.0.0.1:5002"],"optionalArgs":["port","webchannel_port","host","rules","websocket_port","functions_emulator","seed_from_export","project_id","single_project_mode"],"joinArgs":false,"shell":false,"port":8081} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"/Users/rafaelcastillo/.cache/firebase/emulators/cloud-firestore-emulator-v1.19.8.jar\",\"--host\",\"127.0.0.1\",\"--port\",8081,\"--websocket_port\",9150,\"--project_id\",\"patients-synergycare\",\"--rules\",\"/Users/rafaelcastillo/sc/synergycare/firestore.rules\",\"--single_project_mode\",true,\"--functions_emulator\",\"127.0.0.1:5002\"],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"websocket_port\",\"functions_emulator\",\"seed_from_export\",\"project_id\",\"single_project_mode\"],\"joinArgs\":false,\"shell\":false,\"port\":8081}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to firestore-debug.log"}}
+[debug] [2025-10-24T04:23:20.200Z] Oct 24, 2025 5:23:20 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start
+INFO: Started WebSocket server on ws://127.0.0.1:9150
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:23:20 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start\nINFO: Started WebSocket server on ws://127.0.0.1:9150\n"}}
+[debug] [2025-10-24T04:23:20.212Z] API endpoint: http:// {"metadata":{"emulator":{"name":"firestore"},"message":"API endpoint: http://"}}
+[debug] [2025-10-24T04:23:20.212Z] 127.0.0.1:8081
+If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
+
+   export FIRESTORE_EMULATOR_HOST=127.0.0.1:8081
+
+If you are running a Firestore in Datastore Mode project, run:
+
+   export DATASTORE_EMULATOR_HOST=127.0.0.1:8081
+
+Note: Support for Datastore Mode is in preview. If you encounter any bugs please file at https://github.com/firebase/firebase-tools/issues.
+Dev App Server is now running.
+
+ {"metadata":{"emulator":{"name":"firestore"},"message":"127.0.0.1:8081\nIf you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:\n\n   export FIRESTORE_EMULATOR_HOST=127.0.0.1:8081\n\nIf you are running a Firestore in Datastore Mode project, run:\n\n   export DATASTORE_EMULATOR_HOST=127.0.0.1:8081\n\nNote: Support for Datastore Mode is in preview. If you encounter any bugs please file at https://github.com/firebase/firebase-tools/issues.\nDev App Server is now running.\n\n"}}
+[info] ✔  firestore: Firestore Emulator UI websocket is running on 9150. {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator UI websocket is running on 9150."}}
+[debug] [2025-10-24T04:23:23.224Z] defaultcredentials: writing to file /Users/rafaelcastillo/.config/firebase/rafcasto_gmail_com_application_default_credentials.json
+[debug] [2025-10-24T04:23:24.234Z] W1024 17:23:24.229214   82266 control.go:68] [/emulator/synergycare 0c15] connector "example" has errors: example/queries.gql:37:43: Field "id_expr" is not defined by type "User_Filter".
+
+sources: example/queries.gql [1661B] 
+I1024 17:23:24.231369   82266 control.go:94] [/emulator/synergycare 0c15] UpdateResources(): done
+Main schema: sources: schema/schema.gql [932B] 
+Connector "example": sources: example/queries.gql [1661B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W1024 17:23:24.229214   82266 control.go:68] [/emulator/synergycare 0c15] connector \"example\" has errors: example/queries.gql:37:43: Field \"id_expr\" is not defined by type \"User_Filter\".\n\nsources: example/queries.gql [1661B] \nI1024 17:23:24.231369   82266 control.go:94] [/emulator/synergycare 0c15] UpdateResources(): done\nMain schema: sources: schema/schema.gql [932B] \nConnector \"example\": sources: example/queries.gql [1661B] \n"}}
+[debug] [2025-10-24T04:23:24.235Z] defaultcredentials: writing to file /Users/rafaelcastillo/.config/firebase/rafcasto_gmail_com_application_default_credentials.json
+[debug] [2025-10-24T04:23:24.236Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2025-10-24T04:23:24.236Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"dataconnect"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2025-10-24T04:23:24.236Z] Starting Data Connect Emulator with command {"binary":"/Users/rafaelcastillo/.cache/firebase/emulators/dataconnect-emulator-2.15.0","args":["--logtostderr","-v=2","dev","--listen=127.0.0.1:9399,[::1]:9399","--config_dir=/Users/rafaelcastillo/sc/synergycare/dataconnect","--enable_output_schema_extensions=true","--enable_output_generated_sdk=true"],"optionalArgs":["listen","config_dir","enable_output_schema_extensions","enable_output_generated_sdk"],"joinArgs":true,"shell":false,"port":9399} {"metadata":{"emulator":{"name":"dataconnect"},"message":"Starting Data Connect Emulator with command {\"binary\":\"/Users/rafaelcastillo/.cache/firebase/emulators/dataconnect-emulator-2.15.0\",\"args\":[\"--logtostderr\",\"-v=2\",\"dev\",\"--listen=127.0.0.1:9399,[::1]:9399\",\"--config_dir=/Users/rafaelcastillo/sc/synergycare/dataconnect\",\"--enable_output_schema_extensions=true\",\"--enable_output_generated_sdk=true\"],\"optionalArgs\":[\"listen\",\"config_dir\",\"enable_output_schema_extensions\",\"enable_output_generated_sdk\"],\"joinArgs\":true,\"shell\":false,\"port\":9399}"}}
+[info] i  dataconnect: Data Connect Emulator logging to dataconnect-debug.log {"metadata":{"emulator":{"name":"dataconnect"},"message":"Data Connect Emulator logging to dataconnect-debug.log"}}
+[info] i  dataconnect: Started up Postgres server, listening on {"address":"127.0.0.1","family":"IPv4","port":5432} {"metadata":{"emulator":{"name":"dataconnect"},"message":"Started up Postgres server, listening on {\"address\":\"127.0.0.1\",\"family\":\"IPv4\",\"port\":5432}"}}
+[debug] [2025-10-24T04:23:24.249Z] [Data Connect] Connecting to postgres://127.0.0.1:5432/fdcdb?sslmode=disable}...
+[debug] [2025-10-24T04:23:24.249Z] >>> [apiv2][query] POST http://127.0.0.1:9399/emulator/configure [none]
+[debug] [2025-10-24T04:23:24.249Z] >>> [apiv2][body] POST http://127.0.0.1:9399/emulator/configure {"connectionString":"postgres://127.0.0.1:5432/fdcdb?sslmode=disable","database":"fdcdb","serviceId":"synergycare","maxOpenConnections":1}
+[debug] [2025-10-24T04:23:24.250Z] *** [apiv2] error from fetch(http://127.0.0.1:9399/emulator/configure, {"headers":{},"method":"POST","body":"{\"connectionString\":\"postgres://127.0.0.1:5432/fdcdb?sslmode=disable\",\"database\":\"fdcdb\",\"serviceId\":\"synergycare\",\"maxOpenConnections\":1}"}): FetchError: request to http://127.0.0.1:9399/emulator/configure failed, reason: connect ECONNREFUSED 127.0.0.1:9399
+[debug] [2025-10-24T04:23:24.250Z] [Data Connect] Retrying connectToPostgress call (1 of 3 attempts): FirebaseError: Data Connect emulator: undefined
+[debug] [2025-10-24T04:23:24.398Z] I1024 17:23:24.396616   82275 load.go:31] Reloading schema and connectors...
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I1024 17:23:24.396616   82275 load.go:31] Reloading schema and connectors...\n"}}
+[debug] [2025-10-24T04:23:24.452Z] W1024 17:23:24.451868   82275 control.go:68] [/emulator/synergycare 1774] connector "example" has errors: example/queries.gql:37:43: Field "id_expr" is not defined by type "User_Filter".
+
+sources: example/queries.gql [1661B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W1024 17:23:24.451868   82275 control.go:68] [/emulator/synergycare 1774] connector \"example\" has errors: example/queries.gql:37:43: Field \"id_expr\" is not defined by type \"User_Filter\".\n\nsources: example/queries.gql [1661B] \n"}}
+[debug] [2025-10-24T04:23:24.452Z] I1024 17:23:24.452349   82275 control.go:94] [/emulator/synergycare 1774] UpdateResources(): done
+Main schema: sources: schema/schema.gql [932B] 
+Connector "example": sources: example/queries.gql [1661B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I1024 17:23:24.452349   82275 control.go:94] [/emulator/synergycare 1774] UpdateResources(): done\nMain schema: sources: schema/schema.gql [932B] \nConnector \"example\": sources: example/queries.gql [1661B] \n"}}
+[debug] [2025-10-24T04:23:24.454Z] E1024 17:23:24.454754   82275 load.go:73] Could not load sources: 
+Errors: example/queries.gql:37:43: Field "id_expr" is not defined by type "User_Filter".
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E1024 17:23:24.454754   82275 load.go:73] Could not load sources: \nErrors: example/queries.gql:37:43: Field \"id_expr\" is not defined by type \"User_Filter\".\n"}}
+[debug] [2025-10-24T04:23:24.457Z] I1024 17:23:24.456956   82275 collector.go:107] schema extensions wrote into "/Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema"
+Generated sources: prelude.gql [73219B] main/relation.gql [30423B] main/query.gql [7617B] main/mutation.gql [20560B] main/implicit.gql [3559B] main/input.gql [60573B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I1024 17:23:24.456956   82275 collector.go:107] schema extensions wrote into \"/Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema\"\nGenerated sources: prelude.gql [73219B] main/relation.gql [30423B] main/query.gql [7617B] main/mutation.gql [20560B] main/implicit.gql [3559B] main/input.gql [60573B] \n"}}
+[debug] [2025-10-24T04:23:24.457Z] E1024 17:23:24.457117   82275 load.go:42] Errors flushing generated files: schema extensions
+failed to create output directory /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema: mkdir /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect: permission denied
+failed to create directory main: mkdir /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect: permission denied
+failed to write file main/input.gql: open /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema/main/input.gql: no such file or directory
+failed to write file prelude.gql: open /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema/prelude.gql: no such file or directory
+failed to write file main/relation.gql: open /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema/main/relation.gql: no such file or directory
+failed to write file main/query.gql: open /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema/main/query.gql: no such file or directory
+failed to write file main/mutation.gql: open /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema/main/mutation.gql: no such file or directory
+failed to write file main/implicit.gql: open /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema/main/implicit.gql: no such file or directory
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"E1024 17:23:24.457117   82275 load.go:42] Errors flushing generated files: schema extensions\nfailed to create output directory /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema: mkdir /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect: permission denied\nfailed to create directory main: mkdir /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect: permission denied\nfailed to write file main/input.gql: open /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema/main/input.gql: no such file or directory\nfailed to write file prelude.gql: open /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema/prelude.gql: no such file or directory\nfailed to write file main/relation.gql: open /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema/main/relation.gql: no such file or directory\nfailed to write file main/query.gql: open /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema/main/query.gql: no such file or directory\nfailed to write file main/mutation.gql: open /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema/main/mutation.gql: no such file or directory\nfailed to write file main/implicit.gql: open /Users/rafaelcastillo/sc/synergycare/dataconnect/.dataconnect/schema/main/implicit.gql: no such file or directory\n"}}
+[debug] [2025-10-24T04:23:24.457Z] I1024 17:23:24.457169   82275 load.go:74] Finished reloading
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I1024 17:23:24.457169   82275 load.go:74] Finished reloading\n"}}
+[debug] [2025-10-24T04:23:24.460Z] I1024 17:23:24.460412   82275 dev.go:102] Listening on address (HTTP + gRPC): 127.0.0.1:9399
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I1024 17:23:24.460412   82275 dev.go:102] Listening on address (HTTP + gRPC): 127.0.0.1:9399\n"}}
+[debug] [2025-10-24T04:23:24.461Z] I1024 17:23:24.461384   82275 dev.go:102] Listening on address (HTTP + gRPC): [::1]:9399
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I1024 17:23:24.461384   82275 dev.go:102] Listening on address (HTTP + gRPC): [::1]:9399\n"}}
+[debug] [2025-10-24T04:23:26.251Z] [Data Connect] Connecting to postgres://127.0.0.1:5432/fdcdb?sslmode=disable}...
+[debug] [2025-10-24T04:23:26.252Z] >>> [apiv2][query] POST http://127.0.0.1:9399/emulator/configure [none]
+[debug] [2025-10-24T04:23:26.252Z] >>> [apiv2][body] POST http://127.0.0.1:9399/emulator/configure {"connectionString":"postgres://127.0.0.1:5432/fdcdb?sslmode=disable","database":"fdcdb","serviceId":"synergycare","maxOpenConnections":1}
+[debug] [2025-10-24T04:23:26.912Z] I1024 17:23:26.912227   82275 migrate.go:24] Running migration SQL:
+Step 1: CREATE EXTENSION IF NOT EXISTS "uuid-ossp"
+Step 2: CREATE TABLE "public"."user" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "address" text NULL, "created_at" timestamptz NOT NULL, "display_name" text NOT NULL, "email" text NOT NULL, "phone_number" text NULL, "photo_url" text NULL, "user_type" text NOT NULL, PRIMARY KEY ("id"))
+Step 3: CREATE TABLE "public"."doctor" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "user_id" uuid NOT NULL, "bio" text NULL, "clinic_address" text NULL, "consultation_fee" double precision NULL, "experience_years" integer NOT NULL, "license_number" text NOT NULL, "specialization" text NOT NULL, PRIMARY KEY ("id"), CONSTRAINT "doctor_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."user" ("id") ON DELETE CASCADE)
+Step 4: CREATE INDEX "doctor_userId_idx" ON "public"."doctor" ("user_id")
+Step 5: CREATE TABLE "public"."patient" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "user_id" uuid NOT NULL, "date_of_birth" date NOT NULL, "gender" text NULL, "medical_history_summary" text NULL, PRIMARY KEY ("id"), CONSTRAINT "patient_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."user" ("id") ON DELETE CASCADE)
+Step 6: CREATE INDEX "patient_userId_idx" ON "public"."patient" ("user_id")
+Step 7: CREATE TABLE "public"."appointment" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "doctor_id" uuid NOT NULL, "patient_id" uuid NOT NULL, "appointment_date_time" timestamptz NOT NULL, "created_at" timestamptz NOT NULL, "duration_minutes" integer NULL, "notes" text NULL, "status" text NOT NULL, PRIMARY KEY ("id"), CONSTRAINT "appointment_doctor_id_fkey" FOREIGN KEY ("doctor_id") REFERENCES "public"."doctor" ("id") ON DELETE CASCADE, CONSTRAINT "appointment_patient_id_fkey" FOREIGN KEY ("patient_id") REFERENCES "public"."patient" ("id") ON DELETE CASCADE)
+Step 8: CREATE INDEX "appointment_doctorId_idx" ON "public"."appointment" ("doctor_id")
+Step 9: CREATE INDEX "appointment_patientId_idx" ON "public"."appointment" ("patient_id")
+Step 10: CREATE TABLE "public"."medical_record" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "associated_appointment_id" uuid NULL, "patient_id" uuid NOT NULL, "description" text NULL, "document_url" text NULL, "record_type" text NOT NULL, "upload_date" timestamptz NOT NULL, PRIMARY KEY ("id"), CONSTRAINT "medical_record_associated_appointment_id_fkey" FOREIGN KEY ("associated_appointment_id") REFERENCES "public"."appointment" ("id") ON DELETE SET NULL, CONSTRAINT "medical_record_patient_id_fkey" FOREIGN KEY ("patient_id") REFERENCES "public"."patient" ("id") ON DELETE CASCADE)
+Step 11: CREATE INDEX "medical_record_associatedAppointmentId_idx" ON "public"."medical_record" ("associated_appointment_id")
+Step 12: CREATE INDEX "medical_record_patientId_idx" ON "public"."medical_record" ("patient_id")
+Step 13: CREATE TABLE "public"."review" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "doctor_id" uuid NOT NULL, "patient_id" uuid NOT NULL, "created_at" timestamptz NOT NULL, "rating" integer NOT NULL, "review_text" text NOT NULL, PRIMARY KEY ("id"), CONSTRAINT "review_doctor_id_fkey" FOREIGN KEY ("doctor_id") REFERENCES "public"."doctor" ("id") ON DELETE CASCADE, CONSTRAINT "review_patient_id_fkey" FOREIGN KEY ("patient_id") REFERENCES "public"."patient" ("id") ON DELETE CASCADE)
+Step 14: CREATE INDEX "review_doctorId_idx" ON "public"."review" ("doctor_id")
+Step 15: CREATE INDEX "review_patientId_idx" ON "public"."review" ("patient_id")
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I1024 17:23:26.912227   82275 migrate.go:24] Running migration SQL:\nStep 1: CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\"\nStep 2: CREATE TABLE \"public\".\"user\" (\"id\" uuid NOT NULL DEFAULT uuid_generate_v4(), \"address\" text NULL, \"created_at\" timestamptz NOT NULL, \"display_name\" text NOT NULL, \"email\" text NOT NULL, \"phone_number\" text NULL, \"photo_url\" text NULL, \"user_type\" text NOT NULL, PRIMARY KEY (\"id\"))\nStep 3: CREATE TABLE \"public\".\"doctor\" (\"id\" uuid NOT NULL DEFAULT uuid_generate_v4(), \"user_id\" uuid NOT NULL, \"bio\" text NULL, \"clinic_address\" text NULL, \"consultation_fee\" double precision NULL, \"experience_years\" integer NOT NULL, \"license_number\" text NOT NULL, \"specialization\" text NOT NULL, PRIMARY KEY (\"id\"), CONSTRAINT \"doctor_user_id_fkey\" FOREIGN KEY (\"user_id\") REFERENCES \"public\".\"user\" (\"id\") ON DELETE CASCADE)\nStep 4: CREATE INDEX \"doctor_userId_idx\" ON \"public\".\"doctor\" (\"user_id\")\nStep 5: CREATE TABLE \"public\".\"patient\" (\"id\" uuid NOT NULL DEFAULT uuid_generate_v4(), \"user_id\" uuid NOT NULL, \"date_of_birth\" date NOT NULL, \"gender\" text NULL, \"medical_history_summary\" text NULL, PRIMARY KEY (\"id\"), CONSTRAINT \"patient_user_id_fkey\" FOREIGN KEY (\"user_id\") REFERENCES \"public\".\"user\" (\"id\") ON DELETE CASCADE)\nStep 6: CREATE INDEX \"patient_userId_idx\" ON \"public\".\"patient\" (\"user_id\")\nStep 7: CREATE TABLE \"public\".\"appointment\" (\"id\" uuid NOT NULL DEFAULT uuid_generate_v4(), \"doctor_id\" uuid NOT NULL, \"patient_id\" uuid NOT NULL, \"appointment_date_time\" timestamptz NOT NULL, \"created_at\" timestamptz NOT NULL, \"duration_minutes\" integer NULL, \"notes\" text NULL, \"status\" text NOT NULL, PRIMARY KEY (\"id\"), CONSTRAINT \"appointment_doctor_id_fkey\" FOREIGN KEY (\"doctor_id\") REFERENCES \"public\".\"doctor\" (\"id\") ON DELETE CASCADE, CONSTRAINT \"appointment_patient_id_fkey\" FOREIGN KEY (\"patient_id\") REFERENCES \"public\".\"patient\" (\"id\") ON DELETE CASCADE)\nStep 8: CREATE INDEX \"appointment_doctorId_idx\" ON \"public\".\"appointment\" (\"doctor_id\")\nStep 9: CREATE INDEX \"appointment_patientId_idx\" ON \"public\".\"appointment\" (\"patient_id\")\nStep 10: CREATE TABLE \"public\".\"medical_record\" (\"id\" uuid NOT NULL DEFAULT uuid_generate_v4(), \"associated_appointment_id\" uuid NULL, \"patient_id\" uuid NOT NULL, \"description\" text NULL, \"document_url\" text NULL, \"record_type\" text NOT NULL, \"upload_date\" timestamptz NOT NULL, PRIMARY KEY (\"id\"), CONSTRAINT \"medical_record_associated_appointment_id_fkey\" FOREIGN KEY (\"associated_appointment_id\") REFERENCES \"public\".\"appointment\" (\"id\") ON DELETE SET NULL, CONSTRAINT \"medical_record_patient_id_fkey\" FOREIGN KEY (\"patient_id\") REFERENCES \"public\".\"patient\" (\"id\") ON DELETE CASCADE)\nStep 11: CREATE INDEX \"medical_record_associatedAppointmentId_idx\" ON \"public\".\"medical_record\" (\"associated_appointment_id\")\nStep 12: CREATE INDEX \"medical_record_patientId_idx\" ON \"public\".\"medical_record\" (\"patient_id\")\nStep 13: CREATE TABLE \"public\".\"review\" (\"id\" uuid NOT NULL DEFAULT uuid_generate_v4(), \"doctor_id\" uuid NOT NULL, \"patient_id\" uuid NOT NULL, \"created_at\" timestamptz NOT NULL, \"rating\" integer NOT NULL, \"review_text\" text NOT NULL, PRIMARY KEY (\"id\"), CONSTRAINT \"review_doctor_id_fkey\" FOREIGN KEY (\"doctor_id\") REFERENCES \"public\".\"doctor\" (\"id\") ON DELETE CASCADE, CONSTRAINT \"review_patient_id_fkey\" FOREIGN KEY (\"patient_id\") REFERENCES \"public\".\"patient\" (\"id\") ON DELETE CASCADE)\nStep 14: CREATE INDEX \"review_doctorId_idx\" ON \"public\".\"review\" (\"doctor_id\")\nStep 15: CREATE INDEX \"review_patientId_idx\" ON \"public\".\"review\" (\"patient_id\")\n"}}
+[debug] [2025-10-24T04:23:26.978Z] W1024 17:23:26.977947   82275 control.go:68] [/emulator/synergycare db2b] connector "example" has errors: example/queries.gql:37:43: Field "id_expr" is not defined by type "User_Filter".
+
+sources: example/queries.gql [1661B] 
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"W1024 17:23:26.977947   82275 control.go:68] [/emulator/synergycare db2b] connector \"example\" has errors: example/queries.gql:37:43: Field \"id_expr\" is not defined by type \"User_Filter\".\n\nsources: example/queries.gql [1661B] \n"}}
+[debug] [2025-10-24T04:23:26.978Z] I1024 17:23:26.977996   82275 control.go:94] [/emulator/synergycare db2b] UpdateResources(): done
+Main schema: sources: schema/schema.gql [932B] 
+Connector "example": sources: example/queries.gql [1661B] 
+I1024 17:23:26.978020   82275 service.go:148] [/emulator/synergycare db2b] while configuring to server.Settings{ConnectionString:"dbname='fdcdb' host='127.0.0.1' port='5432' sslmode='disable' dbname='fdcdb'", MaxOpenConnection:1, UseDummy:false, EnableGoogleMLIntegration:false, SchemaValidationMode:""}, failed to reload last live sources: 
+Errors: example/queries.gql:37:43: Field "id_expr" is not defined by type "User_Filter".
+ {"metadata":{"emulator":{"name":"dataconnect"},"message":"I1024 17:23:26.977996   82275 control.go:94] [/emulator/synergycare db2b] UpdateResources(): done\nMain schema: sources: schema/schema.gql [932B] \nConnector \"example\": sources: example/queries.gql [1661B] \nI1024 17:23:26.978020   82275 service.go:148] [/emulator/synergycare db2b] while configuring to server.Settings{ConnectionString:\"dbname='fdcdb' host='127.0.0.1' port='5432' sslmode='disable' dbname='fdcdb'\", MaxOpenConnection:1, UseDummy:false, EnableGoogleMLIntegration:false, SchemaValidationMode:\"\"}, failed to reload last live sources: \nErrors: example/queries.gql:37:43: Field \"id_expr\" is not defined by type \"User_Filter\".\n"}}
+[debug] [2025-10-24T04:23:26.986Z] <<< [apiv2][status] POST http://127.0.0.1:9399/emulator/configure 200
+[debug] [2025-10-24T04:23:26.986Z] <<< [apiv2][body] POST http://127.0.0.1:9399/emulator/configure {}
+[debug] [2025-10-24T04:23:26.986Z] [Data Connect] Successfully connected to postgres://127.0.0.1:5432/fdcdb?sslmode=disable}
+[debug] [2025-10-24T04:23:26.989Z] [Extensions] Connecting Extensions emulator, this is a noop.
+[info] i  functions: Watching "/Users/rafaelcastillo/sc/synergycare/functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"/Users/rafaelcastillo/sc/synergycare/functions\" for Cloud Functions..."}}
+[debug] [2025-10-24T04:23:26.992Z] Validating nodejs source
+[debug] [2025-10-24T04:23:27.401Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "22"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^6.0.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^5.7.3"
+  },
+  "private": true
+}
+[debug] [2025-10-24T04:23:27.401Z] Building nodejs source
+[debug] [2025-10-24T04:23:27.401Z] Failed to find version of module node: reached end of search path /Users/rafaelcastillo/sc/synergycare/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "22" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2025-10-24T04:23:27.402Z] Could not find functions.yaml. Must use http discovery
+[debug] [2025-10-24T04:23:27.406Z] Found firebase-functions binary at '/Users/rafaelcastillo/sc/synergycare/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8968
+
+[debug] [2025-10-24T04:23:27.695Z] Got response from /__/functions.yaml {"endpoints":{},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[debug] [2025-10-24T04:23:32.707Z] defaultcredentials: writing to file /Users/rafaelcastillo/.config/firebase/rafcasto_gmail_com_application_default_credentials.json
+[debug] [2025-10-24T04:23:32.708Z] Setting GAC to /Users/rafaelcastillo/.config/firebase/rafcasto_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to /Users/rafaelcastillo/.config/firebase/rafcasto_gmail_com_application_default_credentials.json"}}
+[info] ✔  functions: Loaded functions definitions from source: . {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: ."}}
+[debug] [2025-10-24T04:23:32.709Z] >>> [apiv2][query] GET http://127.0.0.1:9399/emulator/info [none]
+[debug] [2025-10-24T04:23:32.712Z] <<< [apiv2][status] GET http://127.0.0.1:9399/emulator/info 200
+[debug] [2025-10-24T04:23:32.712Z] <<< [apiv2][body] GET http://127.0.0.1:9399/emulator/info {"version":"","services":[{"serviceId":"synergycare","connectionString":"dbname='fdcdb' host='127.0.0.1' port='5432' sslmode='disable' dbname='fdcdb'"}]}
+[debug] [2025-10-24T04:23:32.714Z] Could not find VSCode notification endpoint: FetchError: request to http://localhost:40001/vscode/notify failed, reason: . If you are not running the Firebase Data Connect VSCode extension, this is expected and not an issue.
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4001/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌────────────────┬────────────────┬──────────────────────────────────┐
+│ Emulator       │ Host:Port      │ View in Emulator UI              │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Authentication │ 127.0.0.1:9099 │ http://127.0.0.1:4001/auth       │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Functions      │ 127.0.0.1:5002 │ http://127.0.0.1:4001/functions  │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Firestore      │ 127.0.0.1:8081 │ http://127.0.0.1:4001/firestore  │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Data Connect   │ 127.0.0.1:9399 │ n/a                              │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Extensions     │ 127.0.0.1:5002 │ http://127.0.0.1:4001/extensions │
+└────────────────┴────────────────┴──────────────────────────────────┘
+  Emulator Hub host: 127.0.0.1 port: 4400
+  Other reserved ports: 4500, 9150
+┌─────────────────────────┬───────────────┬─────────────────────┐
+│ Extension Instance Name │ Extension Ref │ View in Emulator UI │
+└─────────────────────────┴───────────────┴─────────────────────┘
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[debug] [2025-10-24T04:23:59.948Z] >>> [apiv2][query] POST http://127.0.0.1:5002/functions/projects/patients-synergycare/trigger_multicast [none]
+[debug] [2025-10-24T04:23:59.949Z] >>> [apiv2][body] POST http://127.0.0.1:5002/functions/projects/patients-synergycare/trigger_multicast {"eventId":"a9b199a3-53eb-47c8-88e0-dadc71fe8b51","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/patients-synergycare","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2025-10-24T04:23:59.948Z","data":{"uid":"Y33xOVxJi3LDbWI385YARTn3Giod","email":"rafcasto@gmail.com","emailVerified":false,"displayName":"System Administrator","metadata":{"creationTime":"2025-10-24T04:23:59.947Z","lastSignInTime":"2025-10-24T04:23:59.947Z"},"customClaims":{},"providerData":[{"rawId":"rafcasto@gmail.com","providerId":"password","displayName":"System Administrator","email":"rafcasto@gmail.com","federatedId":"rafcasto@gmail.com"}]}}
+[debug] [2025-10-24T04:23:59.954Z] <<< [apiv2][status] POST http://127.0.0.1:5002/functions/projects/patients-synergycare/trigger_multicast 200
+[debug] [2025-10-24T04:23:59.954Z] <<< [apiv2][body] POST http://127.0.0.1:5002/functions/projects/patients-synergycare/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2025-10-24T04:26:07.266Z] >>> [apiv2][query] POST http://127.0.0.1:5002/functions/projects/patients-synergycare/trigger_multicast [none]
+[debug] [2025-10-24T04:26:07.267Z] >>> [apiv2][body] POST http://127.0.0.1:5002/functions/projects/patients-synergycare/trigger_multicast {"eventId":"0b176795-9b3e-4f64-8b81-41dfcc96b100","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/patients-synergycare","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2025-10-24T04:26:07.266Z","data":{"uid":"ektWPhvbYOIX9jJ7o1bdxX4U9Sty","email":"kenneth@terepay.com","emailVerified":false,"metadata":{"creationTime":"2025-10-24T04:26:07.265Z","lastSignInTime":"2025-10-24T04:26:07.265Z"},"customClaims":{},"providerData":[{"rawId":"kenneth@terepay.com","providerId":"password","email":"kenneth@terepay.com","federatedId":"kenneth@terepay.com"}]}}
+[debug] [2025-10-24T04:26:07.276Z] <<< [apiv2][status] POST http://127.0.0.1:5002/functions/projects/patients-synergycare/trigger_multicast 200
+[debug] [2025-10-24T04:26:07.276Z] <<< [apiv2][body] POST http://127.0.0.1:5002/functions/projects/patients-synergycare/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2025-10-24T04:26:07.319Z] Oct 24, 2025 5:26:07 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:26:07 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:26:07.320Z] Oct 24, 2025 5:26:07 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:26:07 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:26:07.775Z] Oct 24, 2025 5:26:07 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:26:07 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:26:07.785Z] Oct 24, 2025 5:26:07 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:26:07 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:26:07.846Z] Oct 24, 2025 5:26:07 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:26:07 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:26:07.859Z] Oct 24, 2025 5:26:07 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:26:07 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:26:07.910Z] Oct 24, 2025 5:26:07 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+Oct 24, 2025 5:26:07 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:26:07 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\nOct 24, 2025 5:26:07 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:26:07.918Z] Oct 24, 2025 5:26:07 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose
+INFO: channel closed
+Oct 24, 2025 5:26:07 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreWriteHandler onClose
+INFO: channel closed
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:26:07 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose\nINFO: channel closed\nOct 24, 2025 5:26:07 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreWriteHandler onClose\nINFO: channel closed\n"}}
+[debug] [2025-10-24T04:26:16.489Z] Oct 24, 2025 5:26:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:26:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:26:16.505Z] Oct 24, 2025 5:26:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:26:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:26:16.515Z] Oct 24, 2025 5:26:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:26:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:26:16.951Z] Oct 24, 2025 5:26:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:26:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:26:16.956Z] Oct 24, 2025 5:26:16 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose
+INFO: channel closed
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:26:16 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose\nINFO: channel closed\n"}}
+[debug] [2025-10-24T04:26:27.054Z] Oct 24, 2025 5:26:27 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:26:27 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:26:27.073Z] Oct 24, 2025 5:26:27 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:26:27 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:26:27.085Z] Oct 24, 2025 5:26:27 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:26:27 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:26:27.742Z] Oct 24, 2025 5:26:27 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:26:27 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:26:27.748Z] Oct 24, 2025 5:26:27 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose
+INFO: channel closed
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:26:27 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose\nINFO: channel closed\n"}}
+[debug] [2025-10-24T04:26:28.707Z] Oct 24, 2025 5:26:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:26:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:26:28.725Z] Oct 24, 2025 5:26:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:26:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:26:28.733Z] Oct 24, 2025 5:26:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:26:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:27:00.647Z] Oct 24, 2025 5:27:00 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:27:00 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:27:00.674Z] Oct 24, 2025 5:27:00 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:27:00 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:27:00.683Z] Oct 24, 2025 5:27:00 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:27:00 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:28:00.688Z] Oct 24, 2025 5:28:00 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:28:00 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:28:00.695Z] Oct 24, 2025 5:28:00 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose
+INFO: channel closed
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:28:00 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose\nINFO: channel closed\n"}}
+[debug] [2025-10-24T04:30:52.216Z] Oct 24, 2025 5:30:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:30:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:30:52.262Z] Oct 24, 2025 5:30:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:30:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:30:52.263Z] Oct 24, 2025 5:30:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:30:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:30:52.264Z] Oct 24, 2025 5:30:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:30:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:30:52.269Z] Oct 24, 2025 5:30:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:30:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:30:52.300Z] Oct 24, 2025 5:30:52 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel
+INFO: Connected to new websocket client
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:30:52 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel\nINFO: Connected to new websocket client\n"}}
+[debug] [2025-10-24T04:30:52.324Z] Oct 24, 2025 5:30:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:30:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:30:52.377Z] Oct 24, 2025 5:30:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:30:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:30:52.407Z] Oct 24, 2025 5:30:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:30:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:30:52.425Z] Oct 24, 2025 5:30:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:30:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:30:54.780Z] Oct 24, 2025 5:30:54 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose
+INFO: channel closed
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:30:54 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose\nINFO: channel closed\n"}}
+[debug] [2025-10-24T04:31:36.373Z] Oct 24, 2025 5:31:36 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel
+INFO: Connected to new websocket client
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:31:36 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel\nINFO: Connected to new websocket client\n"}}
+[debug] [2025-10-24T04:32:16.751Z] Oct 24, 2025 5:32:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:32:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:32:16.765Z] Oct 24, 2025 5:32:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:32:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:32:16.772Z] Oct 24, 2025 5:32:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:32:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:32:24.311Z] Oct 24, 2025 5:32:24 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:32:24 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:32:24.316Z] Oct 24, 2025 5:32:24 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose
+INFO: channel closed
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:32:24 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose\nINFO: channel closed\n"}}
+[debug] [2025-10-24T04:36:22.519Z] Oct 24, 2025 5:36:22 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:36:22 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:36:22.544Z] Oct 24, 2025 5:36:22 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:36:22 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:36:22.553Z] Oct 24, 2025 5:36:22 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:36:22 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:36:28.541Z] Oct 24, 2025 5:36:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:36:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:36:28.546Z] Oct 24, 2025 5:36:28 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose
+INFO: channel closed
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:36:28 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose\nINFO: channel closed\n"}}
+[debug] [2025-10-24T04:37:33.652Z] >>> [apiv2][query] POST http://127.0.0.1:5002/functions/projects/patients-synergycare/trigger_multicast [none]
+[debug] [2025-10-24T04:37:33.652Z] >>> [apiv2][body] POST http://127.0.0.1:5002/functions/projects/patients-synergycare/trigger_multicast {"eventId":"396bc73f-a1d7-47e2-bd18-71c5a564d678","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/patients-synergycare","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2025-10-24T04:37:33.651Z","data":{"uid":"0tTp2Q7RwJQpH9acIf6SlytM8jMo","email":"patient@gmail.com","emailVerified":false,"metadata":{"creationTime":"2025-10-24T04:37:33.651Z","lastSignInTime":"2025-10-24T04:37:33.651Z"},"customClaims":{},"providerData":[{"rawId":"patient@gmail.com","providerId":"password","email":"patient@gmail.com","federatedId":"patient@gmail.com"}]}}
+[debug] [2025-10-24T04:37:33.660Z] <<< [apiv2][status] POST http://127.0.0.1:5002/functions/projects/patients-synergycare/trigger_multicast 200
+[debug] [2025-10-24T04:37:33.660Z] <<< [apiv2][body] POST http://127.0.0.1:5002/functions/projects/patients-synergycare/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2025-10-24T04:37:33.680Z] Oct 24, 2025 5:37:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+Oct 24, 2025 5:37:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:37:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\nOct 24, 2025 5:37:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:37:33.693Z] Oct 24, 2025 5:37:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:37:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:37:33.699Z] Oct 24, 2025 5:37:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:37:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:37:33.702Z] Oct 24, 2025 5:37:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:37:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:37:33.709Z] Oct 24, 2025 5:37:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:37:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:37:34.406Z] Oct 24, 2025 5:37:34 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:37:34 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:37:34.406Z] Oct 24, 2025 5:37:34 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:37:34 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:37:34.409Z] Oct 24, 2025 5:37:34 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose
+INFO: channel closed
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:37:34 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose\nINFO: channel closed\n"}}
+[debug] [2025-10-24T04:37:34.409Z] Oct 24, 2025 5:37:34 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreWriteHandler onClose
+INFO: channel closed
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:37:34 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreWriteHandler onClose\nINFO: channel closed\n"}}
+[debug] [2025-10-24T04:37:37.850Z] Oct 24, 2025 5:37:37 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:37:37 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:37:37.867Z] Oct 24, 2025 5:37:37 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:37:37 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:37:37.872Z] Oct 24, 2025 5:37:37 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:37:37 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:37:40.864Z] Oct 24, 2025 5:37:40 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:37:40 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:37:40.875Z] Oct 24, 2025 5:37:40 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:37:40 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:37:40.884Z] Oct 24, 2025 5:37:40 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:37:40 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:37:45.250Z] Oct 24, 2025 5:37:45 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:37:45 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:37:45.255Z] Oct 24, 2025 5:37:45 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose
+INFO: channel closed
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:37:45 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose\nINFO: channel closed\n"}}
+[debug] [2025-10-24T04:44:26.664Z] >>> [apiv2][query] POST http://127.0.0.1:5002/functions/projects/patients-synergycare/trigger_multicast [none]
+[debug] [2025-10-24T04:44:26.665Z] >>> [apiv2][body] POST http://127.0.0.1:5002/functions/projects/patients-synergycare/trigger_multicast {"eventId":"d8a28d1b-1966-41e8-b6cf-eab8c0b4396e","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/patients-synergycare","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2025-10-24T04:44:26.663Z","data":{"uid":"jpgEJGHRE4mCFx5TlxDfBSQFXYYm","email":"t@t.com","emailVerified":false,"metadata":{"creationTime":"2025-10-24T04:44:26.662Z","lastSignInTime":"2025-10-24T04:44:26.662Z"},"customClaims":{},"providerData":[{"rawId":"t@t.com","providerId":"password","email":"t@t.com","federatedId":"t@t.com"}]}}
+[debug] [2025-10-24T04:44:26.669Z] <<< [apiv2][status] POST http://127.0.0.1:5002/functions/projects/patients-synergycare/trigger_multicast 200
+[debug] [2025-10-24T04:44:26.669Z] <<< [apiv2][body] POST http://127.0.0.1:5002/functions/projects/patients-synergycare/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2025-10-24T04:44:26.691Z] Oct 24, 2025 5:44:26 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:44:26 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:44:26.691Z] Oct 24, 2025 5:44:26 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:44:26 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:44:26.705Z] Oct 24, 2025 5:44:26 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:44:26 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:44:26.709Z] Oct 24, 2025 5:44:26 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:44:26 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:44:26.714Z] Oct 24, 2025 5:44:26 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:44:26 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:44:26.723Z] Oct 24, 2025 5:44:26 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:44:26 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:44:27.429Z] Oct 24, 2025 5:44:27 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:44:27 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:44:27.429Z] Oct 24, 2025 5:44:27 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:44:27 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected non-HTTP/2 connection.\n"}}
+[debug] [2025-10-24T04:44:27.432Z] Oct 24, 2025 5:44:27 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose
+INFO: channel closed
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:44:27 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose\nINFO: channel closed\n"}}
+[debug] [2025-10-24T04:44:27.433Z] Oct 24, 2025 5:44:27 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreWriteHandler onClose
+INFO: channel closed
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Oct 24, 2025 5:44:27 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreWriteHandler onClose\nINFO: channel closed\n"}}

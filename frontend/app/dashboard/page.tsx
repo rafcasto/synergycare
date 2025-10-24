@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/components/auth/AuthProvider';
+import { useRouter } from 'next/navigation';
 import { apiClient } from '@/lib/firebase/api';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -22,59 +23,21 @@ interface ApiError {
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const router = useRouter();
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const getRoleDashboardContent = () => {
-    switch (user?.role) {
-      case 'doctor':
-        return (
-          <Card className="p-6">
-            <h2 className="text-xl font-semibold mb-4">Doctor Dashboard</h2>
-            <p className="text-gray-600 mb-4">
-              View appointments, manage patients, and access medical records.
-            </p>
-            <div className="space-x-3">
-              <Button onClick={() => window.location.href = '/appointments'}>
-                View Appointments
-              </Button>
-              <Button variant="outline" onClick={() => window.location.href = '/patients'}>
-                My Patients
-              </Button>
-            </div>
-          </Card>
-        );
-      
-      case 'patient':
-        return (
-          <Card className="p-6">
-            <h2 className="text-xl font-semibold mb-4">Patient Dashboard</h2>
-            <p className="text-gray-600 mb-4">
-              Book appointments, view your medical records, and find doctors.
-            </p>
-            <div className="space-x-3">
-              <Button onClick={() => window.location.href = '/doctors'}>
-                Find Doctors
-              </Button>
-              <Button variant="outline" onClick={() => window.location.href = '/appointments'}>
-                My Appointments
-              </Button>
-            </div>
-          </Card>
-        );
-      
-      default:
-        return (
-          <Card className="p-6">
-            <h2 className="text-xl font-semibold mb-4">Welcome</h2>
-            <p className="text-gray-600">
-              Your role is being set up. Please contact the administrator.
-            </p>
-          </Card>
-        );
+  // Redirect admin users to admin portal
+  useEffect(() => {
+    if (user?.role === 'admin') {
+      router.push('/admin');
     }
-  };
+  }, [user?.role, router]);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
 
   const fetchDashboardData = async () => {
     setLoading(true);
@@ -108,9 +71,76 @@ export default function DashboardPage() {
     }
   };
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
+  const getRoleDashboardContent = () => {
+    // Admin users are redirected to /admin, so they won't see this
+    switch (user?.role) {
+      case 'doctor':
+        return (
+          <Card className="p-6">
+            <h2 className="text-xl font-semibold mb-4">Doctor Dashboard</h2>
+            <p className="text-gray-600 mb-4">
+              View appointments, manage patients, and access medical records.
+            </p>
+            <div className="space-x-3">
+              <Button onClick={() => window.location.href = '/doctor-portal'}>
+                Go to Doctor Portal
+              </Button>
+              <Button variant="outline" onClick={() => window.location.href = '/appointments'}>
+                View Appointments
+              </Button>
+              <Button variant="outline" onClick={() => window.location.href = '/patients'}>
+                My Patients
+              </Button>
+            </div>
+          </Card>
+        );
+      
+      case 'patient':
+        return (
+          <Card className="p-6">
+            <h2 className="text-xl font-semibold mb-4">Patient Dashboard</h2>
+            <p className="text-gray-600 mb-4">
+              Book appointments, view your medical records, and find doctors.
+            </p>
+            <div className="space-x-3">
+              <Button onClick={() => window.location.href = '/patient-portal'}>
+                Go to Patient Portal
+              </Button>
+              <Button variant="outline" onClick={() => window.location.href = '/doctors'}>
+                Find Doctors
+              </Button>
+              <Button variant="outline" onClick={() => window.location.href = '/appointments'}>
+                My Appointments
+              </Button>
+            </div>
+          </Card>
+        );
+      
+      default:
+        return (
+          <Card className="p-6">
+            <h2 className="text-xl font-semibold mb-4">Welcome</h2>
+            <p className="text-gray-600">
+              Your role is being set up. Please contact the administrator.
+            </p>
+          </Card>
+        );
+    }
+  };
+
+  // Show loading or redirect message for admin users
+  if (user?.role === 'admin') {
+    return (
+      <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <Card className="p-8 text-center">
+          <div className="flex flex-col items-center space-y-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <p className="text-gray-600">Redirecting to Admin Portal...</p>
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">

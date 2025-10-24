@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
 import { Shield, ArrowLeft } from 'lucide-react';
+import { getDashboardUrl } from '@/lib/utils/navigation';
 
 interface AuthError {
   message: string;
@@ -20,8 +21,18 @@ export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const { executeRecaptchaAction, isRecaptchaAvailable } = useRecaptcha();
+
+  // Redirect when user role is available after login
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+  
+  useEffect(() => {
+    if (shouldRedirect && user?.role) {
+      const dashboardUrl = getDashboardUrl(user.role);
+      router.push(dashboardUrl);
+    }
+  }, [shouldRedirect, user?.role, router]);
 
   const {
     register,
@@ -31,21 +42,16 @@ export function LoginForm() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data: LoginFormData) => {
+    const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      // Execute reCAPTCHA
-      let recaptchaToken: string | null = null;
+      let recaptchaToken = null;
       if (isRecaptchaAvailable) {
         recaptchaToken = await executeRecaptchaAction('login');
-        if (!recaptchaToken) {
-          throw new Error('reCAPTCHA verification failed. Please try again.');
-        }
       }
 
-      // Proceed with login - you can send recaptchaToken to your backend for verification
       await login(data.email, data.password);
       
       // Optional: Verify reCAPTCHA token with your backend
@@ -54,7 +60,8 @@ export function LoginForm() {
         // You can send this token to your backend API for verification
       }
 
-      router.push('/dashboard');
+      // Set flag to redirect once user role is available
+      setShouldRedirect(true);
     } catch (err) {
       const error = err as AuthError;
       setError(error.message || 'Failed to log in');

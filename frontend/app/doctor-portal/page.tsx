@@ -1,0 +1,58 @@
+'use client';
+
+import { useState } from 'react';
+import { DoctorLayout, DoctorTab } from '@/components/doctor/DoctorLayout';
+import DoctorDashboard from '@/components/doctor/DoctorDashboard';
+import { Card } from '@/components/ui/Card';
+
+export default function DoctorPortalPage() {
+  const [currentTab, setCurrentTab] = useState<DoctorTab>('dashboard');
+
+  const renderTabContent = () => {
+    switch (currentTab) {
+      case 'dashboard':
+        return <DoctorDashboard />;
+      
+      case 'patients':
+        return (
+          <Card className="p-8 text-center">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">My Patients</h3>
+            <p className="text-gray-600">Patient management interface coming soon...</p>
+          </Card>
+        );
+      
+      case 'appointments':
+        return (
+          <Card className="p-8 text-center">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Appointments</h3>
+            <p className="text-gray-600">Appointment management interface coming soon...</p>
+          </Card>
+        );
+      
+      case 'schedule':
+        return (
+          <Card className="p-8 text-center">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Schedule</h3>
+            <p className="text-gray-600">Schedule management interface coming soon...</p>
+          </Card>
+        );
+      
+      case 'settings':
+        return (
+          <Card className="p-8 text-center">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Settings</h3>
+            <p className="text-gray-600">Practice settings interface coming soon...</p>
+          </Card>
+        );
+      
+      default:
+        return <DoctorDashboard />;
+    }
+  };
+
+  return (
+    <DoctorLayout currentTab={currentTab} onTabChange={setCurrentTab}>
+      {renderTabContent()}
+    </DoctorLayout>
+  );
+}

@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+import { getDashboardUrl } from '@/lib/utils/navigation';
 
 export default function HomePage() {
   const { user, loading } = useAuth();
@@ -12,12 +13,9 @@ export default function HomePage() {
   useEffect(() => {
     if (!loading) {
       if (user) {
-        // Redirect admin users to admin panel, others to dashboard
-        if (user.role === 'admin') {
-          router.push('/admin');
-        } else {
-          router.push('/dashboard');
-        }
+        // Redirect to appropriate dashboard based on role
+        const dashboardUrl = getDashboardUrl(user.role);
+        router.push(dashboardUrl);
       } else {
         router.push('/role-selection');
       }

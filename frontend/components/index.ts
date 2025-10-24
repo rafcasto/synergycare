@@ -28,3 +28,11 @@ export { Navigation } from './layout/Navigation';
 export { MetricCard } from './admin/MetricCard';
 export { SimpleChart } from './admin/SimpleChart';
 export { DashboardSkeleton } from './admin/DashboardSkeleton';
+
+// Doctor components
+export { DoctorLayout } from './doctor/DoctorLayout';
+export { default as DoctorDashboard } from './doctor/DoctorDashboard';
+
+// Patient components
+export { PatientLayout } from './patient/PatientLayout';
+export { default as PatientDashboard } from './patient/PatientDashboard';

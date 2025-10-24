@@ -18,6 +18,11 @@ export default function RootLayout({
 }) {
   const pathname = usePathname();
   const isAdminRoute = pathname?.startsWith('/admin');
+  const isDoctorPortalRoute = pathname?.startsWith('/doctor-portal');
+  const isPatientPortalRoute = pathname?.startsWith('/patient-portal');
+
+  // Hide global header/navigation for portal routes that have their own navigation
+  const shouldHideGlobalNavigation = isAdminRoute || isDoctorPortalRoute || isPatientPortalRoute;
 
   return (
     <html lang="en">
@@ -25,7 +30,7 @@ export default function RootLayout({
         <RecaptchaProvider>
           <AuthProvider>
             <div className="min-h-screen bg-gray-50">
-              {!isAdminRoute && (
+              {!shouldHideGlobalNavigation && (
                 <>
                   <Header />
                   <Navigation />

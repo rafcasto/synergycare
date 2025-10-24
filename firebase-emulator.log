@@ -6,7 +6,7 @@ i  dataconnect: Data Connect Emulator logging to dataconnect-debug.log
 i  dataconnect: Started up Postgres server, listening on {"address":"127.0.0.1","family":"IPv4","port":5432}
 i  functions: Watching "/Users/rafaelcastillo/sc/synergycare/functions" for Cloud Functions...
 ⚠  functions: Your requested "node" version "22" doesn't match your global version "20". Using node@20 from host.
-Serving at port 8421
+Serving at port 8968
 
 ✔  functions: Loaded functions definitions from source: .
 
@@ -35,48 +35,3 @@ Serving at port 8421
 [90m└─────────────────────────[39m[90m┴───────────────[39m[90m┴─────────────────────┘[39m
 Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
  
- 
-i  emulators: Received SIGINT (Ctrl-C) for the first time. Starting a clean shutdown.
-i  emulators: Please wait for a clean shutdown or send the SIGINT (Ctrl-C) signal again to stop right now.
-i  emulators: Shutting down emulators.
-i  ui: Stopping Emulator UI
-i  extensions: Stopping Extensions Emulator
-i  functions: Stopping Functions Emulator
-i  firestore: Stopping Firestore Emulator
- 
-⚠  emulators: Received SIGINT (Ctrl-C) 2 times. You have forced the Emulator Suite to exit without waiting for 2 subprocesses to finish. These processes may still be running on your machine: 
-
-[90m┌───────────────────────[39m[90m┬────────────────[39m[90m┬───────┐[39m
-[90m│[39m[33m Emulator              [39m[90m│[39m[33m Host:Port      [39m[90m│[39m[33m PID   [39m[90m│[39m
-[90m├───────────────────────[39m[90m┼────────────────[39m[90m┼───────┤[39m
-[90m│[39m Firestore Emulator    [90m│[39m 127.0.0.1:8081 [90m│[39m 46465 [90m│[39m
-[90m├───────────────────────[39m[90m┼────────────────[39m[90m┼───────┤[39m
-[90m│[39m Data Connect Emulator [90m│[39m 127.0.0.1:9399 [90m│[39m 46479 [90m│[39m
-[90m└───────────────────────[39m[90m┴────────────────[39m[90m┴───────┘[39m
-
-To force them to exit run:
-
-kill 46465 46479
-
- 
-⚠  emulators: Received SIGINT (Ctrl-C) 3 times. You have forced the Emulator Suite to exit without waiting for 2 subprocesses to finish. These processes may still be running on your machine: 
-
-[90m┌───────────────────────[39m[90m┬────────────────[39m[90m┬───────┐[39m
-[90m│[39m[33m Emulator              [39m[90m│[39m[33m Host:Port      [39m[90m│[39m[33m PID   [39m[90m│[39m
-[90m├───────────────────────[39m[90m┼────────────────[39m[90m┼───────┤[39m
-[90m│[39m Firestore Emulator    [90m│[39m 127.0.0.1:8081 [90m│[39m 46465 [90m│[39m
-[90m├───────────────────────[39m[90m┼────────────────[39m[90m┼───────┤[39m
-[90m│[39m Data Connect Emulator [90m│[39m 127.0.0.1:9399 [90m│[39m 46479 [90m│[39m
-[90m└───────────────────────[39m[90m┴────────────────[39m[90m┴───────┘[39m
-
-To force them to exit run:
-
-kill 46465 46479
-
-i  auth: Stopping Authentication Emulator
-i  eventarc: Stopping Eventarc Emulator
-i  dataconnect: Stopping Data Connect Emulator
-⚠  Data Connect Emulator has exited upon receiving signal: SIGINT
-i  tasks: Stopping Cloud Tasks Emulator
-i  hub: Stopping emulator hub
-i  logging: Stopping Logging Emulator

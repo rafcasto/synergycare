@@ -8,80 +8,239 @@
    - Environments: .env.local
 
  ✓ Starting...
- ✓ Ready in 1300ms
+ ✓ Ready in 1342ms
  ○ Compiling /admin-setup ...
- ✓ Compiled /admin-setup in 2s (1007 modules)
- GET /admin-setup?token=a330b47a-f573-4d1b-8b5d-2a3ca3b5d961 200 in 2375ms
- ✓ Compiled /api/proxy/[...path] in 296ms (1026 modules)
- GET /admin-setup?token=a330b47a-f573-4d1b-8b5d-2a3ca3b5d961 200 in 32ms
- GET /api/proxy/admin-setup/status 200 in 702ms
- POST /api/proxy/admin-setup/validate-token 200 in 702ms
- POST /api/proxy/admin-setup/register 200 in 32ms
- ○ Compiling /login ...
- ✓ Compiled /login in 837ms (1035 modules)
- GET /login?message=Admin+account+created+successfully 200 in 915ms
- ✓ Compiled /role-selection in 373ms (1084 modules)
- GET /role-selection 200 in 418ms
- ✓ Compiled /doctor/register in 155ms (1094 modules)
- GET /doctor/register 200 in 179ms
- POST /api/proxy/user/complete-registration 200 in 57ms
+ ✓ Compiled /admin-setup in 1477ms (1007 modules)
+ GET /admin-setup?token=51c7feea-2b90-4440-896e-c78547bcd7ea 200 in 1977ms
+ ✓ Compiled /api/proxy/[...path] in 260ms (1026 modules)
+ GET /admin-setup?token=51c7feea-2b90-4440-896e-c78547bcd7ea 200 in 37ms
+ GET /api/proxy/admin-setup/status 200 in 646ms
+ POST /api/proxy/admin-setup/validate-token 200 in 646ms
+ POST /api/proxy/admin-setup/register 200 in 37ms
+ ✓ Compiled /login in 485ms (1035 modules)
+ GET /login?message=Admin+account+created+successfully 200 in 569ms
  ○ Compiling /dashboard ...
- ✓ Compiled /dashboard in 537ms (1107 modules)
- GET /dashboard 200 in 601ms
- GET /dashboard 200 in 520ms
- ✓ Compiled /profile in 285ms (1096 modules)
- GET /profile 200 in 338ms
- ✓ Compiled /_not-found in 173ms (1100 modules)
- GET /appointments 404 in 199ms
- GET /appointments 404 in 142ms
- GET /_next/static/webpack/6202793b582b2a4a.webpack.hot-update.json 404 in 24ms
- GET /profile 200 in 17ms
- GET /profile 200 in 10ms
- GET /profile 200 in 7ms
- GET /profile 200 in 24ms
- GET /_next/static/webpack/2ec34832121cdc03.webpack.hot-update.json 404 in 49ms
- GET /profile 200 in 37ms
- GET /login 200 in 23ms
- GET /login 200 in 20ms
+ ✓ Compiled /dashboard in 509ms (1051 modules)
+ GET /dashboard 200 in 566ms
+ GET /dashboard 200 in 538ms
+ ✓ Compiled /admin in 430ms (1105 modules)
+ GET /admin 200 in 509ms
+ ✓ Compiled in 297ms (1119 modules)
+ GET /admin 200 in 58ms
+ ✓ Compiled in 395ms (1119 modules)
+ GET /admin 200 in 38ms
+ GET /login 200 in 24ms
+ ○ Compiling /role-selection ...
+ ✓ Compiled /role-selection in 792ms (1139 modules)
+ GET /role-selection 200 in 886ms
+ ✓ Compiled /doctor/register in 246ms (1149 modules)
+ GET /doctor/register 200 in 288ms
+ ✓ Compiled in 330ms (1163 modules)
+ GET /doctor/register 200 in 32ms
+ ✓ Compiled in 323ms (1153 modules)
+ GET /doctor/register 200 in 27ms
+ ✓ Compiled in 103ms (446 modules)
+ ✓ Compiled in 188ms (446 modules)
+ GET /doctor/register 200 in 288ms
+ GET /doctor/register 200 in 13ms
+ ✓ Compiled in 547ms (1153 modules)
+ GET /doctor/register 200 in 27ms
+ GET /dashboard 200 in 17ms
+ ✓ Compiled /api/proxy/[...path] in 209ms (723 modules)
+ POST /api/proxy/user/complete-registration 200 in 282ms
+ GET /dashboard 200 in 29ms
+ ✓ Compiled /_not-found in 258ms (1159 modules)
+ GET /patients 404 in 298ms
+ GET /patients 404 in 148ms
+ GET /medical-records 404 in 12ms
+ GET /medical-records 404 in 21ms
+ GET /appointments 404 in 13ms
+ GET /appointments 404 in 23ms
+ ✓ Compiled /profile in 381ms (1181 modules)
+ GET /profile 200 in 423ms
+ GET /dashboard 200 in 17ms
+ ✓ Compiled /doctor-portal in 239ms (1189 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /doctor-portal 200 in 249ms
+ GET /dashboard 200 in 25ms
+ GET /appointments 404 in 34ms
+ GET /profile 200 in 18ms
+ GET /dashboard 200 in 14ms
+ GET /profile 200 in 14ms
+ ✓ Compiled in 396ms (1205 modules)
+ GET /profile 200 in 27ms
+ GET /medical-records 404 in 14ms
+ GET /medical-records 404 in 112ms
+ GET /patients 404 in 9ms
+ GET /patients 404 in 19ms
+ GET /dashboard 200 in 52ms
+ ✓ Compiled in 467ms (1201 modules)
+ GET /dashboard 200 in 29ms
+ GET /profile 200 in 22ms
+ ✓ Compiled in 338ms (1201 modules)
+ GET /profile 200 in 22ms
+ ✓ Compiled in 232ms (1201 modules)
+ GET /profile 200 in 36ms
+ ✓ Compiled in 285ms (1185 modules)
+ GET /profile 200 in 120ms
+ ✓ Compiled in 160ms (461 modules)
+ GET /profile 200 in 9ms
+ ✓ Compiled in 97ms (458 modules)
+ GET /profile 200 in 9ms
+ ✓ Compiled in 158ms (458 modules)
+ GET /profile 200 in 20ms
+ ✓ Compiled in 84ms (458 modules)
+ GET /profile 200 in 11ms
+ ✓ Compiled in 197ms (458 modules)
+ GET /profile 200 in 18ms
+ ✓ Compiled /login in 305ms (721 modules)
+ GET /login 200 in 383ms
+ GET /login 200 in 380ms
+ ✓ Compiled in 90ms (458 modules)
+ GET /login 200 in 13ms
  GET /dashboard 200 in 21ms
- GET /dashboard 200 in 22ms
- ○ Compiling /admin ...
- ✓ Compiled /admin in 965ms (1134 modules)
- GET /admin 200 in 1045ms
- ○ Compiling / ...
- ✓ Compiled / in 912ms (1127 modules)
- GET / 200 in 1177ms
+ GET /admin 200 in 25ms
+ GET /admin 200 in 26ms
+ ✓ Compiled in 304ms (458 modules)
+ GET /admin 200 in 36ms
+ ✓ Compiled in 163ms (458 modules)
+ GET /admin 200 in 11ms
+ ✓ Compiled in 259ms (458 modules)
  GET /admin 200 in 19ms
- ✓ Compiled /_not-found in 200ms (1131 modules)
- GET /_next/static/webpack/d2491387a852fe9b.webpack.hot-update.json 404 in 340ms
- GET /admin 200 in 31ms
- GET /admin 200 in 37ms
- GET /admin 200 in 39ms
- GET /login 200 in 52ms
- ✓ Compiled /role-selection in 429ms (718 modules)
- GET /role-selection 200 in 468ms
- ○ Compiling /patient/register ...
- ✓ Compiled /patient/register in 513ms (1170 modules)
- GET /patient/register 200 in 544ms
- GET /dashboard 200 in 19ms
- ✓ Compiled /api/proxy/[...path] in 339ms (700 modules)
- POST /api/proxy/user/complete-registration 200 in 422ms
- GET /dashboard 200 in 36ms
- ✓ Compiled /_not-found in 223ms (1146 modules)
- GET /medical-records 404 in 262ms
- GET /medical-records 404 in 151ms
- GET /doctors 404 in 10ms
- GET /doctors 404 in 22ms
- GET /_next/static/webpack/18bff86e23032625.webpack.hot-update.json 404 in 22ms
+ ✓ Compiled in 373ms (1171 modules)
+ GET /admin 200 in 47ms
+ ✓ Compiled in 87ms (458 modules)
+ GET /admin 200 in 11ms
+ ✓ Compiled in 576ms (1171 modules)
+ GET /admin 200 in 43ms
+ GET /login 200 in 22ms
+ GET /role-selection 200 in 25ms
+ ✓ Compiled /doctor/login in 258ms (1165 modules)
+ GET /doctor/login 200 in 283ms
+ ✓ Compiled /doctor-portal in 239ms (715 modules)
+ GET /doctor-portal 200 in 296ms
+ GET /profile 200 in 19ms
+ ✓ Compiled /_not-found in 341ms (1129 modules)
+ GET /appointments 404 in 381ms
+ GET /appointments 404 in 157ms
+ ✓ Compiled /dashboard in 283ms (687 modules)
+ GET /dashboard 200 in 319ms
+ ✓ Compiled in 615ms (1140 modules)
+ GET /doctor-portal 200 in 213ms
  GET /dashboard 200 in 16ms
- GET /dashboard 200 in 12ms
- GET /dashboard 200 in 27ms
- GET /appointments 404 in 4ms
- GET /appointments 404 in 17ms
- GET /profile 200 in 16ms
- GET /dashboard 200 in 10ms
- ✓ Compiled / in 170ms (706 modules)
- GET / 200 in 353ms
- GET /dashboard 200 in 13ms
- ✓ Compiled in 707ms (1126 modules)
-[?25h
+ GET /profile 200 in 20ms
+ GET /login 200 in 24ms
+ GET /login 200 in 23ms
+ ✓ Compiled /role-selection in 330ms (716 modules)
+ GET /role-selection 200 in 398ms
+ ○ Compiling /patient/register ...
+ ✓ Compiled /patient/register in 519ms (1172 modules)
+ GET /patient/register 200 in 546ms
+ ○ Compiling /api/proxy/[...path] ...
+ ✓ Compiled /api/proxy/[...path] in 550ms (1185 modules)
+ GET /patient-portal 200 in 657ms
+ POST /api/proxy/user/complete-registration 200 in 661ms
+ GET /dashboard 200 in 15ms
+ ✓ Compiled /profile in 229ms (743 modules)
+ GET /profile 200 in 280ms
+ ✓ Compiled /_not-found in 261ms (1198 modules)
+ GET /appointments 404 in 294ms
+ GET /appointments 404 in 171ms
+ GET /profile 200 in 20ms
+ ✓ Compiled /login in 139ms (748 modules)
+ GET /login 200 in 176ms
+ GET /login 200 in 179ms
+ GET /patient-portal 200 in 24ms
+ GET /_next/static/webpack/38a2c8ca1522607e.webpack.hot-update.json 404 in 125ms
+ ✓ Compiled /admin in 422ms (750 modules)
+ GET /admin 200 in 446ms
+ ✓ Compiled in 424ms (1156 modules)
+ GET /patient-portal 200 in 81ms
+ ✓ Compiled in 236ms (465 modules)
+ GET /patient-portal 200 in 32ms
+ ✓ Compiled in 526ms (465 modules)
+ GET /patient-portal 200 in 37ms
+ ✓ Compiled in 557ms (1152 modules)
+ GET /patient-portal 200 in 51ms
+ ✓ Compiled in 346ms (1152 modules)
+ GET /patient-portal 200 in 42ms
+ GET /login 200 in 47ms
+ GET /login 200 in 53ms
+ ✓ Compiled /role-selection in 370ms (721 modules)
+ GET /role-selection 200 in 477ms
+ ✓ Compiled /doctor/register in 357ms (728 modules)
+ GET /doctor/register 200 in 430ms
+ ✓ Compiled /api/proxy/[...path] in 365ms (727 modules)
+ ✓ Compiled (743 modules)
+ GET /doctor-portal 200 in 671ms
+ POST /api/proxy/user/complete-registration 200 in 658ms
+ GET /doctor-portal 200 in 10ms
+ GET /login 200 in 24ms
+ GET /login 200 in 27ms
+ ✓ Compiled in 610ms (1162 modules)
+ GET /login 200 in 72ms
+ ✓ Compiled in 371ms (465 modules)
+ GET /login 200 in 16ms
+ ✓ Compiled /_not-found in 456ms (1136 modules)
+ GET /_next/static/css/app/layout.css?v=1761281178294 404 in 699ms
+ ✓ Compiled in 667ms (1150 modules)
+ ⨯ Error: Cannot find module './447.js'
+Require stack:
+- /Users/rafaelcastillo/sc/synergycare/frontend/.next/server/webpack-runtime.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/.next/server/app/(auth)/login/page.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/server/require.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/server/load-components.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/build/utils.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/build/swc/options.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/build/swc/index.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/server/config.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/server/next.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/server/lib/start-server.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:198:28)
+    at <unknown> (.next/server/webpack-runtime.js:111:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:162:22)
+    at <unknown> (.next/server/app/(auth)/login/page.js:1:12394)
+    at Object.<anonymous> (.next/server/app/(auth)/login/page.js:1:12450) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/login'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 597ms (1470 modules)
+ GET /login 500 in 1025ms
+ GET /login 200 in 41ms
+ GET /login 200 in 7ms
+ GET /login 200 in 119ms
+ GET /_next/static/css/app/layout.css?v=1761281188178 404 in 63ms
+ GET /_next/static/chunks/app/(auth)/layout.js 404 in 65ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 66ms
+ GET /_next/static/chunks/main-app.js?v=1761281188178 404 in 66ms
+ GET /_next/static/chunks/app/(auth)/login/page.js 404 in 21ms
+ ⨯ ./components/doctor/DoctorDashboard.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+     ,-[[36;1;4m/Users/rafaelcastillo/sc/synergycare/frontend/components/doctor/DoctorDashboard.tsx[0m:146:1]
+ [2m143[0m |   };
+ [2m144[0m | 
+ [2m145[0m |   return (
+ [2m146[0m |     <div className="space-y-8">
+     : [35;1m     ^^^[0m
+ [2m147[0m |       {/* Welcome Section */}
+ [2m148[0m |       <div>
+ [2m149[0m |         <h1 className="text-2xl font-bold text-gray-900 mb-2">
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/doctor/DoctorDashboard.tsx
+ ✓ Compiled in 220ms (1484 modules)
+ ✓ Compiled in 474ms (1484 modules)
+ ✓ Compiled in 316ms (1484 modules)
+ ✓ Compiled in 424ms (1484 modules)
+ ✓ Compiled in 443ms (1484 modules)
+ ✓ Compiled in 899ms (1437 modules)

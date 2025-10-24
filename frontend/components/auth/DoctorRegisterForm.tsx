@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
 import { Shield, Stethoscope, ArrowLeft } from 'lucide-react';
+import { getDashboardUrl } from '@/lib/utils/navigation';
 
 interface AuthError {
   message: string;
@@ -61,7 +62,8 @@ export function DoctorRegisterForm() {
       // Register the user with doctor role
       await registerUser(data.email, data.password, displayName, 'doctor', additionalData);
 
-      router.push('/dashboard');
+      // Redirect to doctor portal instead of general dashboard
+      router.push(getDashboardUrl('doctor'));
     } catch (err) {
       const error = err as AuthError;
       setError(error.message || 'Failed to create account');

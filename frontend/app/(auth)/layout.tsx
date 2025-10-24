@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/auth/AuthProvider';
+import { getDashboardUrl } from '@/lib/utils/navigation';
 
 export default function AuthLayout({
   children,
@@ -14,7 +15,8 @@ export default function AuthLayout({
 
   useEffect(() => {
     if (!loading && user) {
-      router.push('/dashboard');
+      const dashboardUrl = getDashboardUrl(user.role);
+      router.push(dashboardUrl);
     }
   }, [user, loading, router]);
 

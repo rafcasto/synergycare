@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,7 +10,8 @@ import { loginSchema, LoginFormData } from '@/lib/utils/validators';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
-import { Shield, UserCheck, ArrowLeft } from 'lucide-react';
+import { UserCheck, ArrowLeft, Shield } from 'lucide-react';
+import { getDashboardUrl } from '@/lib/utils/navigation';
 
 interface AuthError {
   message: string;
@@ -20,8 +21,18 @@ export function PatientLoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const { executeRecaptchaAction, isRecaptchaAvailable } = useRecaptcha();
+
+  // Redirect when user role is available after login
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+  
+  useEffect(() => {
+    if (shouldRedirect && user?.role) {
+      const dashboardUrl = getDashboardUrl(user.role);
+      router.push(dashboardUrl);
+    }
+  }, [shouldRedirect, user?.role, router]);
 
   const {
     register,
@@ -52,7 +63,8 @@ export function PatientLoginForm() {
         console.log('reCAPTCHA token generated for patient login:', recaptchaToken);
       }
 
-      router.push('/dashboard');
+      // Set flag to redirect once user role is available
+      setShouldRedirect(true);
     } catch (err) {
       const error = err as AuthError;
       setError(error.message || 'Failed to log in');
