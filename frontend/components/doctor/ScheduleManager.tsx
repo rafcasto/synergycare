@@ -228,6 +228,24 @@ export default function ScheduleManager() {
           >
             <span>Test Firebase</span>
           </Button>
+          <Button
+            variant="outline"
+            onClick={async () => {
+              const { FirebaseDiagnostic } = await import('@/lib/firebase/diagnostic');
+              await FirebaseDiagnostic.checkEnvironment();
+              const results = await FirebaseDiagnostic.runFullDiagnostic();
+              console.log('🔍 Diagnostic Results:', results);
+              
+              if (results.errors.length > 0) {
+                alert(`Issues found:\n${results.errors.join('\n')}\n\nCheck console for details.`);
+              } else {
+                alert('All tests passed! Check console for details.');
+              }
+            }}
+            className="flex items-center space-x-2"
+          >
+            <span>Run Diagnostics</span>
+          </Button>
         </div>
       </div>
 

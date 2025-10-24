@@ -373,16 +373,38 @@ export class FirestoreService {
 
   // Doctor Schedule Operations
   static async createDoctorSchedule(scheduleData: Omit<DoctorSchedule, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
-    const scheduleRef = doc(collection(db, DOCTOR_SCHEDULES_COLLECTION));
-    const scheduleDoc: DoctorSchedule = {
-      ...scheduleData,
-      id: scheduleRef.id,
-      createdAt: Timestamp.now(),
-      updatedAt: Timestamp.now(),
-    };
+    console.log('🔧 Creating doctor schedule:', scheduleData);
     
-    await setDoc(scheduleRef, scheduleDoc);
-    return scheduleRef.id;
+    try {
+      const scheduleRef = doc(collection(db, DOCTOR_SCHEDULES_COLLECTION));
+      const scheduleDoc: DoctorSchedule = {
+        ...scheduleData,
+        id: scheduleRef.id,
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
+      };
+      
+      console.log('💾 Writing schedule document to Firestore...');
+      await setDoc(scheduleRef, scheduleDoc);
+      console.log('✅ Schedule created successfully with ID:', scheduleRef.id);
+      return scheduleRef.id;
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorCode = (error as { code?: string }).code;
+      
+      console.error('❌ Failed to create doctor schedule:', {
+        message: errorMessage,
+        code: errorCode,
+        doctorId: scheduleData.doctorId,
+        stack: error instanceof Error ? error.stack : undefined
+      });
+      
+      if (errorCode === 'permission-denied') {
+        throw new Error(`Permission denied: Unable to create schedule. Please check that your account has doctor permissions. Error: ${errorMessage}`);
+      }
+      
+      throw error;
+    }
   }
 
   static async getDoctorSchedules(doctorId: string): Promise<DoctorSchedule[]> {
@@ -491,16 +513,34 @@ export class FirestoreService {
 
   // Availability Slot Operations
   static async createAvailabilitySlot(slotData: Omit<AvailabilitySlot, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
-    const slotRef = doc(collection(db, AVAILABILITY_SLOTS_COLLECTION));
-    const slotDoc: AvailabilitySlot = {
-      ...slotData,
-      id: slotRef.id,
-      createdAt: Timestamp.now(),
-      updatedAt: Timestamp.now(),
-    };
-    
-    await setDoc(slotRef, slotDoc);
-    return slotRef.id;
+    try {
+      const slotRef = doc(collection(db, AVAILABILITY_SLOTS_COLLECTION));
+      const slotDoc: AvailabilitySlot = {
+        ...slotData,
+        id: slotRef.id,
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
+      };
+      
+      await setDoc(slotRef, slotDoc);
+      return slotRef.id;
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorCode = (error as { code?: string }).code;
+      
+      console.error('❌ Failed to create availability slot:', {
+        message: errorMessage,
+        code: errorCode,
+        slotData,
+        stack: error instanceof Error ? error.stack : undefined
+      });
+      
+      if (errorCode === 'permission-denied') {
+        throw new Error(`Permission denied: Unable to create availability slot. Please check that your account has doctor permissions. Error: ${errorMessage}`);
+      }
+      
+      throw error;
+    }
   }
 
   // Helper function to retry queries that might fail due to index building
@@ -516,9 +556,23 @@ export class FirestoreService {
         const errorMessage = error instanceof Error ? error.message : String(error);
         const errorCode = (error as { code?: string }).code;
         
+        console.error(`🔄 Query attempt ${attempt + 1} failed:`, {
+          message: errorMessage,
+          code: errorCode,
+          stack: error instanceof Error ? error.stack : undefined
+        });
+        
         const isIndexError = errorMessage.includes('index') || 
                             errorMessage.includes('Index') ||
                             errorCode === 'failed-precondition';
+        
+        const isPermissionError = errorCode === 'permission-denied' ||
+                                 errorMessage.includes('permission');
+        
+        if (isPermissionError) {
+          console.error('❌ Permission denied - this might be a Firestore rules issue');
+          throw error; // Don't retry permission errors
+        }
         
         if (isIndexError && attempt < maxRetries - 1) {
           console.log(`🔄 Index error detected, retrying in ${delayMs}ms (attempt ${attempt + 1}/${maxRetries})`);
