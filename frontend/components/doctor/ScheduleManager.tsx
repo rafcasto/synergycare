@@ -23,6 +23,7 @@ export default function ScheduleManager() {
   const [dataLoading, setDataLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
+  const [isIndexBuilding, setIsIndexBuilding] = useState(false);
 
   // Retry logic for production delays
   const retryWithDelay = async (fn: () => Promise<unknown>, maxRetries: number = 3, delay: number = 1000): Promise<unknown> => {
@@ -106,6 +107,7 @@ export default function ScheduleManager() {
       setDefaultSchedule(defaultSched);
 
       console.log('Schedule data loaded successfully');
+      setIsIndexBuilding(false); // Clear index building state on success
 
     } catch (err) {
       console.error('Error loading schedule data:', err);
@@ -125,10 +127,24 @@ export default function ScheduleManager() {
       
       if (errorCode === 'permission-denied') {
         setError('Permission denied: Unable to load schedule data. Check your user permissions.');
-      } else if (errorMessage.includes('index') || errorMessage.includes('Index')) {
-        setError('Database indexes are building. Schedule data will be available shortly.');
+      } else if (errorMessage.includes('index') || errorMessage.includes('Index') || errorMessage.includes('requires an index')) {
+        const indexError = 'Database indexes are building. This is normal for new deployments and usually takes 2-5 minutes. Please try refreshing in a moment.';
+        setError(indexError);
+        setIsIndexBuilding(true);
+        
+        // Auto-retry in 30 seconds for index errors if this is an early retry
+        if (retryAttempt < 2) {
+          console.log(`Index error detected. Auto-retrying in 30 seconds... (attempt ${retryAttempt + 1})`);
+          setTimeout(() => {
+            loadScheduleData(retryAttempt + 1);
+          }, 30000);
+        }
+      } else if (errorCode === 'failed-precondition' && errorMessage.includes('index')) {
+        setError('Database indexes are still building. Please wait a few minutes and try again.');
+        setIsIndexBuilding(true);
       } else {
         setError(`Failed to load schedule data: ${errorMessage}. This might be your first time accessing schedules.`);
+        setIsIndexBuilding(false);
       }
     } finally {
       setLoading(false);
@@ -320,7 +336,24 @@ export default function ScheduleManager() {
     return (
       <Card className="p-6">
         <div className="text-center">
-          <div className="text-red-600 mb-4">{error}</div>
+          {isIndexBuilding ? (
+            <div className="mb-4">
+              <div className="w-12 h-12 mx-auto mb-4 bg-yellow-100 rounded-full flex items-center justify-center">
+                <svg className="w-6 h-6 text-yellow-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Database Initializing</h3>
+              <div className="text-yellow-700 mb-4">{error}</div>
+              <div className="text-sm text-gray-600 mb-4">
+                🔧 We&apos;ve just deployed new database indexes. This process typically takes 2-5 minutes to complete.
+                <br />
+                <span className="font-medium">The page will automatically retry in 30 seconds.</span>
+              </div>
+            </div>
+          ) : (
+            <div className="text-red-600 mb-4">{error}</div>
+          )}
           {retryCount > 0 && (
             <div className="text-sm text-gray-500 mb-4">
               Attempted {retryCount + 1} time{retryCount > 0 ? 's' : ''}
@@ -330,9 +363,11 @@ export default function ScheduleManager() {
             <Button onClick={handleRefresh} disabled={dataLoading}>
               {dataLoading ? 'Retrying...' : 'Try Again'}
             </Button>
-            <Button variant="outline" onClick={createDefaultSchedule} disabled={loading}>
-              Create Default Schedule
-            </Button>
+            {!isIndexBuilding && (
+              <Button variant="outline" onClick={createDefaultSchedule} disabled={loading}>
+                Create Default Schedule
+              </Button>
+            )}
           </div>
         </div>
       </Card>
