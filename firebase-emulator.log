@@ -7,7 +7,7 @@ i  dataconnect: Data Connect Emulator logging to dataconnect-debug.log
 i  dataconnect: Started up Postgres server, listening on {"address":"127.0.0.1","family":"IPv4","port":5432}
 i  functions: Watching "/Users/rafaelcastillo/sc/synergycare/functions" for Cloud Functions...
 ⚠  functions: Your requested "node" version "22" doesn't match your global version "20". Using node@20 from host.
-Serving at port 8747
+Serving at port 8705
 
 ✔  functions: Loaded functions definitions from source: .
 
@@ -36,7 +36,3 @@ Serving at port 8747
 [90m└─────────────────────────[39m[90m┴───────────────[39m[90m┴─────────────────────┘[39m
 Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
  
-i  firestore: Change detected, updating rules...
-✔  firestore: Rules updated.
-i  firestore: Change detected, updating rules...
-✔  firestore: Rules updated.

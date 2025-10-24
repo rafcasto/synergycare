@@ -123,13 +123,13 @@ export default function ScheduleManager() {
         console.error('Error message:', err.message);
         console.error('Error stack:', err.stack);
         if ('code' in err) {
-          console.error('Error code:', (err as any).code);
+          console.error('Error code:', (err as Error & { code?: string }).code);
         }
       }
       
       // More specific error handling
       const errorMessage = (err as Error).message;
-      const errorCode = (err as any).code;
+      const errorCode = (err as Error & { code?: string }).code;
       
       if (errorCode === 'permission-denied') {
         setError(`Permission denied: ${errorMessage}. Check your user role and Firestore rules.`);

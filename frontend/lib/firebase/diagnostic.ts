@@ -1,8 +1,15 @@
 import { auth, db } from './config';
 import { doc, getDoc, collection, addDoc, deleteDoc, setDoc, updateDoc } from 'firebase/firestore';
 
+// Only export diagnostic tools in development environment
 export class FirebaseDiagnostic {
   static async runFullDiagnostic() {
+    // Don't run diagnostics in production
+    if (process.env.NODE_ENV === 'production') {
+      console.warn('Diagnostic tools are disabled in production');
+      return { errors: ['Diagnostics disabled in production'] };
+    }
+
     const results = {
       auth: false,
       userDoc: false,
@@ -126,6 +133,11 @@ export class FirebaseDiagnostic {
   }
 
   static async fixUserRole(forceRole?: 'doctor' | 'patient' | 'admin') {
+    // Don't allow role fixing in production
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('Role fixing is disabled in production');
+    }
+
     const user = auth.currentUser;
     if (!user) {
       throw new Error('No authenticated user');
@@ -171,6 +183,12 @@ export class FirebaseDiagnostic {
   }
 
   static async checkEnvironment() {
+    // Only run environment checks in development
+    if (process.env.NODE_ENV === 'production') {
+      console.warn('Environment diagnostics are disabled in production');
+      return;
+    }
+
     console.log('🔍 Environment Check:');
     console.log('NODE_ENV:', process.env.NODE_ENV);
     console.log('Firebase Project ID:', process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID);

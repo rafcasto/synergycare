@@ -6,7 +6,8 @@ service cloud.firestore {
     function hasRole(role) {
       return request.auth != null && 
              (request.auth.token.role == role || 
-              get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == role);
+              (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+               get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == role));
     }
     
     // Helper function to check if user is authenticated
@@ -17,6 +18,11 @@ service cloud.firestore {
     // Helper function to check if user owns the resource
     function isOwner(userId) {
       return request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Temporary test collection for diagnostics
+    match /test_collection/{testId} {
+      allow read, write: if isAuthenticated();
     }
     
     // User collection rules
@@ -115,19 +121,27 @@ service cloud.firestore {
     // Doctor schedule collection rules
     match /doctor_schedules/{scheduleId} {
       // Only the doctor themselves or admins can access their schedules
-      allow read, write: if isOwner(resource.data.doctorId) || hasRole('admin');
+      allow read, write: if isAuthenticated() && 
+                           (isOwner(resource.data.doctorId) || hasRole('admin'));
       
-      // Allow creating new schedules
-      allow create: if hasRole('doctor') && isOwner(request.resource.data.doctorId) || hasRole('admin');
+      // Allow creating new schedules - more permissive for doctors
+      allow create: if isAuthenticated() && 
+                       (isOwner(request.resource.data.doctorId) || 
+                        hasRole('doctor') || 
+                        hasRole('admin'));
     }
     
     // Schedule exceptions collection rules
     match /schedule_exceptions/{exceptionId} {
       // Only the doctor themselves or admins can access their exceptions
-      allow read, write: if isOwner(resource.data.doctorId) || hasRole('admin');
+      allow read, write: if isAuthenticated() && 
+                           (isOwner(resource.data.doctorId) || hasRole('admin'));
       
-      // Allow creating new exceptions
-      allow create: if hasRole('doctor') && isOwner(request.resource.data.doctorId) || hasRole('admin');
+      // Allow creating new exceptions - more permissive for doctors
+      allow create: if isAuthenticated() && 
+                       (isOwner(request.resource.data.doctorId) || 
+                        hasRole('doctor') || 
+                        hasRole('admin'));
     }
     
     // Availability slots collection rules
@@ -138,8 +152,11 @@ service cloud.firestore {
                       hasRole('admin') ||
                       (hasRole('patient') && resource.data.status == 'available'));
       
-      // Doctors can fully manage their own slots
-      allow write: if hasRole('doctor') && isOwner(resource.data.doctorId) || hasRole('admin');
+      // Doctors can fully manage their own slots - more permissive
+      allow write: if isAuthenticated() && 
+                      (isOwner(resource.data.doctorId) || 
+                       hasRole('doctor') || 
+                       hasRole('admin'));
       
       // Patients can book available slots (change status to 'booked' only)
       allow update: if hasRole('patient') && 
@@ -150,8 +167,11 @@ service cloud.firestore {
                        request.resource.data.startTime == resource.data.startTime &&
                        request.resource.data.endTime == resource.data.endTime;
       
-      // Allow creating new slots
-      allow create: if hasRole('doctor') && isOwner(request.resource.data.doctorId) || hasRole('admin');
+      // Allow creating new slots - more permissive for doctors
+      allow create: if isAuthenticated() && 
+                       (isOwner(request.resource.data.doctorId) || 
+                        hasRole('doctor') || 
+                        hasRole('admin'));
     }
     
     // Audit logs (read-only for admin)
