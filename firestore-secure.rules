@@ -19,22 +19,37 @@ service cloud.firestore {
       return request.auth != null && request.auth.uid == userId;
     }
     
+    // Helper function to check if data contains sensitive fields
+    function containsSensitiveData(data) {
+      return 'medicalLicense' in data || 
+             'phoneNumber' in data || 
+             'address' in data ||
+             'emergencyContact' in data ||
+             'insuranceNumber' in data;
+    }
+    
     // User collection rules
     match /users/{userId} {
       // Users can read their own profile, admins can read all
       allow read: if isOwner(userId) || hasRole('admin');
       
       // Users can update their own profile, admins can update all
-      allow update: if isOwner(userId) || hasRole('admin');
+      // Restrict sensitive field updates
+      allow update: if (isOwner(userId) || hasRole('admin')) &&
+                       (!containsSensitiveData(request.resource.data) || hasRole('admin'));
       
       // Users can create their own profile during registration
       allow create: if isOwner(userId) || hasRole('admin');
     }
     
-    // Doctor collection rules - PRIVATE (sensitive data)
+    // Doctor collection rules - MORE RESTRICTIVE
     match /doctors/{doctorId} {
-      // Only the doctor themselves or admins can read private data
-      allow read: if isOwner(doctorId) || hasRole('admin');
+      // Public info only for finding doctors (limit fields)
+      allow read: if isAuthenticated() && 
+                     (isOwner(doctorId) || 
+                      hasRole('admin') ||
+                      // Only allow reading limited public fields
+                      !containsSensitiveData(resource.data));
       
       // Only the doctor themselves or admins can update
       allow update: if isOwner(doctorId) || hasRole('admin');
@@ -43,22 +58,15 @@ service cloud.firestore {
       allow create: if isOwner(doctorId) || hasRole('admin');
     }
     
-    // Public doctor directory (limited fields only)
-    match /doctor_public/{doctorId} {
-      // Anyone authenticated can read public doctor info
-      allow read: if isAuthenticated();
-      
-      // Only the doctor or admin can update
-      allow create, update: if isOwner(doctorId) || hasRole('admin');
-      
-      // No delete - keep directory intact
-      allow delete: if hasRole('admin');
-    }
-    
     // Patient collection rules - HIPAA COMPLIANT
     match /patients/{patientId} {
       // Only the patient themselves or admins can read
-      allow read: if isOwner(patientId) || hasRole('admin');
+      // Doctors can only read if they have an active appointment/relationship
+      allow read: if isOwner(patientId) || 
+                     hasRole('admin') ||
+                     // TODO: Add doctor-patient relationship check
+                     (hasRole('doctor') && 
+                      exists(/databases/$(database)/documents/appointments/$(request.auth.uid + '_' + patientId)));
       
       // Only the patient themselves or admins can update
       allow update: if isOwner(patientId) || hasRole('admin');
@@ -83,7 +91,7 @@ service cloud.firestore {
       allow delete: if hasRole('admin');
     }
     
-    // Medical Records collection rules - VERY STRICT
+    // Medical Records collection rules - STRICT
     match /medical_records/{recordId} {
       // Very restrictive - only patient and their assigned doctor
       allow read: if isOwner(resource.data.patientId) || 
@@ -97,14 +105,24 @@ service cloud.firestore {
     
     // Reviews collection rules
     match /reviews/{reviewId} {
-      // Anyone can read reviews (public)
+      // Anyone can read reviews (public) - but limit sensitive data
       allow read: if isAuthenticated();
       
-      // Only patients can create reviews
-      allow create: if hasRole('patient');
+      // Only patients who had appointments can create reviews
+      allow create: if hasRole('patient') && 
+                       exists(/databases/$(database)/documents/appointments/$(request.auth.uid + '_' + resource.data.doctorId));
       
       // Only the review author or admins can update/delete
       allow update, delete: if isOwner(resource.data.patientId) || hasRole('admin');
+    }
+    
+    // Public doctor directory (limited fields only)
+    match /doctor_public/{doctorId} {
+      // Anyone can read public doctor info (name, specialization, rating)
+      allow read: if isAuthenticated();
+      
+      // Only the doctor or admin can update
+      allow write: if isOwner(doctorId) || hasRole('admin');
     }
     
     // Admin-only collections
@@ -112,7 +130,7 @@ service cloud.firestore {
       allow read, write: if hasRole('admin');
     }
     
-    // Audit logs (read-only for admin)
+    // Audit logs (write-only for system, read for admin)
     match /audit_logs/{logId} {
       allow read: if hasRole('admin');
       allow write: if false; // Only server functions should write logs

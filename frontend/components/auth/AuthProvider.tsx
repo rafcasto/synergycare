@@ -4,7 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { auth } from '@/lib/firebase/config';
 import { authService } from '@/lib/firebase/auth';
-import { apiClient } from '@/lib/firebase/api';
+import { FirestoreService } from '@/lib/firebase/firestore';
 import { User, AuthContextType, UserRole } from '@/types/auth';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -35,9 +35,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
         return role;
       }
 
-      // If no role in claims, try to fetch from backend
-      const response = await apiClient.get<{ role: UserRole }>('/roles/my-role');
-      return response.role;
+      // If no role in claims, try to get from Firestore
+      try {
+        const userProfile = await FirestoreService.getUser(firebaseUser.uid);
+        if (userProfile?.role) {
+          return userProfile.role;
+        }
+      } catch (firestoreError) {
+        console.log('Could not fetch role from Firestore:', firestoreError);
+      }
+
+      // If no role found anywhere, return undefined (don't fail)
+      return undefined;
     } catch (error) {
       console.error('Failed to fetch user role:', error);
       return undefined;
@@ -85,33 +94,93 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const register = async (email: string, password: string, displayName?: string, role?: UserRole, additionalData?: Record<string, unknown>) => {
     const userCredential = await authService.register(email, password, displayName);
     
-    // If role is provided, complete registration with role and additional data
+    // Store user data directly in Firestore (no backend needed for this)
     if (role && userCredential.user) {
       try {
-        // Get the user's ID token
-        const idToken = await userCredential.user.getIdToken();
-        
-        // Call backend to complete registration with role
-        const response = await fetch('/api/proxy/user/complete-registration', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${idToken}`,
-          },
-          body: JSON.stringify({
-            role,
-            user_data: additionalData || {},
-          }),
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to complete registration');
+        const baseUserData = {
+          uid: userCredential.user.uid,
+          email: userCredential.user.email!,
+          displayName: displayName || userCredential.user.displayName || '',
+          role: role,
+          ...(userCredential.user.photoURL && { photoURL: userCredential.user.photoURL }),
+        };
+
+        // Store user data directly in Firestore first (most important)
+        if (role === 'doctor' && additionalData) {
+          const doctorData = {
+            ...baseUserData,
+            role: 'doctor' as const,
+            firstName: additionalData.firstName as string,
+            lastName: additionalData.lastName as string,
+            phoneNumber: additionalData.phoneNumber as string,
+            medicalLicense: additionalData.medicalLicense as string,
+            specialization: additionalData.specialization as string,
+          };
+          
+          // Only add hospitalAffiliation if it's provided
+          if (additionalData.hospitalAffiliation) {
+            (doctorData as typeof doctorData & { hospitalAffiliation: string }).hospitalAffiliation = additionalData.hospitalAffiliation as string;
+          }
+          
+          await FirestoreService.createDoctorProfile(doctorData);
+          console.log('Doctor profile stored in Firestore');
+        } else if (role === 'patient' && additionalData) {
+          const patientData = {
+            ...baseUserData,
+            role: 'patient' as const,
+            firstName: additionalData.firstName as string,
+            lastName: additionalData.lastName as string,
+            dateOfBirth: additionalData.dateOfBirth as string,
+            phoneNumber: additionalData.phoneNumber as string,
+            address: additionalData.address as string,
+            emergencyContact: additionalData.emergencyContact as string,
+          };
+          
+          // Only add optional fields if they're provided
+          if (additionalData.insuranceProvider) {
+            (patientData as typeof patientData & { insuranceProvider: string }).insuranceProvider = additionalData.insuranceProvider as string;
+          }
+          if (additionalData.insuranceNumber) {
+            (patientData as typeof patientData & { insuranceNumber: string }).insuranceNumber = additionalData.insuranceNumber as string;
+          }
+          
+          await FirestoreService.createPatientProfile(patientData);
+          console.log('Patient profile stored in Firestore');
+        } else {
+          await FirestoreService.createUser(baseUserData);
+          console.log('Basic user profile stored in Firestore');
         }
         
-        console.log('Registration completed with role:', role);
+        // Try to set role via backend (for custom claims) - IMPORTANT for security
+        try {
+          const idToken = await userCredential.user.getIdToken();
+          const response = await fetch('/api/proxy/user/complete-registration', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${idToken}`,
+            },
+            body: JSON.stringify({
+              role,
+              user_data: additionalData || {},
+            }),
+          });
+          
+          if (response.ok) {
+            console.log('✅ Backend role setting completed - user now has custom claims');
+            // Force token refresh to get new custom claims
+            await userCredential.user.getIdToken(true);
+          } else {
+            console.warn('⚠️ Backend role setting failed, but Firestore data is saved');
+          }
+        } catch (backendError) {
+          console.warn('⚠️ Backend not available for role setting:', backendError);
+          console.log('✅ User data is safely stored in Firestore');
+        }
+        
       } catch (error) {
-        console.error('Failed to complete registration with role:', error);
-        // Don't throw here as the user is already created, just log the error
+        console.error('Failed to store user data in Firestore:', error);
+        throw error; // This is important - if Firestore fails, we should know
       }
     }
   };

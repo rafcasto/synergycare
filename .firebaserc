@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "patients-synergycare"
-  }
+    "default": "patients-synergycare",
+    "production": "patients-synergycare"
+  },
+  "targets": {},
+  "etags": {}
 }
