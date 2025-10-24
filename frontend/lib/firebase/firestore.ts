@@ -817,7 +817,16 @@ export class FirestoreService {
       const endDate = this.parseLocalDate(toDate);
       const promises: Promise<string>[] = [];
       
+      // Get today's date for comparison (timezone-safe)
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Reset to start of day
+      
       for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+        // Skip past dates - only generate slots for today and future dates
+        if (date < today) {
+          continue;
+        }
+        
         const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
         const dayOfWeek = this.getDayOfWeek(date);
         

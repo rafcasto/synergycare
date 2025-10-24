@@ -194,13 +194,15 @@ export default function ScheduleManager() {
       
       // Step 5: Generate availability slots with retry
       const today = new Date();
+      // Reset time to start of day to ensure we don't skip today due to time zone issues
+      today.setHours(0, 0, 0, 0);
       const endDate = new Date(today);
       endDate.setDate(today.getDate() + 30);
       
       const fromDate = today.toISOString().split('T')[0];
       const toDate = endDate.toISOString().split('T')[0];
       
-      console.log(`🕐 Step 5: Generating availability slots from ${fromDate} to ${toDate}...`);
+      console.log(`🕐 Step 5: Generating availability slots from ${fromDate} to ${toDate} (today forward)...`);
       
       await retryWithDelay(async () => {
         return await FirestoreService.generateAvailabilitySlots(

@@ -150,10 +150,17 @@ export function CalendarView({ doctorId, schedules, exceptions, onRefresh }: Cal
       const month = currentDate.getMonth();
       const firstDay = new Date(year, month, 1);
       const lastDay = new Date(year, month + 1, 0);
+      
+      // Ensure we don't generate slots for past dates
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Reset time to start of day
+      
+      // Use today as start date if it's later than the first day of the month
+      const startDate = firstDay < today ? today : firstDay;
 
       await FirestoreService.generateAvailabilitySlots(
         doctorId,
-        firstDay.toISOString().split('T')[0],
+        startDate.toISOString().split('T')[0],
         lastDay.toISOString().split('T')[0]
       );
 
@@ -185,6 +192,16 @@ export function CalendarView({ doctorId, schedules, exceptions, onRefresh }: Cal
   const getDayOfWeek = (date: Date): DayOfWeek => {
     const days: DayOfWeek[] = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     return days[date.getDay()];
+  };
+
+  const isViewingPastMonth = (): boolean => {
+    const today = new Date();
+    const viewingYear = currentDate.getFullYear();
+    const viewingMonth = currentDate.getMonth();
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth();
+    
+    return viewingYear < currentYear || (viewingYear === currentYear && viewingMonth < currentMonth);
   };
 
   const getDayStatus = (day: CalendarDay) => {
@@ -294,8 +311,9 @@ export function CalendarView({ doctorId, schedules, exceptions, onRefresh }: Cal
             </Button>
             <Button
               onClick={generateSlotsForMonth}
-              disabled={loading}
+              disabled={loading || isViewingPastMonth()}
               className="flex items-center space-x-2"
+              title={isViewingPastMonth() ? "Cannot generate slots for past months" : undefined}
             >
               <Calendar className="w-4 h-4" />
               <span>{loading ? 'Generating...' : 'Generate Slots'}</span>
