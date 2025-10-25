@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { DoctorLayout, DoctorTab } from '@/components/doctor/DoctorLayout';
 import DoctorDashboard from '@/components/doctor/DoctorDashboard';
 import ScheduleManager from '@/components/doctor/ScheduleManager';
+import DoctorAppointments from '@/components/doctor/DoctorAppointments';
 import { Card } from '@/components/ui/Card';
 
 export default function DoctorPortalPage() {
@@ -23,12 +24,7 @@ export default function DoctorPortalPage() {
         );
       
       case 'appointments':
-        return (
-          <Card className="p-8 text-center">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Appointments</h3>
-            <p className="text-gray-600">Appointment management interface coming soon...</p>
-          </Card>
-        );
+        return <DoctorAppointments />;
       
       case 'schedule':
         return <ScheduleManager />;

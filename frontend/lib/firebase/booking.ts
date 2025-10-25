@@ -120,6 +120,33 @@ export class BookingService {
         throw new Error('Appointment slot is no longer available');
       }
 
+      // Check if patient already has an appointment with this doctor at the same time
+      const existingAppointments = await getDocs(query(
+        collection(db, APPOINTMENTS_COLLECTION),
+        where('patientId', '==', patientId),
+        where('doctorId', '==', doctorId),
+        where('date', '==', slot.date),
+        where('startTime', '==', slot.startTime),
+        where('status', 'in', ['scheduled', 'confirmed'])
+      ));
+
+      if (!existingAppointments.empty) {
+        throw new Error('You already have an appointment booked with this doctor at this time');
+      }
+
+      // Check if patient has any conflicting appointments at the same time (with any doctor)
+      const conflictingAppointments = await getDocs(query(
+        collection(db, APPOINTMENTS_COLLECTION),
+        where('patientId', '==', patientId),
+        where('date', '==', slot.date),
+        where('startTime', '==', slot.startTime),
+        where('status', 'in', ['scheduled', 'confirmed'])
+      ));
+
+      if (!conflictingAppointments.empty) {
+        throw new Error('You already have another appointment scheduled at this time');
+      }
+
       // Create appointment record
       const appointmentData: Omit<AppointmentBooking, 'id'> = {
         patientId,
@@ -208,8 +235,8 @@ export class BookingService {
       let q = query(
         collection(db, APPOINTMENTS_COLLECTION),
         where('patientId', '==', patientId),
-        orderBy('date', 'desc'),
-        orderBy('startTime', 'desc')
+        orderBy('date', 'asc'),
+        orderBy('startTime', 'asc')
       );
 
       if (status) {
@@ -217,8 +244,8 @@ export class BookingService {
           collection(db, APPOINTMENTS_COLLECTION),
           where('patientId', '==', patientId),
           where('status', '==', status),
-          orderBy('date', 'desc'),
-          orderBy('startTime', 'desc')
+          orderBy('date', 'asc'),
+          orderBy('startTime', 'asc')
         );
       }
 
@@ -242,8 +269,8 @@ export class BookingService {
       let q = query(
         collection(db, APPOINTMENTS_COLLECTION),
         where('doctorId', '==', doctorId),
-        orderBy('date', 'desc'),
-        orderBy('startTime', 'desc')
+        orderBy('date', 'asc'),
+        orderBy('startTime', 'asc')
       );
 
       if (status) {
@@ -251,8 +278,8 @@ export class BookingService {
           collection(db, APPOINTMENTS_COLLECTION),
           where('doctorId', '==', doctorId),
           where('status', '==', status),
-          orderBy('date', 'desc'),
-          orderBy('startTime', 'desc')
+          orderBy('date', 'asc'),
+          orderBy('startTime', 'asc')
         );
       }
 
@@ -378,6 +405,22 @@ export class BookingService {
       } as AppointmentBooking));
     } catch (error) {
       console.error('Error getting appointments by date range:', error);
+      throw error;
+    }
+  }
+
+  // Update appointment status
+  static async updateAppointmentStatus(
+    appointmentId: string,
+    status: AppointmentBooking['status']
+  ): Promise<void> {
+    try {
+      await updateDoc(doc(db, APPOINTMENTS_COLLECTION, appointmentId), {
+        status,
+        updatedAt: Timestamp.now()
+      });
+    } catch (error) {
+      console.error('Error updating appointment status:', error);
       throw error;
     }
   }

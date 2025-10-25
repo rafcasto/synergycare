@@ -128,6 +128,23 @@ export default function DevDoctorSeeder() {
             updatedAt: new Date()
           });
           
+          // Create public doctor profile (for discovery)
+          await setDoc(doc(db, 'doctor_public', uid), {
+            uid,
+            displayName: doctorData.displayName,
+            specialization: doctorData.specialization,
+            experienceYears: doctorData.experienceYears,
+            bio: doctorData.bio,
+            hospitalAffiliation: doctorData.hospitalAffiliation,
+            consultationFee: doctorData.consultationFee,
+            rating: doctorData.rating,
+            reviewCount: doctorData.reviewCount,
+            isAvailable: true,
+            isVerified: true,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          });
+          
           // Add availability slots for the next 7 days
           const today = new Date();
           for (let day = 1; day <= 7; day++) {

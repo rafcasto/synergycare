@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import { PatientLayout, PatientTab } from '@/components/patient/PatientLayout';
 import PatientDashboard from '@/components/patient/PatientDashboard';
+import PatientAppointments from '@/components/patient/PatientAppointments';
 import AppointmentBooking from '@/components/patient/AppointmentBooking';
 import DevDoctorSeeder from '@/components/debug/DevDoctorSeeder';
 import { Card } from '@/components/ui/Card';
-import { Button } from '@/components/ui/Button';
 
 export default function PatientPortalPage() {
   const [currentTab, setCurrentTab] = useState<PatientTab>('dashboard');
@@ -41,15 +41,9 @@ export default function PatientPortalPage() {
           );
         }
         return (
-          <Card className="p-8 text-center">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">My Appointments</h3>
-            <p className="text-gray-600 mb-6">
-              View and manage your upcoming and past appointments.
-            </p>
-            <Button onClick={handleBookNewAppointment}>
-              Book New Appointment
-            </Button>
-          </Card>
+          <PatientAppointments 
+            onBookNewAppointment={handleBookNewAppointment}
+          />
         );
       
       case 'doctors':
