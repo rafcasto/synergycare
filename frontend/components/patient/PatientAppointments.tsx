@@ -9,6 +9,7 @@ import { FirestoreService } from '@/lib/firebase/firestore';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { AppointmentBooking } from '@/lib/firebase/booking';
 
+
 interface PatientAppointmentsProps {
   onBookNewAppointment?: () => void;
 }
@@ -41,46 +42,32 @@ function PatientAppointments({ onBookNewAppointment }: PatientAppointmentsProps)
             // First try the doctor_public collection, then fall back to the private doctors collection
             let doctorProfile = null;
             
-            console.log(`🔍 Looking for doctor profile: ${appointment.doctorId}`);
-            
             // Try public collection first (this is what most components use)
             try {
               const publicDoctors = await FirestoreService.getAllDoctors();
-              console.log(`📋 Found ${publicDoctors.length} public doctors`);
               doctorProfile = publicDoctors.find(doc => doc.uid === appointment.doctorId);
-              if (doctorProfile) {
-                console.log(`✅ Found doctor in public collection:`, doctorProfile.displayName);
-              } else {
-                console.log(`❌ Doctor ${appointment.doctorId} not found in public collection`);
-              }
-            } catch (publicErr) {
-              console.warn(`Could not fetch from public doctors collection:`, publicErr);
+            } catch {
+              // Continue to private collection
             }
             
             // If not found in public, try private collection
             if (!doctorProfile) {
               try {
                 doctorProfile = await FirestoreService.getDoctorProfile(appointment.doctorId);
-                if (doctorProfile) {
-                  console.log(`✅ Found doctor in private collection:`, doctorProfile.displayName);
-                } else {
-                  console.log(`❌ Doctor ${appointment.doctorId} not found in private collection`);
-                }
-              } catch (privateErr) {
-                console.warn(`Could not fetch from private doctors collection:`, privateErr);
+              } catch {
+                // Continue to name resolution
               }
             }
             
             const finalName = doctorProfile?.displayName || `Dr. ${appointment.doctorId.slice(0, 8)}...`;
-            console.log(`👨‍⚕️ Final doctor name for appointment:`, finalName);
             
             return {
               ...appointment,
               doctorName: finalName,
               doctorSpecialization: doctorProfile?.specialization
             };
-          } catch (err) {
-            console.error(`Error fetching doctor profile for ${appointment.doctorId}:`, err);
+          } catch {
+            // Error fetching doctor profile - using fallback name
             return {
               ...appointment,
               doctorName: `Dr. ${appointment.doctorId.slice(0, 8)}...`,
@@ -296,6 +283,8 @@ function PatientAppointments({ onBookNewAppointment }: PatientAppointmentsProps)
 
   return (
     <div className="space-y-8">
+
+      
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -444,9 +433,52 @@ function PatientAppointments({ onBookNewAppointment }: PatientAppointmentsProps)
                   
                   <div className="flex items-center space-x-2 ml-4">
                     {appointment.status === 'confirmed' && (
-                      <div className="text-right">
-                        <div className="text-green-600 font-medium text-sm mb-1">✓ Ready for appointment</div>
-                        <div className="text-xs text-gray-500">Check in when you arrive</div>
+                      <div className="flex items-center space-x-3">
+                        {appointment.videoConference && (
+                          <Button
+                            size="sm"
+                            onClick={() => {
+                              // Navigate to video conference page
+                              window.open(`/video-conference/${appointment.id}`, '_blank');
+                            }}
+                            className="bg-green-600 hover:bg-green-700 text-white"
+                          >
+                            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                            Join Video Call
+                          </Button>
+                        )}
+                        {/* Debug: Show if appointment needs video setup */}
+                        {!appointment.videoConference && process.env.NODE_ENV === 'development' && (
+                          <Button
+                            size="sm"
+                            onClick={async () => {
+                              try {
+                                await BookingService.addVideoConferenceToAppointment(appointment.id!);
+                                alert('Video conference room created! Please refresh the page.');
+                                window.location.reload();
+                              } catch (error) {
+                                console.error('Error creating video room:', error);
+                                alert('Failed to create video room. Check console for details.');
+                              }
+                            }}
+                            className="bg-blue-600 hover:bg-blue-700 text-white"
+                          >
+                            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            Create Video Room
+                          </Button>
+                        )}
+                        <div className="text-right">
+                          <div className="text-green-600 font-medium text-sm mb-1">✓ Ready for appointment</div>
+                          <div className="text-xs text-gray-500">
+                            {appointment.videoConference ? 'Video call available' : 
+                             process.env.NODE_ENV === 'development' ? 'Click "Create Video Room" to enable video' : 
+                             'Contact support to enable video call'}
+                          </div>
+                        </div>
                       </div>
                     )}
                   </div>

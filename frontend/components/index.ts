@@ -46,3 +46,6 @@ export { default as DoctorProfile } from './patient/DoctorProfile';
 export { default as BookingForm } from './patient/BookingForm';
 export { default as BookingConfirmation } from './patient/BookingConfirmation';
 export { default as PatientAppointments } from './patient/PatientAppointments';
+
+// Video components
+export { default as VideoConference } from './video/VideoConference';

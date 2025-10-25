@@ -9,11 +9,18 @@ import { FirestoreService } from '@/lib/firebase/firestore';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { AppointmentBooking } from '@/lib/firebase/booking';
 
+
 interface AppointmentWithPatient extends AppointmentBooking {
   patientName?: string;
   patientEmail?: string;
   patientPhone?: string;
+  dataError?: boolean; // Flag when patient data could not be loaded
 }
+
+// Simple error logging
+const logPatientDataError = (message: string, patientId: string) => {
+  console.error(`❌ PATIENT DATA ERROR: ${message} (ID: ${patientId})`);
+};
 
 function DoctorAppointments() {
   const { user } = useAuth();
@@ -37,88 +44,68 @@ function DoctorAppointments() {
         doctorAppointments.map(async (appointment) => {
           try {
             console.log(`🔍 Looking for patient profile: ${appointment.patientId}`);
-            console.log(`📋 Full appointment data:`, appointment);
-            
             // Try to get patient profile from multiple sources
             let patientProfile = null;
             
-            // First try the users collection (most likely to have the data)
+            // First try the patients collection (most complete patient data)
             try {
-              patientProfile = await FirestoreService.getUser(appointment.patientId);
-              console.log(`🔍 Users collection result:`, patientProfile);
-              if (patientProfile) {
-                console.log(`✅ Found patient in users collection:`, patientProfile.displayName || patientProfile.email);
-              } else {
-                console.log(`❌ No patient found in users collection for ID: ${appointment.patientId}`);
-              }
-            } catch (userErr) {
-              console.warn(`❌ Error fetching from users collection:`, userErr);
+              patientProfile = await FirestoreService.getPatientProfile(appointment.patientId);
+            } catch {
+              // Continue to next collection
             }
             
-            // If not found in users collection, try the patients collection
+            // If not found in patients collection, try the users collection as fallback
             if (!patientProfile) {
               try {
-                patientProfile = await FirestoreService.getPatientProfile(appointment.patientId);
-                console.log(`🔍 Patients collection result:`, patientProfile);
-                if (patientProfile) {
-                  console.log(`✅ Found patient in patients collection:`, patientProfile.displayName || patientProfile.email);
-                } else {
-                  console.log(`❌ No patient found in patients collection for ID: ${appointment.patientId}`);
-                }
-              } catch (patientErr) {
-                console.warn(`❌ Error fetching from patients collection:`, patientErr);
+                patientProfile = await FirestoreService.getUser(appointment.patientId);
+              } catch {
+                // Continue to name resolution
               }
             }
             
-            // Generate a user-friendly name with better fallbacks
-            let finalName = 'Unknown Patient';
+            // Get patient name - NO FALLBACKS, only real data
+            let finalName = null;
+            let nameResolutionError = null;
+
             if (patientProfile?.displayName) {
               finalName = patientProfile.displayName;
-              console.log(`✅ Using displayName: ${finalName}`);
-            } else if (patientProfile?.email) {
-              // Extract name from email if possible
-              const emailName = patientProfile.email.split('@')[0];
-              const formattedName = emailName.split(/[._-]/).map((part: string) => 
-                part.charAt(0).toUpperCase() + part.slice(1).toLowerCase()
-              ).join(' ');
-              finalName = formattedName || patientProfile.email;
-              console.log(`✅ Using formatted email name: ${finalName}`);
+            } else if (patientProfile && 'firstName' in patientProfile && 'lastName' in patientProfile && patientProfile.firstName && patientProfile.lastName) {
+              finalName = `${patientProfile.firstName} ${patientProfile.lastName}`;
             } else {
-              // Create a more user-friendly fallback name
-              const patientIdShort = appointment.patientId.slice(-6);
-              // Generate a more realistic-looking name for demo purposes
-              const demoNames = [
-                'John Smith', 'Jane Doe', 'Michael Johnson', 'Sarah Wilson', 
-                'David Brown', 'Emily Davis', 'Robert Miller', 'Lisa Garcia'
-              ];
-              const nameIndex = parseInt(patientIdShort, 36) % demoNames.length;
-              finalName = demoNames[nameIndex] || `Patient ${patientIdShort}`;
-              console.log(`⚠️ Using demo fallback name: ${finalName} (from ID: ${patientIdShort})`);
+              // NO FALLBACKS - Show exactly what happened
+              nameResolutionError = `Patient data missing for ID: ${appointment.patientId}`;
+              finalName = `MISSING PATIENT DATA (${appointment.patientId.slice(-8)})`;
             }
-            
-            console.log(`👤 Final patient name for appointment: ${finalName}`);
-            console.log(`📧 Patient email: ${patientProfile?.email || 'not found'}`);
-            console.log(`📱 Patient phone: ${patientProfile?.phoneNumber || 'not found'}`);
+
+            // Log any data issues
+            if (nameResolutionError) {
+              logPatientDataError(nameResolutionError, appointment.patientId);
+            }
             
             return {
               ...appointment,
               patientName: finalName,
               patientEmail: patientProfile?.email,
-              patientPhone: patientProfile?.phoneNumber
+              patientPhone: patientProfile?.phoneNumber,
+              dataError: !!nameResolutionError // Convert to boolean
             };
           } catch (err) {
-            console.error(`❌ Error fetching patient profile for ${appointment.patientId}:`, err);
+            logPatientDataError(`Failed to fetch patient profile: ${err instanceof Error ? err.message : String(err)}`, appointment.patientId);
+            
             return {
               ...appointment,
-              patientName: `Patient ${appointment.patientId.slice(-6)}`,
+              patientName: `SYSTEM ERROR: Cannot load patient (${appointment.patientId.slice(-8)})`,
               patientEmail: undefined,
-              patientPhone: undefined
+              patientPhone: undefined,
+              dataError: true
             };
           }
         })
       );
       
       setAppointments(appointmentsWithPatients);
+      
+
     } catch (err) {
       console.error('Error loading appointments:', err);
       setError(err instanceof Error ? err.message : 'Failed to load appointments');
@@ -142,7 +129,12 @@ function DoctorAppointments() {
     setUpdatingId(appointmentId);
 
     try {
-      await BookingService.updateAppointmentStatus(appointmentId, newStatus);
+      if (newStatus === 'confirmed') {
+        // When confirming, create video conference room
+        await BookingService.confirmAppointmentWithVideo(appointmentId, user.uid);
+      } else {
+        await BookingService.updateAppointmentStatus(appointmentId, newStatus);
+      }
       await loadAppointments(); // Refresh the list
     } catch (err) {
       console.error('Error updating appointment status:', err);
@@ -303,6 +295,8 @@ function DoctorAppointments() {
 
   return (
     <div className="space-y-8">
+
+      
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -468,9 +462,21 @@ function DoctorAppointments() {
                   
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center space-x-2 mb-2">
-                      <h3 className="text-lg font-semibold text-gray-900">
-                        {appointment.patientName}
-                      </h3>
+                      <div className={`flex items-center ${appointment.dataError ? 'relative group' : ''}`}>
+                        <h3 className={`text-lg font-semibold ${appointment.dataError ? 'text-red-600' : 'text-gray-900'}`}>
+                          {appointment.dataError && (
+                            <svg className="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L5.082 15.5c-.77.833.192 2.5 1.732 2.5z" />
+                            </svg>
+                          )}
+                          {appointment.patientName}
+                        </h3>
+                        {appointment.dataError && (
+                          <div className="absolute bottom-full mb-2 left-0 bg-red-600 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                            Patient data incomplete - Contact system administrator
+                          </div>
+                        )}
+                      </div>
                       <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(appointment.status)}`}>
                         {appointment.status}
                       </span>
@@ -555,22 +561,77 @@ function DoctorAppointments() {
                   )}
                   
                   {appointment.status === 'confirmed' && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleUpdateAppointmentStatus(appointment.id!, 'completed')}
-                      disabled={updatingId === appointment.id}
-                      className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
-                    >
-                      {updatingId === appointment.id ? (
-                        <div className="flex items-center space-x-1">
-                          <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600"></div>
-                          <span>Completing...</span>
-                        </div>
-                      ) : (
-                        'Mark Complete'
+                    <>
+                      {appointment.videoConference && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            // Navigate to video conference page
+                            window.open(`/video-conference/${appointment.id}`, '_blank');
+                          }}
+                          className="text-green-600 hover:text-green-700 hover:bg-green-50"
+                        >
+                          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                          </svg>
+                          Join Video Call
+                        </Button>
                       )}
-                    </Button>
+                      {/* Add video room if missing */}
+                      {!appointment.videoConference && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={async () => {
+                            if (!user) return;
+                            setUpdatingId(appointment.id!);
+                            try {
+                              await BookingService.addVideoConferenceToAppointment(appointment.id!);
+                              await loadAppointments(); // Refresh the list
+                              alert('Video conference room created!');
+                            } catch (err) {
+                              console.error('Error creating video room:', err);
+                              alert('Failed to create video room. Check console for details.');
+                            } finally {
+                              setUpdatingId(null);
+                            }
+                          }}
+                          disabled={updatingId === appointment.id}
+                          className="text-purple-600 hover:text-purple-700 hover:bg-purple-50"
+                        >
+                          {updatingId === appointment.id ? (
+                            <div className="flex items-center space-x-1">
+                              <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-purple-600"></div>
+                              <span>Creating...</span>
+                            </div>
+                          ) : (
+                            <>
+                              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                              </svg>
+                              Enable Video Call
+                            </>
+                          )}
+                        </Button>
+                      )}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleUpdateAppointmentStatus(appointment.id!, 'completed')}
+                        disabled={updatingId === appointment.id}
+                        className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                      >
+                        {updatingId === appointment.id ? (
+                          <div className="flex items-center space-x-1">
+                            <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600"></div>
+                            <span>Completing...</span>
+                          </div>
+                        ) : (
+                          'Mark Complete'
+                        )}
+                      </Button>
+                    </>
                   )}
                 </div>
               </div>

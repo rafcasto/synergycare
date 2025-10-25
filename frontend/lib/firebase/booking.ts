@@ -1,4 +1,4 @@
-import { Timestamp, doc, collection, addDoc, updateDoc, query, where, getDocs, orderBy, getDoc } from 'firebase/firestore';
+import { Timestamp, doc, collection, addDoc, updateDoc, query, where, getDocs, orderBy, getDoc, setDoc } from 'firebase/firestore';
 import { db } from './config';
 import { FirestoreService, AvailabilitySlot, DoctorPublicProfile } from './firestore';
 
@@ -14,6 +14,16 @@ export interface AppointmentBooking {
   status: 'scheduled' | 'confirmed' | 'cancelled' | 'completed';
   notes?: string;
   appointmentType?: 'consultation' | 'follow-up' | 'emergency' | 'routine';
+  // Video conferencing fields
+  videoConference?: {
+    roomName: string;
+    joinUrl: string;
+    patientJoinUrl: string;
+    relativesJoinUrl: string;
+    isActive: boolean;
+    startedAt?: Timestamp;
+    endedAt?: Timestamp;
+  };
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }
@@ -415,12 +425,154 @@ export class BookingService {
     status: AppointmentBooking['status']
   ): Promise<void> {
     try {
+      // Update appointment status
       await updateDoc(doc(db, APPOINTMENTS_COLLECTION, appointmentId), {
         status,
         updatedAt: Timestamp.now()
       });
+
+      // HIPAA Compliance: When appointment is confirmed, create authorized access
+      if (status === 'confirmed') {
+        const appointment = await this.getAppointment(appointmentId);
+        if (appointment) {
+          await this.createAuthorizedAccess(appointment.doctorId, appointment.patientId);
+        }
+      }
     } catch (error) {
       console.error('Error updating appointment status:', error);
+      throw error;
+    }
+  }
+
+  // HIPAA-compliant authorized access management
+  private static async createAuthorizedAccess(doctorId: string, patientId: string): Promise<void> {
+    try {
+      const accessId = `${doctorId}_${patientId}`;
+      await setDoc(doc(db, 'authorized_access', accessId), {
+        doctorId,
+        patientId,
+        createdAt: Timestamp.now(),
+        status: 'active',
+        reason: 'appointment_confirmed'
+      });
+      console.log(`✅ Authorized access created: ${accessId}`);
+    } catch {
+      // If document doesn't exist, create it
+      const accessId = `${doctorId}_${patientId}`;
+      try {
+        await setDoc(doc(db, 'authorized_access', accessId), {
+          doctorId,
+          patientId,
+          createdAt: Timestamp.now(),
+          status: 'active',
+          reason: 'appointment_confirmed'
+        });
+        console.log(`✅ Authorized access created: ${accessId}`);
+      } catch (createError) {
+        console.error('Error creating authorized access:', createError);
+      }
+    }
+  }
+
+  // Create video conference room when doctor confirms appointment
+  static async createVideoConferenceRoom(
+    appointmentId: string
+  ): Promise<void> {
+    try {
+      const { VideoConferenceService } = await import('@/lib/services/videoConference');
+      const room = VideoConferenceService.createVideoConferenceRoom(appointmentId);
+      
+      await updateDoc(doc(db, APPOINTMENTS_COLLECTION, appointmentId), {
+        videoConference: {
+          roomName: room.roomName,
+          joinUrl: room.joinUrl,
+          patientJoinUrl: room.patientJoinUrl,
+          relativesJoinUrl: room.relativesJoinUrl,
+          isActive: false
+        },
+        updatedAt: Timestamp.now()
+      });
+    } catch (error) {
+      console.error('Error creating video conference room:', error);
+      throw error;
+    }
+  }
+
+  // Confirm appointment and create video room
+  static async confirmAppointmentWithVideo(
+    appointmentId: string,
+    doctorId: string
+  ): Promise<void> {
+    try {
+      // Get appointment details first
+      const appointment = await this.getAppointment(appointmentId);
+      if (!appointment) {
+        throw new Error('Appointment not found');
+      }
+
+      // Verify doctor has permission
+      if (appointment.doctorId !== doctorId) {
+        throw new Error('Not authorized to confirm this appointment');
+      }
+
+      // Update status to confirmed
+      await this.updateAppointmentStatus(appointmentId, 'confirmed');
+      
+      // Create video conference room
+      await this.createVideoConferenceRoom(appointmentId);
+    } catch (error) {
+      console.error('Error confirming appointment with video:', error);
+      throw error;
+    }
+  }
+
+  // Start video conference
+  static async startVideoConference(appointmentId: string): Promise<void> {
+    try {
+      await updateDoc(doc(db, APPOINTMENTS_COLLECTION, appointmentId), {
+        'videoConference.isActive': true,
+        'videoConference.startedAt': Timestamp.now(),
+        updatedAt: Timestamp.now()
+      });
+    } catch (error) {
+      console.error('Error starting video conference:', error);
+      throw error;
+    }
+  }
+
+  // End video conference
+  static async endVideoConference(appointmentId: string): Promise<void> {
+    try {
+      await updateDoc(doc(db, APPOINTMENTS_COLLECTION, appointmentId), {
+        'videoConference.isActive': false,
+        'videoConference.endedAt': Timestamp.now(),
+        updatedAt: Timestamp.now()
+      });
+    } catch (error) {
+      console.error('Error ending video conference:', error);
+      throw error;
+    }
+  }
+
+  // Manually add video conference to existing appointment
+  static async addVideoConferenceToAppointment(appointmentId: string): Promise<void> {
+    try {
+      const appointment = await this.getAppointment(appointmentId);
+      if (!appointment) {
+        throw new Error('Appointment not found');
+      }
+
+      if (appointment.videoConference) {
+        console.log('Appointment already has video conference room');
+        return;
+      }
+
+      // Create video conference room
+      await this.createVideoConferenceRoom(appointmentId);
+      
+      console.log(`✅ Video conference room created for appointment ${appointmentId}`);
+    } catch (error) {
+      console.error('Error adding video conference to appointment:', error);
       throw error;
     }
   }

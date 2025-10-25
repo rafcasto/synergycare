@@ -5,7 +5,6 @@ import { PatientLayout, PatientTab } from '@/components/patient/PatientLayout';
 import PatientDashboard from '@/components/patient/PatientDashboard';
 import PatientAppointments from '@/components/patient/PatientAppointments';
 import AppointmentBooking from '@/components/patient/AppointmentBooking';
-import DevDoctorSeeder from '@/components/debug/DevDoctorSeeder';
 import { Card } from '@/components/ui/Card';
 
 export default function PatientPortalPage() {
@@ -82,7 +81,6 @@ export default function PatientPortalPage() {
 
   return (
     <PatientLayout currentTab={currentTab} onTabChange={setCurrentTab}>
-      <DevDoctorSeeder />
       {renderTabContent()}
     </PatientLayout>
   );

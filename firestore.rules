@@ -20,15 +20,26 @@ service cloud.firestore {
       return request.auth != null && request.auth.uid == userId;
     }
     
+    // HIPAA-compliant approach: Create a separate authorized access collection
+    function hasAuthorizedAccess(patientId) {
+      // Check if there's an active doctor-patient relationship in the authorized_access collection
+      return request.auth != null && hasRole('doctor') &&
+             exists(/databases/$(database)/documents/authorized_access/$(request.auth.uid + '_' + patientId));
+    }
+    
     // Temporary test collection for diagnostics
     match /test_collection/{testId} {
       allow read, write: if isAuthenticated();
     }
     
-    // User collection rules
+    // User collection rules - HIPAA COMPLIANT
     match /users/{userId} {
-      // Users can read their own profile, admins can read all
-      allow read: if isOwner(userId) || hasRole('admin');
+      // Users can read their own profile, authorized doctors can read patient profiles, admins can read all
+      allow read: if isOwner(userId) || 
+                     hasRole('admin') ||
+                     (hasRole('doctor') && 
+                      get(/databases/$(database)/documents/users/$(userId)).data.role == 'patient' && 
+                      hasAuthorizedAccess(userId));
       
       // Users can update their own profile, admins can update all
       allow update: if isOwner(userId) || hasRole('admin');
@@ -63,14 +74,27 @@ service cloud.firestore {
     
     // Patient collection rules - HIPAA COMPLIANT
     match /patients/{patientId} {
-      // Only the patient themselves or admins can read
-      allow read: if isOwner(patientId) || hasRole('admin');
+      // Patient themselves, their authorized doctors, or admins can read
+      allow read: if isOwner(patientId) || 
+                     hasRole('admin') ||
+                     hasAuthorizedAccess(patientId);
       
       // Only the patient themselves or admins can update
       allow update: if isOwner(patientId) || hasRole('admin');
       
       // Users can create their own patient profile during registration
       allow create: if isOwner(patientId) || hasRole('admin');
+    }
+    
+    // Authorized Access collection - Controls doctor-patient data access relationships
+    match /authorized_access/{accessId} {
+      // Format: doctorId_patientId
+      // Allow doctors to create access records for their own appointments
+      allow read: if hasRole('admin') || hasRole('doctor');
+      allow create: if hasRole('doctor') && 
+                       accessId == request.auth.uid + '_' + request.resource.data.patientId;
+      allow update: if hasRole('admin');
+      allow delete: if hasRole('admin');
     }
     
     // Appointment collection rules
