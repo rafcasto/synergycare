@@ -63,18 +63,24 @@ function DoctorAppointments() {
               }
             }
             
-            // Get patient name - NO FALLBACKS, only real data
+            // Get patient name - Handle different appointment states
             let finalName = null;
             let nameResolutionError = null;
+            const isPendingConfirmation = appointment.status === 'scheduled';
 
             if (patientProfile?.displayName) {
               finalName = patientProfile.displayName;
             } else if (patientProfile && 'firstName' in patientProfile && 'lastName' in patientProfile && patientProfile.firstName && patientProfile.lastName) {
               finalName = `${patientProfile.firstName} ${patientProfile.lastName}`;
             } else {
-              // NO FALLBACKS - Show exactly what happened
-              nameResolutionError = `Patient data missing for ID: ${appointment.patientId}`;
-              finalName = `MISSING PATIENT DATA (${appointment.patientId.slice(-8)})`;
+              // Handle different cases for missing patient data
+              if (isPendingConfirmation) {
+                nameResolutionError = `Appointment pending confirmation - Patient data will be available after confirmation`;
+                finalName = `Appointment Request (${appointment.patientId.slice(-8)})`;
+              } else {
+                nameResolutionError = `Patient data missing for confirmed appointment: ${appointment.patientId}`;
+                finalName = `MISSING PATIENT DATA (${appointment.patientId.slice(-8)})`;
+              }
             }
 
             // Log any data issues
@@ -94,7 +100,9 @@ function DoctorAppointments() {
             
             return {
               ...appointment,
-              patientName: `SYSTEM ERROR: Cannot load patient (${appointment.patientId.slice(-8)})`,
+              patientName: appointment.status === 'scheduled' 
+                ? `Appointment Request (${appointment.patientId.slice(-8)})`
+                : `SYSTEM ERROR: Cannot load patient (${appointment.patientId.slice(-8)})`,
               patientEmail: undefined,
               patientPhone: undefined,
               dataError: true
@@ -463,17 +471,30 @@ function DoctorAppointments() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center space-x-2 mb-2">
                       <div className={`flex items-center ${appointment.dataError ? 'relative group' : ''}`}>
-                        <h3 className={`text-lg font-semibold ${appointment.dataError ? 'text-red-600' : 'text-gray-900'}`}>
+                        <h3 className={`text-lg font-semibold ${
+                          appointment.dataError 
+                            ? (appointment.status === 'scheduled' ? 'text-blue-600' : 'text-red-600')
+                            : 'text-gray-900'
+                        }`}>
                           {appointment.dataError && (
-                            <svg className="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L5.082 15.5c-.77.833.192 2.5 1.732 2.5z" />
+                            <svg className={`w-4 h-4 inline mr-1 ${
+                              appointment.status === 'scheduled' ? 'text-blue-600' : 'text-red-600'
+                            }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={
+                                appointment.status === 'scheduled' 
+                                  ? "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                  : "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L5.082 15.5c-.77.833.192 2.5 1.732 2.5z"
+                              } />
                             </svg>
                           )}
                           {appointment.patientName}
                         </h3>
                         {appointment.dataError && (
-                          <div className="absolute bottom-full mb-2 left-0 bg-red-600 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                            Patient data incomplete - Contact system administrator
+                          <div className="absolute bottom-full mb-2 left-0 bg-blue-600 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 max-w-xs">
+                            {appointment.status === 'scheduled' 
+                              ? 'Confirm this appointment to access patient details and enable video consultation'
+                              : 'Patient data incomplete - Contact system administrator'
+                            }
                           </div>
                         )}
                       </div>
@@ -518,6 +539,17 @@ function DoctorAppointments() {
                         </p>
                       )}
                       
+                      {appointment.status === 'scheduled' && appointment.dataError && (
+                        <div className="mt-2 p-2 bg-blue-50 border border-blue-200 rounded-md">
+                          <p className="text-sm text-blue-700">
+                            <svg className="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span className="font-medium">New appointment request:</span> Confirm this appointment to access patient details and enable video consultation.
+                          </p>
+                        </div>
+                      )}
+
                       {appointment.notes && (
                         <div className="mt-2">
                           <p className="text-sm text-gray-500">

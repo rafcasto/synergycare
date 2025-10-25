@@ -58,3 +58,68 @@
  ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
  GET /doctor-portal 200 in 33ms
  GET /doctor-portal?tab=appointments 200 in 41ms
+ GET /patient-portal 200 in 80ms
+ GET /favicon.ico 200 in 16ms
+ GET /favicon.ico 200 in 7ms
+ GET /doctor-portal 200 in 26ms
+ ✓ Compiled in 716ms (1190 modules)
+ GET /patient-portal 200 in 80ms
+ ✓ Compiled /favicon.ico in 107ms (730 modules)
+ GET /favicon.ico 200 in 164ms
+ ✓ Compiled in 255ms (1206 modules)
+ GET /patient-portal 200 in 54ms
+ GET /favicon.ico 200 in 10ms
+ ✓ Compiled in 266ms (1206 modules)
+ GET /patient-portal 200 in 37ms
+ GET /patient-portal 200 in 199ms
+ GET /favicon.ico 200 in 14ms
+ GET /favicon.ico 200 in 5ms
+ ✓ Compiled in 396ms (1206 modules)
+ GET /patient-portal 200 in 32ms
+ GET /favicon.ico 200 in 8ms
+ ✓ Compiled in 320ms (1206 modules)
+ GET /patient-portal 200 in 60ms
+ GET /favicon.ico 200 in 11ms
+ GET /doctor-portal 200 in 146ms
+ ✓ Compiled in 315ms (1206 modules)
+ GET /patient-portal 200 in 46ms
+ GET /doctor-portal 200 in 50ms
+ GET /video-conference/x7nJyxWNMCIgIU5rcqWK 200 in 123ms
+ ✓ Compiled in 424ms (1190 modules)
+ ⨯ Error: Cannot find module './447.js'
+Require stack:
+- /Users/rafaelcastillo/sc/synergycare/frontend/.next/server/webpack-runtime.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/.next/server/app/patient-portal/page.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/server/require.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/server/load-components.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/build/utils.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/build/swc/options.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/build/swc/index.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/build/next-config-ts/transpile-config.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/server/config.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/server/next.js
+- /Users/rafaelcastillo/sc/synergycare/frontend/node_modules/next/dist/server/lib/start-server.js
+    at __webpack_require__.f.require (.next/server/webpack-runtime.js:198:28)
+    at <unknown> (.next/server/webpack-runtime.js:111:40)
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (.next/server/webpack-runtime.js:162:22)
+    at <unknown> (.next/server/app/patient-portal/page.js:1:5264)
+    at Object.<anonymous> (.next/server/app/patient-portal/page.js:1:5336) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/patient-portal'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 537ms (1510 modules)
+ GET /patient-portal 500 in 939ms
+ GET /patient-portal 200 in 52ms
+ GET /patient-portal 200 in 8ms
+ GET /patient-portal 200 in 191ms
+ ✓ Compiled /_not-found in 252ms (1514 modules)
+ GET /_next/static/css/app/layout.css?v=1761382911507 404 in 448ms
+ GET /_next/static/chunks/app/patient-portal/layout.js 404 in 447ms
+ GET /_next/static/chunks/app/patient-portal/page.js 404 in 447ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 452ms
+ GET /_next/static/chunks/main-app.js?v=1761382911507 404 in 452ms
